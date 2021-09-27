@@ -18,25 +18,31 @@ namespace ft {
 
             T *content;
 
+
+            void initCapacity(size_t size)
+            {
+                cap = INITIAL_CAPACITY;
+                while (cap <= size)
+                    cap *= 2;
+            }
+
         public:
 
             Vector() : s(0)
             {
-                cap = INITIAL_CAPACITY ;
+                initCapacity(s);
                 content = alloc.allocate(cap);
             }
 
-            Vector(size_t _size) : s(_size)
+            Vector(size_t _size, T val = T()) : s(_size)
             {
-                content = alloc.allocate(s);
+                initCapacity(s);
+                content = alloc.allocate(cap);
+                for (size_t i = 0; i < s; i++)
+                    alloc.construct(content + i, val);
             }
 
-            Vector(size_t _size, T val) : s(_size)
-            {
-                content = alloc.allocate(s);
-                for (size_t i = 0; i < s; i++)
-                    content[i] = val;
-            }
+
 
             // template <class InputIterator>
             // Vector (InputIterator first, InputIterator last) : s(last - first)
@@ -46,9 +52,10 @@ namespace ft {
 
             Vector( Vector const & src ) : s(src.size())
             {
-                content = alloc.allocate(s);
+                initCapacity(s);
+                content = alloc.allocate(cap);
                 for (size_t i = 0; i < s; i++)
-                    content[i] = src.at(i);
+                    alloc.construct(content + i, src.at(i));
             };
 
             ~Vector(){
@@ -58,10 +65,42 @@ namespace ft {
             // Vector &		operator=( Vector const & rhs );
 
             //Capacity
-            size_t  size() const { return s; }
-            size_t  capacity() const { return cap; }
-            size_t  max_size() const { return alloc.max_size(); }
-            bool    empty() const { return s == 0; }
+            size_t  size()      const { return s; }
+            size_t  capacity()  const { return cap; }
+            size_t  max_size()  const { return alloc.max_size(); }
+            bool    empty()     const { return s == 0; }
+            void    resize(size_t _size, T val = T())
+            {
+                if (_size > s)
+                {
+                    if (_size <= cap)
+                    {
+                        for (size_t i = s; i < _size; i++)
+                            alloc.construct(content + i, val);
+                        s = _size;
+                    }
+                    else
+                    {
+                        size_t old_cap = cap;
+                        initCapacity(_size);
+                        T *tmp = alloc.allocate(cap);
+                        for (size_t i = 0; i < s; i++)
+                        {
+                            alloc.construct(tmp + i, content[i]);
+                            alloc.destroy(content + i);
+                        }
+                        alloc.deallocate(content, old_cap);
+                        content = tmp;
+                        resize(_size, val);
+                    }
+                }
+                else
+                {
+                    for (size_t i = _size; i < s; i++)
+                        alloc.destroy(content + i);
+                    s = _size;
+                }
+            }
 
             //Element Access
             T &     at(size_t idx) const { return (content[idx]); }
