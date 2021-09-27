@@ -102,6 +102,23 @@ namespace ft {
                 }
             }
 
+            void    reserve(size_t min_capacity)
+            {
+                if (min_capacity > cap)
+                {
+                    size_t old_cap = cap;
+                    cap = min_capacity;
+                    T *tmp = alloc.allocate(cap);
+                    for (size_t i = 0; i < s; i++)
+                    {
+                        alloc.construct(tmp + i, content[i]);
+                        alloc.destroy(content + i);
+                    }
+                    alloc.deallocate(content, old_cap);
+                    content = tmp;
+                }
+            }
+
             //Element Access
             T &     at(size_t idx) const { return (content[idx]); }
             T &     operator[](size_t idx) const { return content[idx]; }
