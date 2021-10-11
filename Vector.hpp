@@ -64,7 +64,16 @@ namespace ft {
 
             // Vector &		operator=( Vector const & rhs );
 
-            //Capacity
+            // Element Access
+            T &     at(size_t idx) const { return (content[idx]); }
+            T &     operator[](size_t idx) const { return content[idx]; }
+            T &     front() const { return (content[0]); }
+            T &     back() const { return (content[size() - 1]);}
+            T       *data() const { return (content); }
+
+            // Iterators
+
+            // Capacity
             size_t  size()      const { return s; }
             size_t  capacity()  const { return cap; }
             size_t  max_size()  const { return alloc.max_size(); }
@@ -117,15 +126,13 @@ namespace ft {
                 }
             }
 
-            //Element Access
-            T &     at(size_t idx) const { return (content[idx]); }
-            T &     operator[](size_t idx) const { return content[idx]; }
-            T &     front() const { return (content[0]); }
-            T &     back() const { return (content[size() - 1]);}
 
-            //Modifiers
-
-            //Allocator
+            // Modifiers
+            void clear(){
+                resize(0);
+            }
+            
+            // Allocator
             Allocator get_allocator() const { return alloc; }
 
     };
