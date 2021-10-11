@@ -69,8 +69,7 @@ namespace ft {
             size_t  capacity()  const { return cap; }
             size_t  max_size()  const { return alloc.max_size(); }
             bool    empty()     const { return s == 0; }
-            void    resize(size_t _size, T val = T())
-            {
+            void    resize(size_t _size, T val = T()) {
                 if (_size > s)
                 {
                     if (_size <= cap)
@@ -102,8 +101,7 @@ namespace ft {
                 }
             }
 
-            void    reserve(size_t min_capacity)
-            {
+            void    reserve(size_t min_capacity){
                 if (min_capacity > cap)
                 {
                     size_t old_cap = cap;
@@ -122,6 +120,9 @@ namespace ft {
             //Element Access
             T &     at(size_t idx) const { return (content[idx]); }
             T &     operator[](size_t idx) const { return content[idx]; }
+            T &     front() const { return (content[0]); }
+            T &     back() const { return (content[size() - 1]);}
+
             //Modifiers
 
             //Allocator

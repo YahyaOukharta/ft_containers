@@ -11,8 +11,9 @@ int main()
     b.resize(7, 44);
     for(size_t i = 0; i < b.size();i++)
         std::cout << b.at(i) << std::endl;
-
-    // std::cout << std::endl;
+    b[0] = 999;
+    b[b.size() - 1] = -9999;
+    std::cout << b.back()<< std::endl;
     // for(size_t i = 0; i < b.size();i++)
     //     std::cout << b.at(i) << std::endl;
 
