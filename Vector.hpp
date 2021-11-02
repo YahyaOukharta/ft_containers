@@ -128,10 +128,42 @@ namespace ft {
 
 
             // Modifiers
-            void clear(){
+            void clear()
+            {
                 resize(0);
             }
-            
+
+            void push_back(const T& val)
+            {
+                resize(size() + 1, val);
+            }
+
+            void pop_back(const T& val)
+            {
+                resize(size() - 1);
+            }
+
+            template <class InputIterator>
+                void assign (InputIterator first, InputIterator last)
+            {
+                clear();
+                size_t size = last - first;
+                if (size < 0)
+                    return ; // // //
+                resize(size);
+                for (size_t i = 0; i < size; i++)
+                {
+                    alloc.construct(content + i, first + i);
+                    
+                }
+            }
+
+            void assign (size_type n, const value_type& val)
+            {
+                clear();
+                resize(n, val);
+            }
+
             // Allocator
             Allocator get_allocator() const { return alloc; }
 
