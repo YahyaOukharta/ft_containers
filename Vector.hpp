@@ -5,6 +5,8 @@
 # include <string>
 # include <memory>
 # define INITIAL_CAPACITY 100
+# include "Utils.hpp"
+
 
 namespace ft {
 
@@ -44,11 +46,11 @@ namespace ft {
 
 
 
-            // template <class InputIterator>
-            // Vector (InputIterator first, InputIterator last) : s(last - first)
-            // {
+            template <class InputIterator>
+            Vector (InputIterator first, InputIterator last) : s(last - first)
+            {
                 
-            // };
+            };
 
             Vector( Vector const & src ) : s(src.size())
             {
@@ -138,13 +140,13 @@ namespace ft {
                 resize(size() + 1, val);
             }
 
-            void pop_back(const T& val)
+            void pop_back()
             {
                 resize(size() - 1);
             }
 
             template <class InputIterator>
-                void assign (InputIterator first, InputIterator last)
+                void assign (InputIterator first, InputIterator last, typename ft::enable_if<ft::is_integral<T>::value, T>::type = InputIterator())
             {
                 clear();
                 size_t size = last - first;
@@ -154,11 +156,10 @@ namespace ft {
                 for (size_t i = 0; i < size; i++)
                 {
                     alloc.construct(content + i, first + i);
-                    
                 }
             }
 
-            void assign (size_type n, const value_type& val)
+            void assign (size_t n, const T& val)
             {
                 clear();
                 resize(n, val);
