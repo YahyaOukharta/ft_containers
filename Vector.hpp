@@ -146,7 +146,7 @@ namespace ft {
             }
 
             template <class InputIterator>
-                void assign (InputIterator first, InputIterator last, typename ft::enable_if<ft::is_integral<T>::value, T>::type = InputIterator())
+                void assign (InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator())
             {
                 clear();
                 size_t size = last - first;
@@ -155,7 +155,7 @@ namespace ft {
                 resize(size);
                 for (size_t i = 0; i < size; i++)
                 {
-                    alloc.construct(content + i, first + i);
+                    alloc.construct(content + i, *(first + i));
                 }
             }
 

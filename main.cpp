@@ -6,7 +6,7 @@ int main()
 
     std::vector<int> b(10,41);
 
-    a.assign(b.begin(),b.end());
+    a.assign(10,456564);
     for(size_t i = 0; i < a.size();i++)
         std::cout << a.at(i) << std::endl;
 
