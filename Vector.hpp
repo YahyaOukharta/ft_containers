@@ -13,6 +13,23 @@ namespace ft {
     template<typename T, class Allocator = std::allocator<T> >
     class Vector
     {
+        //Member Types :
+        typedef  T          value_type;
+
+        typedef  Allocator  allocator_type;
+        typedef  typename allocator_type::reference  reference;
+        typedef  typename allocator_type::const_reference  const_reference;
+        typedef  typename allocator_type::pointer  pointer;
+        typedef  typename allocator_type::const_pointer  const_pointer;
+
+        // typedef  std::iterator<T,allocator_type>  iterator;
+        // typedef  std::const_iterator  const_iterator;///
+        // typedef  std::reverse_iterator<iterator>  reverse_iterator;
+        // typedef  std::reverse_iterator<const_iterator>  const_reverse_iterator;
+        // typedef  std::iterator_traits<iterator>::difference_type  difference_type;
+
+        typedef size_t     size_type;
+
         private:
             Allocator alloc;
             size_t s;
@@ -46,11 +63,11 @@ namespace ft {
 
 
 
-            template <class InputIterator>
-            Vector (InputIterator first, InputIterator last) : s(last - first)
-            {
+            // template <class InputIterator>
+            // Vector (InputIterator first, InputIterator last) : s(last - first)
+            // {
                 
-            };
+            // };
 
             Vector( Vector const & src ) : s(src.size())
             {
@@ -71,7 +88,7 @@ namespace ft {
             T &     operator[](size_t idx) const { return content[idx]; }
             T &     front() const { return (content[0]); }
             T &     back() const { return (content[size() - 1]);}
-            T       *data() const { return (content); }
+            T       *data() const { return (content); } //cpp11
 
             // Iterators
 
@@ -146,8 +163,10 @@ namespace ft {
             }
 
             template <class InputIterator>
-                void assign (InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator())
+                void assign (InputIterator first, InputIterator last, 
+                    typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator())
             {
+                std::cout << "it"<<std::endl;
                 clear();
                 size_t size = last - first;
                 if (size < 0)
@@ -161,6 +180,7 @@ namespace ft {
 
             void assign (size_t n, const T& val)
             {
+                std::cout << "val"<<std::endl;
                 clear();
                 resize(n, val);
             }
