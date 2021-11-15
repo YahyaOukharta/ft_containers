@@ -22,7 +22,7 @@ namespace ft {
         typedef  typename allocator_type::pointer  pointer;
         typedef  typename allocator_type::const_pointer  const_pointer;
 
-        // typedef  std::iterator<T,allocator_type>  iterator;
+        typedef  std::iterator<T,allocator_type>  iterator;
         // typedef  std::const_iterator  const_iterator;///
         // typedef  std::reverse_iterator<iterator>  reverse_iterator;
         // typedef  std::reverse_iterator<const_iterator>  const_reverse_iterator;
@@ -63,11 +63,13 @@ namespace ft {
 
 
 
-            // template <class InputIterator>
-            // Vector (InputIterator first, InputIterator last) : s(last - first)
-            // {
+            template <class InputIterator>
+            Vector (InputIterator first, InputIterator last,
+                 typename ft::enable_if<!ft::is_integral<InputIterator>::value , InputIterator>::type = InputIterator()
+                ) : s(last - first)
+            {
                 
-            // };
+            };
 
             Vector( Vector const & src ) : s(src.size())
             {
@@ -81,7 +83,7 @@ namespace ft {
                 alloc.deallocate(content, s);
             };
 
-            // Vector &		operator=( Vector const & rhs );
+            Vector &		operator=( Vector const & rhs );
 
             // Element Access
             T &     at(size_t idx) const { return (content[idx]); }
@@ -184,9 +186,35 @@ namespace ft {
                 clear();
                 resize(n, val);
             }
+            iterator insert (iterator position, const value_type& val);//single
+            
+            void insert (iterator position, size_type n, const value_type& val);//fill
+            
+            template <class InputIterator>
+                void insert (iterator position, InputIterator first, InputIterator last,
+                typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator());//range
+            
+            iterator erase (iterator position);
+            iterator erase (iterator first, iterator last);
+
+
+            void swap (Vector& x);
 
             // Allocator
             Allocator get_allocator() const { return alloc; }
+
+            //operators 
+            bool operator== ( const Vector<value_type,allocator_type>& rhs);
+
+            bool operator!= ( const Vector<value_type,allocator_type>& rhs);
+
+            bool operator<  ( const Vector<value_type,allocator_type>& rhs);
+
+            bool operator<= ( const Vector<value_type,allocator_type>& rhs);
+
+            bool operator>  ( const Vector<value_type,allocator_type>& rhs);
+
+            bool operator>= ( const Vector<value_type,allocator_type>& rhs);
 
     };
 
