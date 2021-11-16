@@ -13,7 +13,7 @@ namespace ft {
     template<typename T, class Allocator = std::allocator<T> >
     class Vector
     {
-        //Member Types :
+        public:
         typedef  T          value_type;
 
         typedef  Allocator  allocator_type;
@@ -22,20 +22,21 @@ namespace ft {
         typedef  typename allocator_type::pointer  pointer;
         typedef  typename allocator_type::const_pointer  const_pointer;
 
-        typedef  std::iterator<T,allocator_type>  iterator;
-        // typedef  std::const_iterator  const_iterator;///
+        typedef  typename ft::RandomAccessIterator<value_type>  iterator;
+        typedef  typename std::iterator_traits<iterator>::difference_type  difference_type;
+
+        // typedef  std::const_iterator  const_iterator;
         // typedef  std::reverse_iterator<iterator>  reverse_iterator;
         // typedef  std::reverse_iterator<const_iterator>  const_reverse_iterator;
-        // typedef  std::iterator_traits<iterator>::difference_type  difference_type;
 
         typedef size_t     size_type;
 
         private:
             Allocator alloc;
             size_t s;
-            size_t cap;
+            size_type cap;
 
-            T *content;
+            pointer content;
 
 
             void initCapacity(size_t size)
@@ -94,11 +95,19 @@ namespace ft {
 
             // Iterators
 
+            iterator begin(void){
+                return iterator(content);
+            }
+            iterator end(void){
+                return iterator(content + size());
+            }
+
             // Capacity
             size_t  size()      const { return s; }
             size_t  capacity()  const { return cap; }
             size_t  max_size()  const { return alloc.max_size(); }
             bool    empty()     const { return s == 0; }
+
             void    resize(size_t _size, T val = T()) {
                 if (_size > s)
                 {
@@ -147,7 +156,6 @@ namespace ft {
                 }
             }
 
-
             // Modifiers
             void clear()
             {
@@ -168,7 +176,6 @@ namespace ft {
                 void assign (InputIterator first, InputIterator last, 
                     typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator())
             {
-                std::cout << "it"<<std::endl;
                 clear();
                 size_t size = last - first;
                 if (size < 0)
@@ -182,11 +189,11 @@ namespace ft {
 
             void assign (size_t n, const T& val)
             {
-                std::cout << "val"<<std::endl;
                 clear();
                 resize(n, val);
             }
-            iterator insert (iterator position, const value_type& val);//single
+
+            iterator insert (iterator position, const value_type& val);
             
             void insert (iterator position, size_type n, const value_type& val);//fill
             

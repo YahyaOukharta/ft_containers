@@ -6,10 +6,9 @@ int main()
     std::cout << a.size()<<std::endl;   
     std::vector<int> b(10,41);
 
-     a.assign(10,5);
-    //a.assign(b.begin(), b.end()-5);
-    for(size_t i = 0; i < a.size();i++)
-        std::cout << a.at(i) << std::endl;
-
+     //a.assign(10,5);
+    a.assign(b.begin(), b.end()-5);
+    for(ft::Vector<int>::iterator it = a.begin(); it != a.end();it++)
+        std::cout << *it << std::endl;
     return (0);
 }
