@@ -53,14 +53,14 @@ namespace ft {
         typedef typename std::random_access_iterator_tag iterator_category;
     };
 
-    // template <class const T> 
-    // class iterator_traits<const T*>{
-    //     typedef ptrdiff_t difference_type;
-    //     typedef T value_type;
-    //     typedef const T* pointer;
-    //     typedef const T& reference;
-    //     typedef typename std::random_access_iterator_tag iterator_category;
-    // };
+    template <class T> 
+    class iterator_traits<const T*>{
+        typedef ptrdiff_t difference_type;
+        typedef T value_type;
+        typedef const T* pointer;
+        typedef const T& reference;
+        typedef typename std::random_access_iterator_tag iterator_category;
+    };
 
 
     // ft::iterator base class
@@ -107,6 +107,34 @@ namespace ft {
 
     };
 
+
+    template <class Iterator> class reverse_iterator{
+
+        typedef Iterator                                iterator_type;
+        typedef typename Iterator::difference_type      difference_type;
+        typedef typename Iterator::value_type           value_type;
+        typedef typename Iterator::pointer              pointer;
+        typedef typename Iterator::reference            reference;
+        typedef typename Iterator::iterator_category    iterator_category;
+
+        pointer ptr;
+        
+        reverse_iterator(pointer _ptr) : ptr(_ptr){ }
+        reverse_iterator(const reverse_iterator& it) : ptr(it.ptr) {}
+        ~reverse_iterator() {}
+
+        reverse_iterator &operator++() {--ptr;return *this;}
+
+        reverse_iterator operator++(value_type) {
+            reverse_iterator tmp(*this);
+            operator++();
+            return tmp;
+        }
+
+        bool operator==(const reverse_iterator& rhs) const { return ptr == rhs.ptr; }
+        bool operator!=(const reverse_iterator& rhs) const { return ptr != rhs.ptr; }
+        reference operator*() {return *ptr;}
+    };
 }
 
 #endif

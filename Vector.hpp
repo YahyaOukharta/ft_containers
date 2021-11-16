@@ -25,9 +25,10 @@ namespace ft {
         typedef  typename ft::RandomAccessIterator<value_type>  iterator;
         typedef  typename std::iterator_traits<iterator>::difference_type  difference_type;
 
-        // typedef  std::const_iterator  const_iterator;
-        // typedef  std::reverse_iterator<iterator>  reverse_iterator;
+        typedef  typename ft::reverse_iterator<iterator>  reverse_iterator;
         // typedef  std::reverse_iterator<const_iterator>  const_reverse_iterator;
+
+        // typedef  std::const_iterator  const_iterator;
 
         typedef size_t     size_type;
 
@@ -100,6 +101,12 @@ namespace ft {
             }
             iterator end(void){
                 return iterator(content + size());
+            }
+            reverse_iterator rbegin(void){
+                return reverse_iterator(content + size() - 1);
+            }
+            reverse_iterator rend(void){
+                return reverse_iterator(content - 1);
             }
 
             // Capacity
@@ -193,7 +200,12 @@ namespace ft {
                 resize(n, val);
             }
 
-            iterator insert (iterator position, const value_type& val);
+            iterator insert (iterator position, const value_type& val){
+                resize(size() + 1);
+                for (reverse_iterator it = rbegin(); it != position - 1; it++){
+                    
+                }
+            }
             
             void insert (iterator position, size_type n, const value_type& val);//fill
             
