@@ -203,9 +203,8 @@ namespace ft {
             iterator insert (iterator position, const value_type& val){
                 push_back(val);
                 iterator end = position - 1;
-                for (reverse_iterator it = rbegin() - 1; it != end; it++){
+                for (reverse_iterator it = rbegin() - 1; it != end; it++)
                     ft::swap(*(it), *(it + 1));
-                }
                 return (position);
             }
             
@@ -222,7 +221,14 @@ namespace ft {
             
             template <class InputIterator>
                 void insert (iterator position, InputIterator first, InputIterator last,
-                typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator());//range
+                typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator())
+                {
+                    iterator it = position;
+                    while (first != last){
+                        it = insert(it, *first) + 1;
+                        first++;
+                    }
+                }
             
             iterator erase (iterator position);
             iterator erase (iterator first, iterator last);

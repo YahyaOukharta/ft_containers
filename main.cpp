@@ -4,7 +4,7 @@ int main()
 {
     ft::Vector<int> a(5,42);
     std::cout << a.size()<<std::endl;   
-    std::vector<int> b(10,41);
+    std::vector<int> b(7,21);
 
      //a.assign(10,5);
     a.assign(b.begin(), b.end()-5);
@@ -13,8 +13,14 @@ int main()
 
     std::cout << std::endl;
 
-    a.insert(a.end(), 6, 12345);
+    a.insert(a.begin() + 2, 6, 12345);
     for(ft::Vector<int>::iterator it = a.begin(); it != a.end();it++)
         std::cout << *it << std::endl;
+    std::cout << std::endl;
+
+    a.insert(a.begin()+5, b.begin(), b.end());
+    for(ft::Vector<int>::iterator it = a.begin(); it != a.end();it++)
+        std::cout << *it << std::endl;
+    std::cout << std::endl;
     return (0);
 }
