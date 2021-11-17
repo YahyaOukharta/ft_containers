@@ -201,10 +201,12 @@ namespace ft {
             }
 
             iterator insert (iterator position, const value_type& val){
-                resize(size() + 1);
-                for (reverse_iterator it = rbegin(); it != position - 1; it++){
-                    
+                push_back(val);
+                position--;
+                for (reverse_iterator it = rbegin() - 1; it != position; it++){
+                    ft::swap(*(it), *(it + 1));
                 }
+                return (++position);
             }
             
             void insert (iterator position, size_type n, const value_type& val);//fill
