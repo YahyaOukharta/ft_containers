@@ -13,7 +13,7 @@ int main()
 
     std::cout << std::endl;
 
-    a.insert(a.end(), 12345);
+    a.insert(a.end(), 6, 12345);
     for(ft::Vector<int>::iterator it = a.begin(); it != a.end();it++)
         std::cout << *it << std::endl;
     return (0);

@@ -202,14 +202,23 @@ namespace ft {
 
             iterator insert (iterator position, const value_type& val){
                 push_back(val);
-                position--;
-                for (reverse_iterator it = rbegin() - 1; it != position; it++){
+                iterator end = position - 1;
+                for (reverse_iterator it = rbegin() - 1; it != end; it++){
                     ft::swap(*(it), *(it + 1));
                 }
-                return (++position);
+                return (position);
             }
             
-            void insert (iterator position, size_type n, const value_type& val);//fill
+            void insert (iterator position, size_type n, const value_type& val){
+               iterator it = position;
+               size_type i = 0;
+               while(i < n)
+               {
+                    it = insert(it, val) + 1;
+                    i++;
+               }
+               //return (position);
+            }
             
             template <class InputIterator>
                 void insert (iterator position, InputIterator first, InputIterator last,
