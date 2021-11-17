@@ -13,12 +13,12 @@ int main()
 
     std::cout << std::endl;
 
-    a.insert(a.begin() + 2, 6, 12345);
+    a.insert(a.begin() + 2, 8, 12345);
     for(ft::Vector<int>::iterator it = a.begin(); it != a.end();it++)
         std::cout << *it << std::endl;
     std::cout << std::endl;
 
-    a.insert(a.begin()+5, b.begin(), b.end());
+    a.erase(a.begin()+3, a.end());
     for(ft::Vector<int>::iterator it = a.begin(); it != a.end();it++)
         std::cout << *it << std::endl;
     std::cout << std::endl;

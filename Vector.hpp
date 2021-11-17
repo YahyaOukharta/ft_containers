@@ -230,8 +230,22 @@ namespace ft {
                     }
                 }
             
-            iterator erase (iterator position);
-            iterator erase (iterator first, iterator last);
+            iterator erase (iterator position){
+                for (iterator it = position; it != end() - 1; it++)
+                    ft::swap(*(it), *(it + 1));
+                pop_back();
+                return (position);
+            }
+            iterator erase (iterator first, iterator last)
+            {
+                iterator it = first;
+                while( it != last)
+                {
+                    erase(first);
+                    it++;
+                }
+                return (first);
+            }
 
 
             void swap (Vector& x);
