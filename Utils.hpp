@@ -2,6 +2,29 @@
 # define UTILS_HPP
 
 namespace ft {
+    // std::pair / std::make_pair
+    template <class T1, class T2> struct pair;
+
+    template <class T1, class T2>
+    pair<T1,T2> make_pair (T1 x, T2 y);
+    
+    //std::lexicographical_compare
+    template <class InputIterator1, class InputIterator2>
+    bool lexicographical_compare (InputIterator1 first1, InputIterator1 last1,
+                                    InputIterator2 first2, InputIterator2 last2);
+
+    template <class InputIterator1, class InputIterator2, class Compare>
+    bool lexicographical_compare (InputIterator1 first1, InputIterator1 last1,
+                                    InputIterator2 first2, InputIterator2 last2,
+                                    Compare comp);
+
+    //std::equal
+    template <class InputIterator1, class InputIterator2>
+    bool equal (InputIterator1 first1, InputIterator1 last1,
+                InputIterator2 first2);
+    template <class InputIterator1, class InputIterator2, class BinaryPredicate>
+    bool equal (InputIterator1 first1, InputIterator1 last1,
+                InputIterator2 first2, BinaryPredicate pred);
 
     //enable if
     template <bool, typename T = void>
