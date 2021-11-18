@@ -23,12 +23,12 @@ namespace ft {
         typedef  typename allocator_type::const_pointer  const_pointer;
 
         typedef  typename ft::RandomAccessIterator<value_type>  iterator;
-        typedef  typename std::iterator_traits<iterator>::difference_type  difference_type;
+        typedef  typename ft::iterator_traits<iterator>::difference_type  difference_type;
 
         typedef  typename ft::reverse_iterator<iterator>  reverse_iterator;
-        // typedef  std::reverse_iterator<const_iterator>  const_reverse_iterator;
 
-        // typedef  std::const_iterator  const_iterator;
+        typedef  typename ft::RandomAccessIterator<const value_type>  const_iterator;
+        typedef  typename ft::reverse_iterator<const_iterator>  const_reverse_iterator;
 
         typedef size_t     size_type;
 
@@ -63,14 +63,22 @@ namespace ft {
                     alloc.construct(content + i, val);
             }
 
-
-
             template <class InputIterator>
             Vector (InputIterator first, InputIterator last,
-                 typename ft::enable_if<!ft::is_integral<InputIterator>::value , InputIterator>::type = InputIterator()
-                ) : s(last - first)
-            {
+                 typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator())
                 
+            {
+                difference_type size = last - first;
+                if(size < 0)
+                    return;
+                s = size;
+                initCapacity(s);
+                content = alloc.allocate(cap);
+                for (size_t i = 0; i < s; i++)
+                {
+                    alloc.construct(content + i, *first);
+                    first++;
+                }
             };
 
             Vector( Vector const & src ) : s(src.size())
@@ -247,8 +255,20 @@ namespace ft {
                 return (first);
             }
 
+            void setAttr(size_type size, size_type capa, pointer cont)
+            {
+                s = size;
+                cap = capa;
+                content = cont;
+            }
 
-            void swap (Vector& x);
+            void swap (Vector& x){
+                size_type ss = x.size();
+                size_type cc = x.capacity();
+                pointer coco = x.data();
+                x.setAttr(s, cap, content);
+                setAttr(ss,cc,coco);
+            }
 
             // Allocator
             Allocator get_allocator() const { return alloc; }

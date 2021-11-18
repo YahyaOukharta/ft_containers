@@ -60,6 +60,7 @@ namespace ft {
     //Iterator traits
     template <class Iterator>
     class iterator_traits{
+        public:
         typedef typename Iterator::difference_type difference_type;
         typedef typename Iterator::value_type value_type;
         typedef typename Iterator::pointer pointer;
@@ -69,6 +70,7 @@ namespace ft {
 
     template <class T> 
     class iterator_traits<T*>{
+        public:
         typedef ptrdiff_t difference_type;
         typedef T value_type;
         typedef T* pointer;
@@ -78,6 +80,7 @@ namespace ft {
 
     template <class T> 
     class iterator_traits<const T*>{
+        public:
         typedef ptrdiff_t difference_type;
         typedef T value_type;
         typedef const T* pointer;
@@ -112,6 +115,7 @@ namespace ft {
   
             pointer ptr;
             
+            RandomAccessIterator(){ }
             RandomAccessIterator(pointer _ptr) : ptr(_ptr){ }
             RandomAccessIterator(const RandomAccessIterator& it) : ptr(it.ptr) {}
             ~RandomAccessIterator() {}
@@ -131,13 +135,68 @@ namespace ft {
                 operator--();
                 return tmp;
             }
-            RandomAccessIterator operator+ (const RandomAccessIterator& rhs){ return RandomAccessIterator(ptr + rhs.ptr); }
-            RandomAccessIterator operator- (const RandomAccessIterator& rhs){ return RandomAccessIterator(ptr - rhs.ptr); }
+            RandomAccessIterator operator+ (const RandomAccessIterator& rhs)
+            {     
+                pointer p = ptr + rhs.ptr;
+                return RandomAccessIterator(p);
+            }
+            difference_type operator- (const RandomAccessIterator& rhs){
+                difference_type p = ptr - rhs.ptr;
+                return p;
+            }
 
             RandomAccessIterator operator+ (int n){ return RandomAccessIterator(ptr + n); }
             RandomAccessIterator operator- (int n){ return RandomAccessIterator(ptr - n); }
             bool operator==(const RandomAccessIterator& rhs) const { return ptr == rhs.ptr; }
             bool operator!=(const RandomAccessIterator& rhs) const { return ptr != rhs.ptr; }
+            reference operator*() {return *ptr;}
+
+    };
+
+    // my iterator : ft::ConstRandomAccessIterator
+    template <typename T>
+    class ConstRandomAccessIterator : public iterator<std::random_access_iterator_tag, const T> {
+        public :
+
+        typedef T                                                           value_type;
+        typedef ptrdiff_t                                                   difference_type;
+        typedef T*                                                          pointer;
+        typedef T const&                                                    reference;
+        typedef typename 
+        iterator<std::random_access_iterator_tag, T>::iterator_category     iterator_category;
+
+  
+            pointer ptr;
+            
+            ConstRandomAccessIterator() : ptr(NULL){ }
+            ConstRandomAccessIterator(pointer _ptr) : ptr(_ptr){ }
+            ConstRandomAccessIterator(const ConstRandomAccessIterator& it) : ptr(it.ptr) {}
+            ~ConstRandomAccessIterator() {}
+
+            ConstRandomAccessIterator &operator++() {++ptr;return *this;}
+
+            ConstRandomAccessIterator operator++(value_type) {
+                ConstRandomAccessIterator tmp(*this);
+                operator++();
+                return tmp;
+            }
+
+            ConstRandomAccessIterator &operator--() {--ptr;return *this;}
+
+            ConstRandomAccessIterator operator--(value_type) {
+                ConstRandomAccessIterator tmp(*this);
+                operator--();
+                return tmp;
+            }
+            ConstRandomAccessIterator operator+ (const ConstRandomAccessIterator& rhs){ return ConstRandomAccessIterator(ptr + rhs.ptr); }
+            difference_type operator-(const ConstRandomAccessIterator& rhs){
+                difference_type p = ptr - rhs.ptr;
+                return p;
+            }
+            ConstRandomAccessIterator operator+ (int n){ return ConstRandomAccessIterator(ptr + n); }
+            ConstRandomAccessIterator operator- (int n){ return ConstRandomAccessIterator(ptr - n); }
+            bool operator==(const ConstRandomAccessIterator& rhs) const { return ptr == rhs.ptr; }
+            bool operator!=(const ConstRandomAccessIterator& rhs) const { return ptr != rhs.ptr; }
             reference operator*() {return *ptr;}
 
     };
@@ -156,6 +215,7 @@ namespace ft {
 
         pointer ptr;
         
+        reverse_iterator() : ptr(NULL){ }
         reverse_iterator(pointer _ptr) : ptr(_ptr){ }
         reverse_iterator(const reverse_iterator& it) : ptr(it.ptr) {}
         ~reverse_iterator() {}
@@ -178,8 +238,10 @@ namespace ft {
         
 
         reverse_iterator operator+ (const iterator_type& rhs){ return reverse_iterator(ptr + rhs.ptr); }
-        reverse_iterator operator- (const iterator_type& rhs){ return reverse_iterator(ptr - rhs.ptr); }
-
+        difference_type operator-(const iterator_type& rhs){
+            difference_type p = ptr - rhs.ptr;
+            return p;
+        }
         reverse_iterator operator+ (int n){ return reverse_iterator(ptr + n); }
         reverse_iterator operator- (int n){ return reverse_iterator(ptr - n); }
 
