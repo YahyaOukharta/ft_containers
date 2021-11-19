@@ -1,31 +1,7 @@
 #ifndef UTILS_HPP
 # define UTILS_HPP
-# define IS_ITERATOR (typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator())
 
 namespace ft {
-    // std::pair / std::make_pair
-    template <class T1, class T2> struct pair;
-
-    template <class T1, class T2>
-    pair<T1,T2> make_pair (T1 x, T2 y);
-    
-    //std::lexicographical_compare
-    template <class InputIterator1, class InputIterator2>
-    bool lexicographical_compare (InputIterator1 first1, InputIterator1 last1,
-                                    InputIterator2 first2, InputIterator2 last2);
-
-    template <class InputIterator1, class InputIterator2, class Compare>
-    bool lexicographical_compare (InputIterator1 first1, InputIterator1 last1,
-                                    InputIterator2 first2, InputIterator2 last2,
-                                    Compare comp);
-
-    //std::equal
-    template <class InputIterator1, class InputIterator2>
-    bool equal (InputIterator1 first1, InputIterator1 last1,
-                InputIterator2 first2);
-    template <class InputIterator1, class InputIterator2, class BinaryPredicate>
-    bool equal (InputIterator1 first1, InputIterator1 last1,
-                InputIterator2 first2, BinaryPredicate pred);
 
     //enable if
     template <bool, typename T = void>
@@ -50,6 +26,51 @@ namespace ft {
     template<> struct is_integral <wchar_t>             { static const bool value = true; };
     template<> struct is_integral <char>                { static const bool value = true; };
     template<> struct is_integral <bool>                { static const bool value = true; };
+    // std::pair / std::make_pair
+    template <class T1, class T2> struct pair;
+
+    template <class T1, class T2>
+    pair<T1,T2> make_pair (T1 x, T2 y);
+    
+    //std::lexicographical_compare
+    template <class InputIterator1, class InputIterator2>
+    bool lexicographical_compare (InputIterator1 first1, InputIterator1 last1,
+                                    InputIterator2 first2, InputIterator2 last2);
+
+    template <class InputIterator1, class InputIterator2, class Compare>
+    bool lexicographical_compare (InputIterator1 first1, InputIterator1 last1,
+                                    InputIterator2 first2, InputIterator2 last2,
+                                    Compare comp);
+
+    //std::equal
+    template <class InputIterator1, class InputIterator2>
+    bool equal (InputIterator1 first1, InputIterator1 last1,
+                InputIterator2 first2,
+                typename ft::enable_if<!ft::is_integral<InputIterator1>::value, InputIterator1>::type = InputIterator1(),
+                typename ft::enable_if<!ft::is_integral<InputIterator2>::value, InputIterator2>::type = InputIterator2()
+                )
+    {
+        while (first1!=last1) {
+            if (!(*first1 == *first2))
+            return false;
+            ++first1; ++first2;
+        }
+        return true;
+    }
+    // template <class InputIterator1, class InputIterator2, class BinaryPredicate>
+    // bool equal (InputIterator1 first1, InputIterator1 last1,
+    //             InputIterator2 first2, 
+    //             bool (*pred)(typename InputIterator1::value_type,typename InputIterator2::value_type),
+    //             typename ft::enable_if<!ft::is_integral<InputIterator1>::value, InputIterator1>::type = InputIterator1(),
+    //             typename ft::enable_if<!ft::is_integral<InputIterator2>::value, InputIterator2>::type = InputIterator2())
+    // {
+    //     while (first1!=last1) {
+    //         if (!pred(*first1, *first2))
+    //         return false;
+    //         ++first1; ++first2;
+    //     }
+    //     return true;
+    // }
 
     template <class T>
     void swap (T& a, T& b) {
@@ -118,11 +139,11 @@ namespace ft {
             
             RandomAccessIterator(){ }
             RandomAccessIterator(pointer _ptr) : ptr(_ptr){ }
-            RandomAccessIterator(const RandomAccessIterator<value_type>& it) : ptr(it.ptr) {}
+            RandomAccessIterator(const RandomAccessIterator<value_type>& it) : ptr(&(it[0])) {}
 
             template <class InputIterator>
             RandomAccessIterator(InputIterator it,
-                typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator()) : ptr(it.ptr){}
+                typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator()) : ptr(&(it[0])){}
 
             ~RandomAccessIterator() {}
 
@@ -143,7 +164,7 @@ namespace ft {
             }
             RandomAccessIterator operator+ (const RandomAccessIterator& rhs)
             {     
-                pointer p = ptr + rhs.ptr;
+                pointer p = ptr + &(*rhs);
                 return RandomAccessIterator(p);
             }
             difference_type operator- (const RandomAccessIterator& rhs){
@@ -167,7 +188,7 @@ namespace ft {
             bool operator!=(const RandomAccessIterator& rhs) const { return ptr != rhs.ptr; }
             
             reference operator*() {return *ptr;}
-            pointer operator->() {return *ptr;}
+            pointer operator->() {return ptr;}
             reference operator[](size_t idx) const { return ptr[idx]; }
 
             bool operator< (const RandomAccessIterator& rhs){ return this->ptr < rhs.ptr; }
@@ -192,16 +213,17 @@ namespace ft {
         
         reverse_iterator() : ptr(NULL){ }
         reverse_iterator(pointer _ptr) : ptr(_ptr){ }
-        reverse_iterator(const reverse_iterator& it) : ptr(it.ptr) {}
+        reverse_iterator(const reverse_iterator& it) : ptr(&(it[0])) {}
         template<class InputIterator>
         reverse_iterator(InputIterator it,
-            typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator()) : ptr(it.ptr){}
+            typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator()) : ptr(&(it[0])){}
 
         ~reverse_iterator() {}
 
 
         iterator_type base() const {
-            return iterator_type(ptr + 1);
+            iterator_type it;//
+            return it;
         }
         pointer operator->() {return ptr;}
         reference operator[](size_t idx) const { return ptr[idx]; }
@@ -230,7 +252,6 @@ namespace ft {
             operator--();
             return tmp;
         }
-        
 
         reverse_iterator operator+ (reverse_iterator<iterator_type> rhs){ return reverse_iterator(ptr + rhs.ptr); }
         difference_type operator-(reverse_iterator<iterator_type> rhs){
@@ -253,6 +274,18 @@ namespace ft {
         bool operator>=(reverse_iterator<iterator_type> rhs){ return this->ptr >= rhs.ptr; }
 
         reference operator*() {return *ptr;}
+    };
+    template<typename T>
+    struct BinaryPredicates
+    {
+        public:
+        
+            static bool less(T a, T b){ return a < b;}
+            static bool greater(T a, T b){ return a > b;}
+            static bool lessOrEqual(T a, T b){ return a <= b;}
+            static bool greaterOrEqual(T a, T b){ return a >= b;}
+            static bool equals(T a, T b){ return a == b;}
+            static bool notEquals(T a, T b){ return a != b;}
     };
 }
 

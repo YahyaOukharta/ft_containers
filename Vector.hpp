@@ -274,11 +274,23 @@ namespace ft {
             Allocator get_allocator() const { return alloc; }
 
             //operators 
-            bool operator== ( const Vector<value_type,allocator_type>& rhs);
+            bool operator== ( const Vector<value_type,allocator_type>& rhs){
+                if(s != rhs.size())
+                    return false;
+                return ft::equal(begin(),end(),rhs.begin(),rhs.end());
+            }
 
-            bool operator!= ( const Vector<value_type,allocator_type>& rhs);
+            bool operator!= ( const Vector<value_type,allocator_type>& rhs){
+                return !operator==(rhs);
+            }
+            
 
-            bool operator<  ( const Vector<value_type,allocator_type>& rhs);
+            bool operator<  ( const Vector<value_type,allocator_type>& rhs)
+            {
+                if(s >= rhs.size())
+                    return false;
+                return std::equal(begin(),end(),rhs.begin(),std::less<value_type>)
+            }
 
             bool operator<= ( const Vector<value_type,allocator_type>& rhs);
 
