@@ -117,7 +117,12 @@ namespace ft {
             
             RandomAccessIterator(){ }
             RandomAccessIterator(pointer _ptr) : ptr(_ptr){ }
-            RandomAccessIterator(const RandomAccessIterator& it) : ptr(it.ptr) {}
+            RandomAccessIterator(const RandomAccessIterator<value_type>& it) : ptr(it.ptr) {}
+
+            template <class InputIterator>
+            RandomAccessIterator(InputIterator it,
+                typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator()) : ptr(it.ptr){}
+
             ~RandomAccessIterator() {}
 
             RandomAccessIterator &operator++() {++ptr;return *this;}
@@ -153,55 +158,6 @@ namespace ft {
 
     };
 
-    // my iterator : ft::ConstRandomAccessIterator
-    template <typename T>
-    class ConstRandomAccessIterator : public iterator<std::random_access_iterator_tag, const T> {
-        public :
-
-        typedef T                                                           value_type;
-        typedef ptrdiff_t                                                   difference_type;
-        typedef T*                                                          pointer;
-        typedef T const&                                                    reference;
-        typedef typename 
-        iterator<std::random_access_iterator_tag, T>::iterator_category     iterator_category;
-
-  
-            pointer ptr;
-            
-            ConstRandomAccessIterator() : ptr(NULL){ }
-            ConstRandomAccessIterator(pointer _ptr) : ptr(_ptr){ }
-            ConstRandomAccessIterator(const ConstRandomAccessIterator& it) : ptr(it.ptr) {}
-            ~ConstRandomAccessIterator() {}
-
-            ConstRandomAccessIterator &operator++() {++ptr;return *this;}
-
-            ConstRandomAccessIterator operator++(value_type) {
-                ConstRandomAccessIterator tmp(*this);
-                operator++();
-                return tmp;
-            }
-
-            ConstRandomAccessIterator &operator--() {--ptr;return *this;}
-
-            ConstRandomAccessIterator operator--(value_type) {
-                ConstRandomAccessIterator tmp(*this);
-                operator--();
-                return tmp;
-            }
-            ConstRandomAccessIterator operator+ (const ConstRandomAccessIterator& rhs){ return ConstRandomAccessIterator(ptr + rhs.ptr); }
-            difference_type operator-(const ConstRandomAccessIterator& rhs){
-                difference_type p = ptr - rhs.ptr;
-                return p;
-            }
-            ConstRandomAccessIterator operator+ (int n){ return ConstRandomAccessIterator(ptr + n); }
-            ConstRandomAccessIterator operator- (int n){ return ConstRandomAccessIterator(ptr - n); }
-            bool operator==(const ConstRandomAccessIterator& rhs) const { return ptr == rhs.ptr; }
-            bool operator!=(const ConstRandomAccessIterator& rhs) const { return ptr != rhs.ptr; }
-            reference operator*() {return *ptr;}
-
-    };
-
-
     template <class Iterator> class reverse_iterator{
 
         public:
@@ -218,6 +174,10 @@ namespace ft {
         reverse_iterator() : ptr(NULL){ }
         reverse_iterator(pointer _ptr) : ptr(_ptr){ }
         reverse_iterator(const reverse_iterator& it) : ptr(it.ptr) {}
+        template<class InputIterator>
+        reverse_iterator(InputIterator it,
+            typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator()) : ptr(it.ptr){}
+
         ~reverse_iterator() {}
 
         reverse_iterator &operator++() {--ptr;return *this;}

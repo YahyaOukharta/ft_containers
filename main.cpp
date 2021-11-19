@@ -9,5 +9,6 @@ int main()
     a.swap(b);
     std::cout << *it << *(b.begin())<< std::endl;
 
+    ft::Vector<int>::const_iterator cit(it);
     return (0);
 }
