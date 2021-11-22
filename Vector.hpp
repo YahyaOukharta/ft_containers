@@ -277,7 +277,7 @@ namespace ft {
             bool operator== ( const Vector<value_type,allocator_type>& rhs){
                 if(s != rhs.size())
                     return false;
-                return ft::equal(begin(),end(),rhs.begin(),rhs.end());
+                return ft::equal(begin(),end(),rhs.begin());
             }
 
             bool operator!= ( const Vector<value_type,allocator_type>& rhs){
@@ -287,9 +287,9 @@ namespace ft {
 
             bool operator<  ( const Vector<value_type,allocator_type>& rhs)
             {
-                if(s >= rhs.size())
-                    return false;
-                return std::equal(begin(),end(),rhs.begin(),std::less<value_type>)
+                if(s != rhs.size())
+                    return s < rhs.size();
+                else return ft::equal(begin(),end(),rhs.begin(), ft::BinaryPredicates<value_type>::less);
             }
 
             bool operator<= ( const Vector<value_type,allocator_type>& rhs);
