@@ -93,7 +93,10 @@ namespace ft {
                 alloc.deallocate(content, s);
             };
 
-            Vector &		operator=( Vector const & rhs );
+            Vector &		operator=( Vector const & rhs ){
+                assign(rhs.begin(),rhs.end());
+                return *this;
+            }
 
             // Element Access
             T &     at(size_t idx) const { return (content[idx]); }
@@ -289,14 +292,23 @@ namespace ft {
             {
                 if(s != rhs.size())
                     return s < rhs.size();
-                else return ft::equal(begin(),end(),rhs.begin(), ft::BinaryPredicates<value_type>::less);
+                else return ft::lexicographical_compare(begin(),end(),rhs.begin(),rhs.end());
             }
 
-            bool operator<= ( const Vector<value_type,allocator_type>& rhs);
 
-            bool operator>  ( const Vector<value_type,allocator_type>& rhs);
+            bool operator>  ( const Vector<value_type,allocator_type>& rhs){
+                if(s != rhs.size())
+                    return s > rhs.size();
+                else return !ft::lexicographical_compare(begin(),end(),rhs.begin(),rhs.end());
+            }
+            bool operator<= ( const Vector<value_type,allocator_type>& rhs){
+                return (!operator>(rhs));
+            }
 
-            bool operator>= ( const Vector<value_type,allocator_type>& rhs);
+            bool operator>= ( const Vector<value_type,allocator_type>& rhs){
+                return (!operator<(rhs));
+            }
+
 
     };
 
