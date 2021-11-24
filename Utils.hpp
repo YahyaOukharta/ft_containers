@@ -232,24 +232,16 @@ namespace ft {
         reverse_iterator(const reverse_iterator& it) : ptr(&(it[0])) {}
         template<class InputIterator>
         reverse_iterator(InputIterator it,
-            typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator()) : ptr(&(it[0])){}
+            typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator()) : ptr(&(it[0]) - 1){}
 
         ~reverse_iterator() {}
 
-
-        iterator_type base() const {
-            iterator_type it;//
-            return it;
-        }
-        pointer operator->() {return ptr;}
-        reference operator[](size_t idx) const { return ptr[idx]; }
-
         reverse_iterator operator+=(size_t n){
-            this->ptr += n;
+            this->ptr -= n;
             return *this;
         }
         reverse_iterator operator-=(size_t n){
-            this->ptr -= n;
+            this->ptr += n;
             return *this;
         }
 
@@ -271,11 +263,11 @@ namespace ft {
 
         reverse_iterator operator+ (reverse_iterator<iterator_type> rhs){ return reverse_iterator(ptr + rhs.ptr); }
         difference_type operator-(reverse_iterator<iterator_type> rhs){
-            difference_type p = ptr - rhs.ptr;
+            difference_type p = rhs.ptr - ptr;
             return p;
         }
-        reverse_iterator operator+ (int n){ return reverse_iterator(ptr + n); }
-        reverse_iterator operator- (int n){ return reverse_iterator(ptr - n); }
+        reverse_iterator operator+ (int n){ return reverse_iterator(ptr - n); }
+        reverse_iterator operator- (int n){ return reverse_iterator(ptr + n); }
 
         friend reverse_iterator operator+ (int n, const reverse_iterator& rhs){ return reverse_iterator(rhs.ptr - n); }
         friend reverse_iterator operator- (int n, const reverse_iterator& rhs){ return reverse_iterator(rhs.ptr + n); }
@@ -284,18 +276,24 @@ namespace ft {
 
         bool operator!=(reverse_iterator<iterator_type> rhs) const { return ptr != rhs.ptr; }
 
-        bool operator< (reverse_iterator<iterator_type> rhs){ return this->ptr < rhs.ptr; }
-        bool operator> (reverse_iterator<iterator_type> rhs){ return this->ptr > rhs.ptr; }
-        bool operator<=(reverse_iterator<iterator_type> rhs){ return this->ptr <= rhs.ptr; }
-        bool operator>=(reverse_iterator<iterator_type> rhs){ return this->ptr >= rhs.ptr; }
+        bool operator< (reverse_iterator<iterator_type> rhs){ return this->ptr > rhs.ptr; }
+        bool operator> (reverse_iterator<iterator_type> rhs){ return this->ptr < rhs.ptr; }
+        bool operator<=(reverse_iterator<iterator_type> rhs){ return this->ptr >= rhs.ptr; }
+        bool operator>=(reverse_iterator<iterator_type> rhs){ return this->ptr <= rhs.ptr; }
 
         reference operator*() {return *ptr;}
+
+        iterator_type base() const {
+            iterator_type it;
+            return it;
+        }
+        pointer operator->() {return &(*ptr);}
+        reference operator[](size_t idx) const { return ptr[idx]; }
     };
     template<typename T>
     class BinaryPredicates
     {
         public:
-        
             static bool less(T a, T b){ return a < b;}
             static bool greater(T a, T b){ return a > b;}
             static bool lessOrEqual(T a, T b){ return a <= b;}

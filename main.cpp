@@ -1,14 +1,19 @@
 #include "Vector.hpp"
 #include <vector>
+#include <iomanip>
+#define EQUAL(x) ((x) ? (std::cout << "\033[1;32mAC\033[0m\n") : (std::cout << "\033[1;31mWA\033[0m\n"))
+
 int main()
 {
-    ft::Vector<int> a(5,42);
+    std::vector<int> v(3, 4);
 
-    ft::Vector<int> b(7,21);
-    ft::Vector<int>::iterator it = a.begin();
-    a.swap(b);
-    std::cout << *it << *(b.begin())<< std::endl;
+    std::reverse_iterator<std::vector<int>::iterator> rit(v.end()), rit_1(v.end() - 1);
 
-    ft::Vector<int>::const_iterator cit(it);
+    ft::reverse_iterator<std::vector<int>::iterator> my_rit(v.end()), my_rit1(v.end() - 1);
+
+
+    std::cout << "\033[1;37m[-------------------- [" << std::setw(40) << std::left << " * operator "
+              << "] --------------------]\t\t\033[0m";
+    EQUAL(((*my_rit == *(v.end() - 1)) && (&(*my_rit) == &(*(v.end() - 1)))) && ((*rit == *(v.end() - 1)) && (&(*rit) == &(*(v.end() - 1)))));
     return (0);
 }

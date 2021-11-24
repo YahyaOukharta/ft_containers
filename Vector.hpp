@@ -114,10 +114,10 @@ namespace ft {
                 return iterator(content + size());
             }
             reverse_iterator rbegin(void) const{
-                return reverse_iterator(content + size() - 1);
+                return reverse_iterator(end());
             }
             reverse_iterator rend(void) const{
-                return reverse_iterator(content - 1);
+                return reverse_iterator(begin());
             }
 
             // Capacity
