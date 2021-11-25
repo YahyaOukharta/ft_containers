@@ -66,7 +66,6 @@ namespace ft {
             template <class InputIterator>
             Vector (InputIterator first, InputIterator last,
                  typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator())
-                
             {
                 difference_type size = last - first;
                 if(size < 0)

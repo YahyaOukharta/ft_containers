@@ -23,7 +23,7 @@ c : re
 	clear
 	./$(NAME)
 
-vector: re
+vector: fclean
 	clang++ -o vector.out $(FLAGS) tests/vector_tests.cpp
 	clear
 	./vector.out

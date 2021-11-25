@@ -155,7 +155,7 @@ namespace ft {
             
             RandomAccessIterator(){ }
             RandomAccessIterator(pointer _ptr) : ptr(_ptr){ }
-            RandomAccessIterator(const RandomAccessIterator<value_type>& it) : ptr(&(it[0])) {}
+            RandomAccessIterator(RandomAccessIterator<value_type> const & it) : ptr(&(it[0])) {}
 
             template <class InputIterator>
             RandomAccessIterator(InputIterator it,
@@ -229,10 +229,12 @@ namespace ft {
         
         reverse_iterator() : ptr(NULL){ }
         reverse_iterator(pointer _ptr) : ptr(_ptr){ }
-        reverse_iterator(const reverse_iterator& it) : ptr(&(it[0])) {}
+        reverse_iterator(const reverse_iterator& it) : ptr(&(it[0])) {
+        }
         template<class InputIterator>
         reverse_iterator(InputIterator it,
-            typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator()) : ptr(&(it[0]) - 1){}
+            typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator()) : ptr(&(it[0]) - 1){
+            }
 
         ~reverse_iterator() {}
 
@@ -288,7 +290,7 @@ namespace ft {
             return it;
         }
         pointer operator->() {return &(*ptr);}
-        reference operator[](size_t idx) const { return ptr[idx]; }
+        reference operator[](size_t idx) const { return *(ptr - idx);}
     };
     template<typename T>
     class BinaryPredicates
