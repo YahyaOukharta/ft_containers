@@ -8,6 +8,18 @@
 # include "Utils.hpp"
 # include <stddef.h>
 
+size_t nextPowerOf2(size_t n)
+{
+    n-=1;
+    n = n | (n >> 1);
+    n = n | (n >> 2);
+    n = n | (n >> 4);
+    n = n | (n >> 8);
+    n = n | (n >> 16);
+    n = n | (n >> 32);
+    return n+1;
+}
+
 namespace ft {
 
     template<typename T, class Allocator = std::allocator<T> >
@@ -42,8 +54,9 @@ namespace ft {
 
             void initCapacity(size_t size)
             {
+
                 cap = size;
-                // cap = INITIAL_CAPACITY;
+                // cap = 2;
                 // while (cap <= size)
                 //     cap *= 2;
             }
@@ -53,7 +66,7 @@ namespace ft {
             Vector() : s(0)
             {
                 initCapacity(s);
-                content = alloc.allocate(cap);
+                content = alloc.allocate(s);
             }
 
             Vector(size_t _size, T val = T()) : s(_size)
@@ -99,7 +112,11 @@ namespace ft {
             }
 
             // Element Access
-            T &     at(size_t idx) const { return (content[idx]); }
+            T &     at(size_t idx) const { 
+                if(idx < 0 || idx > size() - 1)
+                    throw std::out_of_range("ee");
+                return (content[idx]); 
+            }
             T &     operator[](size_t idx) const { return content[idx]; }
             T &     front() const { return (content[0]); }
             T &     back() const { return (content[size() - 1]);}
@@ -158,18 +175,22 @@ namespace ft {
                 }
             }
 
-            void    reserve(size_t min_capacity){
-                if (min_capacity > cap)
+            void    reserve(size_t new_cap){
+                if(new_cap > max_size())
+                    throw std::length_error("3");
+                if (new_cap > cap)
                 {
+                    T *tmp = alloc.allocate(new_cap);
                     size_t old_cap = cap;
-                    cap = min_capacity;
-                    T *tmp = alloc.allocate(cap);
+                    cap = new_cap;
                     for (size_t i = 0; i < s; i++)
                     {
                         alloc.construct(tmp + i, content[i]);
                         alloc.destroy(content + i);
                     }
-                    alloc.deallocate(content, old_cap);
+                    if(old_cap)
+                        alloc.deallocate(content, old_cap);
+
                     content = tmp;
                 }
             }
@@ -181,9 +202,12 @@ namespace ft {
             }
 
             void push_back(const T& val)
-            {   if(cap == s)
-                    reserve(s+1);
-                content[s] = val;
+            {
+
+                reserve(nextPowerOf2(s));
+                // // std::cout << s << " " << cap << std::endl;
+                // // content[s] = val;
+                alloc.construct(content + s, val);
                 s++;
             }
 
