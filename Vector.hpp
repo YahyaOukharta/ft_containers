@@ -42,9 +42,10 @@ namespace ft {
 
             void initCapacity(size_t size)
             {
-                cap = INITIAL_CAPACITY;
-                while (cap <= size)
-                    cap *= 2;
+                cap = size;
+                // cap = INITIAL_CAPACITY;
+                // while (cap <= size)
+                //     cap *= 2;
             }
 
         public:
@@ -180,8 +181,10 @@ namespace ft {
             }
 
             void push_back(const T& val)
-            {
-                resize(size() + 1, val);
+            {   if(cap == s)
+                    reserve(s+1);
+                content[s] = val;
+                s++;
             }
 
             void pop_back()

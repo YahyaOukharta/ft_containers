@@ -236,12 +236,12 @@ namespace ft {
         reverse_iterator() : ptr(NULL){ }
         reverse_iterator(pointer _ptr) : ptr(_ptr){ }
 
-        reverse_iterator(reverse_iterator const& it) : ptr(&(it[0])){
+        template<typename T>
+        reverse_iterator(reverse_iterator<T> const& it) : ptr(&(it[0])), iter(it){
         }
-
         template<class InputIterator>
         reverse_iterator(InputIterator it,
-            typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator()) : ptr(&(it[0]) - 1)
+            typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator()) : ptr(&(it[0]) - 1), iter(it)
         {
         }
 
@@ -302,7 +302,7 @@ namespace ft {
 
         iterator_type base() const {
             
-            return iterator_type();
+            return iter;
         }
         pointer operator->() {return &(*ptr);}
         reference operator[](size_t idx) const { return *(ptr - idx);}
