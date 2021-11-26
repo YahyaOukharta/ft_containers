@@ -4,10 +4,15 @@ SRCS = main.cpp
 
 FLAGS = -Wall -Wextra -Werror -std=c++98 -fsanitize=address -g
 
+COMP=clang++
+ifeq ($(shell uname), Linux)
+	COMP = g++ -DLINUX
+endif
+
 all : $(NAME)
 
 $(NAME) :
-	clang++ -o $(NAME) $(FLAGS) $(SRCS) 
+	$(COMP) -o $(NAME) $(FLAGS) $(SRCS)
 
 clean :
 	rm -f *.hpp.gch
@@ -24,7 +29,7 @@ c : re
 	./$(NAME)
 
 vector: fclean
-	clang++ -o vector.out $(FLAGS) tests/vector_tests.cpp
+	$(COMP) -o vector.out $(FLAGS) tests/vector_tests.cpp
 	clear
 	./vector.out
 

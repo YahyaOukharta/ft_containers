@@ -6,7 +6,7 @@
 # include <memory>
 # define INITIAL_CAPACITY 100
 # include "Utils.hpp"
-
+# include <stddef.h>
 
 namespace ft {
 

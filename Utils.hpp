@@ -1,6 +1,9 @@
 #ifndef UTILS_HPP
 # define UTILS_HPP
 
+#ifdef LINUX
+   typedef typename std::ptrdiff_t ptrdiff_t;
+#endif
 namespace ft {
 
     //enable if
