@@ -18,6 +18,8 @@ int main()
         ft::Vector<std::string>::const_reverse_iterator it1 = ft_v2.rend();
         ft::Vector<std::string>::reverse_iterator it2 = ft_v2.rend();
 
+        std::cout << (ft_v2.rend()).ptr << std::endl;
         std::cout << it1.ptr << " " << it2.ptr<<std::endl;
+
     return (0);
 }

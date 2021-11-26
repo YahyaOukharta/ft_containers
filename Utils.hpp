@@ -163,6 +163,12 @@ namespace ft {
 
             ~RandomAccessIterator() {}
 
+            RandomAccessIterator &operator=(RandomAccessIterator<value_type> const & it)
+            {
+                ptr = it.ptr;
+                return *this;
+            }
+
             RandomAccessIterator &operator++() {++ptr;return *this;}
 
             RandomAccessIterator operator++(int) {
@@ -226,17 +232,26 @@ namespace ft {
         typedef typename Iterator::iterator_category    iterator_category;
 
         pointer ptr;
-        
+        iterator_type iter;
         reverse_iterator() : ptr(NULL){ }
         reverse_iterator(pointer _ptr) : ptr(_ptr){ }
-        reverse_iterator(const reverse_iterator& it) : ptr(&(it[0])) {
+
+        reverse_iterator(reverse_iterator const& it) : ptr(&(it[0])){
         }
+
         template<class InputIterator>
         reverse_iterator(InputIterator it,
-            typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator()) : ptr(&(it[0]) - 1){
-            }
+            typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator()) : ptr(&(it[0]) - 1)
+        {
+        }
 
         ~reverse_iterator() {}
+        template<typename U>
+        reverse_iterator &operator=(reverse_iterator<U> const & it)
+        {
+            ptr = it.ptr;
+            return *this;
+        }
 
         reverse_iterator operator+=(size_t n){
             this->ptr -= n;
@@ -286,8 +301,8 @@ namespace ft {
         reference operator*() {return *ptr;}
 
         iterator_type base() const {
-            iterator_type it;
-            return it;
+            
+            return iterator_type();
         }
         pointer operator->() {return &(*ptr);}
         reference operator[](size_t idx) const { return *(ptr - idx);}
