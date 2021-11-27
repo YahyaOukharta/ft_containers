@@ -168,7 +168,8 @@ namespace ft {
 
             RandomAccessIterator &operator=(RandomAccessIterator<value_type> const & it)
             {
-                ptr = it.ptr;
+                RandomAccessIterator tmp = it;
+                ptr = &(*tmp);
                 return *this;
             }
 
@@ -187,13 +188,17 @@ namespace ft {
                 operator--();
                 return tmp;
             }
+            reference operator*() {return *ptr;}
+            pointer operator->() {return ptr;}
+            reference operator[](size_t idx) const { return ptr[idx]; }
             RandomAccessIterator operator+ (const RandomAccessIterator& rhs)
             {     
                 pointer p = ptr + &(*rhs);
                 return RandomAccessIterator(p);
             }
             difference_type operator- (const RandomAccessIterator& rhs){
-                difference_type p = ptr - rhs.ptr;
+                RandomAccessIterator tmp = rhs;
+                difference_type p = ptr - tmp.ptr;
                 return p;
             }
             RandomAccessIterator operator+=(size_t n){
@@ -211,16 +216,11 @@ namespace ft {
             friend RandomAccessIterator operator- (int n, const RandomAccessIterator& rhs){ return RandomAccessIterator(rhs.ptr - n); }
             bool operator==(const RandomAccessIterator& rhs) const { return ptr == rhs.ptr; }
             bool operator!=(const RandomAccessIterator& rhs) const { return ptr != rhs.ptr; }
-            
-            reference operator*() {return *ptr;}
-            pointer operator->() {return ptr;}
-            reference operator[](size_t idx) const { return ptr[idx]; }
 
             bool operator< (const RandomAccessIterator& rhs){ return this->ptr < rhs.ptr; }
             bool operator> (const RandomAccessIterator& rhs){ return this->ptr > rhs.ptr; }
             bool operator<=(const RandomAccessIterator& rhs){ return this->ptr <= rhs.ptr; }
             bool operator>=(const RandomAccessIterator& rhs){ return this->ptr >= rhs.ptr; }
-
     };
 
     template <class Iterator> class reverse_iterator{
@@ -249,6 +249,7 @@ namespace ft {
         }
 
         ~reverse_iterator() {}
+
         template<typename U>
         reverse_iterator &operator=(reverse_iterator<U> const & it)
         {
@@ -292,9 +293,20 @@ namespace ft {
         friend reverse_iterator operator+ (int n, const reverse_iterator& rhs){ return reverse_iterator(rhs.ptr - n); }
         friend reverse_iterator operator- (int n, const reverse_iterator& rhs){ return reverse_iterator(rhs.ptr + n); }
 
-        bool operator==(reverse_iterator<iterator_type> rhs) const { return ptr == rhs.ptr; }
+        bool operator==(reverse_iterator<iterator_type> rhs) const {
+            reverse_iterator tmp = rhs;
+             return ptr == &(*tmp); 
+             }
+        bool operator==(iterator_type rhs) const { 
+            iterator_type tmp = rhs + 1;
+            return ptr == &(*tmp);
+            }
 
-        bool operator!=(reverse_iterator<iterator_type> rhs) const { return ptr != rhs.ptr; }
+        bool operator!=(reverse_iterator<iterator_type> rhs) const { 
+            reverse_iterator tmp = rhs;
+            return ptr != rhs.ptr;
+        }
+
 
         bool operator< (reverse_iterator<iterator_type> rhs){ return this->ptr > rhs.ptr; }
         bool operator> (reverse_iterator<iterator_type> rhs){ return this->ptr < rhs.ptr; }

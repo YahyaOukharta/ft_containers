@@ -202,9 +202,11 @@ namespace ft {
             }
 
             void push_back(const T& val)
-            {
+            {   if(s == 0)
+                    reserve(1);
+                else if (s+1 > cap)
+                    reserve(cap*2);
 
-                reserve(nextPowerOf2(s));
                 // // std::cout << s << " " << cap << std::endl;
                 // // content[s] = val;
                 alloc.construct(content + s, val);
@@ -237,22 +239,37 @@ namespace ft {
                 resize(n, val);
             }
 
-            iterator insert (iterator position, const value_type& val){
-                push_back(val);
-                iterator end = position - 1;
-                for (reverse_iterator it = rbegin() - 1; it != end; it++)
-                    ft::swap(*(it), *(it + 1));
-                return (position);
+            iterator insert (iterator position, const value_type& val)
+            {
+                difference_type idx = position - begin();
+                // if (cap > s)
+                // {
+                //     push_back(val);
+                //     if (s == 1) return begin();
+
+                //     reverse_iterator end = begin() + idx;
+                //     for (reverse_iterator it = rbegin() + 1; it != end; it++)
+                //         ft::swap(*(it), *(it - 1));
+                // }
+                // else
+                // {
+                    Vector tmp(begin(), position);
+                    tmp.push_back(val);
+                    tmp.insert(tmp.end() , position, end());
+                    assign(tmp.begin(), tmp.end());
+                //}
+                return (begin() + idx);
             }
             
             void insert (iterator position, size_type n, const value_type& val){
-               iterator it = position;
-               size_type i = 0;
-               while(i < n)
-               {
+
+                iterator it = position;
+                size_type i = 0;
+                while(i < n)
+                {
                     it = insert(it, val) + 1;
                     i++;
-               }
+                }
                //return (position);
             }
             
