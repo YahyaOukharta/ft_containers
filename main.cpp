@@ -6,7 +6,7 @@
 #include <unistd.h>
 
 #define EQUAL(x) ((x) ? (std::cout << "\033[1;32mAC\033[0m\n") : (std::cout << "\033[1;31mWA\033[0m\n"))
-#define TIME_FAC 15 // the ft::vector methods can be slower up to std::vector methods * TIME_FAC (MAX 20)
+#define TIME_FAC 150 // the ft::vector methods can be slower up to std::vector methods * TIME_FAC (MAX 20)
 
 time_t get_time(void)
 {
@@ -95,7 +95,7 @@ int main()
                 ft_str += ft_v[i];
             cond = ((str == ft_str)&& (s == ft_s)&& (c == ft_c) && (*ft_it == *it));
         }
-        // insert at the end
+        // // insert at the end
         {
             std::vector<std::string> v;
             ft::Vector<std::string> ft_v;
@@ -117,9 +117,9 @@ int main()
                 ft_str += ft_v[i];
             cond = (cond && (str == ft_str) && (s == ft_s) && (c == ft_c) && (*it == *ft_it));
         }
-        // /*---------------------------------------------------------------------------------------------------*/
-        // /*------------------------------- test 2: the vector capacity >= size + the new element ----------------------------------------*/
-        {
+        // // /*---------------------------------------------------------------------------------------------------*/
+        // // /*------------------------------- test 2: the vector capacity >= size + the new element ----------------------------------------*/
+        // {
             std::vector<std::string> v(20, "string");
             ft::Vector<std::string> ft_v(20, "string");
             ft::Vector<std::string>::iterator valid_it;
@@ -144,9 +144,9 @@ int main()
                 std::cout << str << std::endl;
                 std::cout << ft_str << std::endl;
             cond = (cond && (str == ft_str) && (s == ft_s) && (c == ft_c) && (*it == *ft_it) && (&(*valid_it) == &(*ft_v.begin())));
-        }
-        /*---------------------------------------------------------------------------------------------------*/
-        /*------------------------------- test 3: the vector capacity < size + the new element ----------------------------------------*/
+        // }
+        // /*---------------------------------------------------------------------------------------------------*/
+        // /*------------------------------- test 3: the vector capacity < size + the new element ----------------------------------------*/
         {
             std::vector<std::string> v(20, "string");
             ft::Vector<std::string> ft_v(20, "string");
@@ -165,8 +165,9 @@ int main()
                 str += v[i];
             for (size_t i = 0; i < ft_v.size(); ++i)
                 ft_str += ft_v[i];
-                std::cout << str << std::endl;
-                std::cout << ft_str << std::endl;
+            std::cout << c << std::endl;
+            std::cout << ft_c << std::endl;
+
             cond = (cond && (str == ft_str)&& (s == ft_s) && (c == ft_c) && (*it == *ft_it));
         }
         /*---------------------------------------------------------------------------------------------------*/

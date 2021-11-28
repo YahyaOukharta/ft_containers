@@ -190,7 +190,6 @@ namespace ft {
                     }
                     if(old_cap)
                         alloc.deallocate(content, old_cap);
-
                     content = tmp;
                 }
             }
@@ -206,9 +205,6 @@ namespace ft {
                     reserve(1);
                 else if (s+1 > cap)
                     reserve(cap*2);
-
-                // // std::cout << s << " " << cap << std::endl;
-                // // content[s] = val;
                 alloc.construct(content + s, val);
                 s++;
             }
@@ -225,12 +221,10 @@ namespace ft {
                 clear();
                 size_t size = last - first;
                 if (size < 0)
-                    return ; // // //
+                    return ;
                 resize(size);
                 for (size_t i = 0; i < size; i++)
-                {
                     alloc.construct(content + i, *(first + i));
-                }
             }
 
             void assign (size_t n, const T& val)
@@ -242,32 +236,31 @@ namespace ft {
             iterator insert (iterator position, const value_type& val)
             {
                 difference_type idx = position - begin();
-                // if (cap > s)
-                // {
-                //     push_back(val);
-                //     if (s == 1) return begin();
-
-                //     reverse_iterator end = begin() + idx;
-                //     for (reverse_iterator it = rbegin() + 1; it != end; it++)
-                //         ft::swap(*(it), *(it - 1));
-                // }
-                // else
-                // {
-                    Vector tmp(begin(), position);
-                    tmp.push_back(val);
-                    tmp.insert(tmp.end() , position, end());
-                    assign(tmp.begin(), tmp.end());
-                //}
+                if(s == 0)
+                    reserve(1);
+                else if(s + 1 > cap)
+                    reserve(cap*2);
+                for(size_t rit = s - 1; rit != idx - 1; rit--)
+                    content[rit + 1] = content[rit];
+                content[idx]=val;
+                s++;
                 return (begin() + idx);
             }
             
             void insert (iterator position, size_type n, const value_type& val){
 
-                iterator it = position;
+                difference_type idx = position - begin();
                 size_type i = 0;
                 while(i < n)
                 {
-                    it = insert(it, val) + 1;
+                    if(s == 0)
+                        reserve(1);
+                    else if(s + 1 > cap)
+                        reserve(cap*2);
+                    for(size_t rit = s - 1; rit != idx - 1; rit--)
+                        content[rit + 1] = content[rit];
+                    content[idx]=val;
+                    s++;
                     i++;
                 }
                //return (position);
