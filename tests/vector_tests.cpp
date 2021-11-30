@@ -3209,7 +3209,7 @@ void vector_tests(void)
             std::vector<std::string> v(1e6, "string");
             std::vector<std::string> v1(1e6, "string2");
             start = get_time();
-            std::swap(v, v1);
+            swap(v, v1);
             end = get_time();
             diff = end - start;
             diff = (diff) ? (diff * TIME_FAC) : TIME_FAC;
@@ -3217,7 +3217,7 @@ void vector_tests(void)
             ft::Vector<std::string> ft_v(1e6, "string");
             ft::Vector<std::string> ft_v1(1e6, "string2");
             ualarm(diff * 1e3, 0);
-            std::swap(ft_v, ft_v1);
+            swap(ft_v, ft_v1);
             ualarm(0, 0);
         }
         /*
@@ -3245,8 +3245,8 @@ void vector_tests(void)
             b1 = ft_v.begin();
             b2 = ft_v1.begin();
 
-            std::swap(v, v1);
-            std::swap(ft_v, ft_v1);
+            swap(v, v1);
+            swap(ft_v, ft_v1);
 
             s = v.size();
             ft_s = ft_v.size();
@@ -3272,8 +3272,8 @@ void vector_tests(void)
             b1 = ft_v.begin();
             b2 = ft_v1.begin();
 
-            std::swap(v, v1);
-            std::swap(ft_v, ft_v1);
+            swap(v, v1);
+            swap(ft_v, ft_v1);
 
             s = v.size();
             ft_s = ft_v.size();
@@ -3299,8 +3299,8 @@ void vector_tests(void)
             b1 = ft_v.begin();
             b2 = ft_v1.begin();
 
-            std::swap(v, v1);
-            std::swap(ft_v, ft_v1);
+            swap(v, v1);
+            swap(ft_v, ft_v1);
 
             s = v.size();
             ft_s = ft_v.size();
@@ -3334,10 +3334,10 @@ int main(void)
     std::cout << RED << "**** The test is taking so much time to test the all cases and the time complexity of each method ****" << std::endl;
     std::cout << RED << "--------------------------------------------------------------------------------------------------------" << RESET << std::endl;
     signal(SIGALRM, alarm_handler);
-    // iterator_tests();
-    // const_iterator_tests();
-    // reverse_iterator_tests();
-    // reverse_iterator_with_ft_vector();
+    iterator_tests();
+    const_iterator_tests();
+    reverse_iterator_tests();
+    reverse_iterator_with_ft_vector();
     vector_tests();
     return 0;
 }

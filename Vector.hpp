@@ -8,18 +8,6 @@
 # include "Utils.hpp"
 # include <stddef.h>
 
-size_t nextPowerOf2(size_t n)
-{
-    n-=1;
-    n = n | (n >> 1);
-    n = n | (n >> 2);
-    n = n | (n >> 4);
-    n = n | (n >> 8);
-    n = n | (n >> 16);
-    n = n | (n >> 32);
-    return n+1;
-}
-
 namespace ft {
 
     template<typename T, class Allocator = std::allocator<T> >
@@ -251,8 +239,9 @@ namespace ft {
              difference_type idx = position - begin();
                 if(s == 0)
                     reserve(n);
-                else if(cap < s + n && n < )
-                reserve(cap*2);
+                else if(cap < s + n && s+n<=cap*2 )
+                    reserve(cap*2);
+                else reserve(s+n);
                 for(size_t rit = s - 1; rit != idx - 1; rit--)
                     content[rit+n] = content[rit];
                 for(size_t i = idx; i != idx + n; i++)
@@ -264,28 +253,37 @@ namespace ft {
                 void insert (iterator position, InputIterator first, InputIterator last,
                 typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator())
                 {
-                    iterator it = position;
-                    while (first != last){
-                        it = insert(it, *first) + 1;
-                        first++;
-                    }
+                    difference_type idx = position - begin();
+                    difference_type n = last - first;
+                    if(s == 0)
+                        reserve(n);
+                    else if(cap < s + n && s+n<=cap*2 )
+                        reserve(cap*2);
+                    else reserve(s+n);
+                    for(size_t rit = s - 1; rit != idx - 1; rit--)
+                        content[rit+n] = content[rit];
+                    for(size_t i = idx; i != idx + n; i++)
+                        content[i]=*(first++);
+                    s+=n;
                 }
             
             iterator erase (iterator position){
-                for (iterator it = position; it != end() - 1; it++)
-                    ft::swap(*(it), *(it + 1));
-                pop_back();
-                return (position);
+                difference_type idx = position - begin();
+                for(size_t i = idx; i != s - 1; i++)
+                    content[i] = content[i+1];
+                s--;
+                return (begin()+idx);
             }
             iterator erase (iterator first, iterator last)
             {
-                iterator it = first;
-                while( it != last)
-                {
-                    erase(first);
-                    it++;
-                }
-                return (first);
+                difference_type idx = first - begin();
+                difference_type n = last - first;
+
+                for(size_t i = idx; i != s - 1; i++)
+                    if(i+n < s)
+                    content[i] = content[i+n];
+                s-=n;
+                return (begin() + idx);
             }
 
             void setAttr(size_type size, size_type capa, pointer cont)
@@ -301,6 +299,7 @@ namespace ft {
                 pointer coco = x.data();
                 x.setAttr(s, cap, content);
                 setAttr(ss,cc,coco);
+                //ft::swap(*this, x);
             }
 
             // Allocator
@@ -325,24 +324,30 @@ namespace ft {
                 else return ft::lexicographical_compare(begin(),end(),rhs.begin(),rhs.end());
             }
 
-
-            bool operator>  ( const Vector<value_type,allocator_type>& rhs){
-                if(s != rhs.size())
-                    return s > rhs.size();
-                else return !ft::lexicographical_compare(begin(),end(),rhs.begin(),rhs.end());
-            }
-            bool operator<= ( const Vector<value_type,allocator_type>& rhs){
-                return (!operator>(rhs));
-            }
-
             bool operator>= ( const Vector<value_type,allocator_type>& rhs){
                 return (!operator<(rhs));
             }
+            
+            bool operator> ( const Vector<value_type,allocator_type>& rhs){
+                if(s != rhs.size())
+                    return s > rhs.size();
+                else return ft::lexicographical_compare(rhs.begin(),rhs.end(), begin(),end());
+            }
+            bool operator<= ( const Vector<value_type,allocator_type>& rhs){
+
+                return (!operator>(rhs));
+            }
+
+
 
 
     };
 
 // std::ostream &			operator<<( std::ostream & o, Vector const & i );
 
+    template <class T,class Alloc>
+    void swap (ft::Vector<T,Alloc>& a, ft::Vector<T,Alloc>& b) {
+        a.swap(b);
+    }
 }
 #endif /* ********************************************************** VECTOR_H */
