@@ -248,22 +248,16 @@ namespace ft {
             }
             
             void insert (iterator position, size_type n, const value_type& val){
-
-                difference_type idx = position - begin();
-                size_type i = 0;
-                while(i < n)
-                {
-                    if(s == 0)
-                        reserve(1);
-                    else if(s + 1 > cap)
-                        reserve(cap*2);
-                    for(size_t rit = s - 1; rit != idx - 1; rit--)
-                        content[rit + 1] = content[rit];
-                    content[idx]=val;
-                    s++;
-                    i++;
-                }
-               //return (position);
+             difference_type idx = position - begin();
+                if(s == 0)
+                    reserve(n);
+                else if(cap < s + n && n < )
+                reserve(cap*2);
+                for(size_t rit = s - 1; rit != idx - 1; rit--)
+                    content[rit+n] = content[rit];
+                for(size_t i = idx; i != idx + n; i++)
+                    content[i]=val;
+                s+=n;
             }
             
             template <class InputIterator>
