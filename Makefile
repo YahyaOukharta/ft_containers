@@ -33,4 +33,10 @@ vector: fclean
 	clear
 	./vector.out
 
+
+stack: fclean
+	$(COMP) -o stack.out $(FLAGS) tests/stack_tests.cpp
+	clear
+	./stack.out
+	
 map:
