@@ -3,12 +3,12 @@
 
 # include <iostream>
 # include <string>
-#include <deque>
+#include "Vector.hpp"
 namespace ft
 {
 	template<
 		class T,
-		class Container = std::deque<T>
+		class Container = ft::Vector<T>
 	> 
 	class Stack
 	{
