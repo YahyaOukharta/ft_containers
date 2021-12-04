@@ -28,22 +28,8 @@ int main()
 {
     signal(SIGALRM, alarm_handler);
 
-    std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " empty method "
-              << "] --------------------]\t\t\033[0m";
-	{
-		ft::Stack<int> mystack;
-		int sum (0);
-
-		for (int i=1;i<=10;i++) mystack.push(i);
-
-		while (!mystack.empty())
-		{
-            std::cout << mystack.top() << std::endl;
-			sum += mystack.top();
-			mystack.pop();
-		}
-        std::cout << sum << std::endl;
-		EQUAL(sum == 55);
-	}
+    ft::pair<std::string, int> a = ft::make_pair(std::string("hello"), 2);
+    ft::pair<std::string, int> b("hellow",42);
+    std::cout << b.first << " " << b.second << std::endl;
     return (0);
 }

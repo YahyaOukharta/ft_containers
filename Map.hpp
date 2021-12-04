@@ -16,8 +16,6 @@ namespace ft
 	class Map
 	{
 		public:
-
-
 			typedef 								Key key_type;
 			typedef 								T	mapped_type;
 			typedef typename ft::pair<const Key, T> 	value_type;
@@ -35,7 +33,23 @@ namespace ft
 			// typedef ft::reverse_iterator<iterator>		reverse_iterator;
 			// typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
 			
-			class value_compare;
+			class value_compare
+			{
+					typedef bool 		result_type;
+					typedef value_type	first_argument_type;
+					typedef value_type	second_argument_type;
+
+				protected :
+					Compare comp;
+
+					value_compare( Compare c ): comp(c) {}
+				
+				public:
+					result_type operator()( const first_argument_type& lhs, const second_argument_type& rhs ) const{
+						return comp(lhs,rhs);
+					}
+
+			};
 
 		private:
 
@@ -146,6 +160,9 @@ namespace ft
 	template< class Key, class T, class Compare, class Alloc >
 	void swap( Map<Key,T,Compare,Alloc>& lhs,
 			Map<Key,T,Compare,Alloc>& rhs );
+
+
+
 }
 
 

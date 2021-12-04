@@ -29,11 +29,76 @@ namespace ft {
     template<> struct is_integral <wchar_t>             { static const bool value = true; };
     template<> struct is_integral <char>                { static const bool value = true; };
     template<> struct is_integral <bool>                { static const bool value = true; };
+
     // std::pair / std::make_pair
-    template <class T1, class T2> struct pair;
+    template <class T1, class T2> struct pair
+    {
+        typedef T1 first_type;
+        typedef T2 second_type;
+
+        first_type first;
+        second_type second;
+
+        pair(){
+
+        }
+
+        pair( const T1& x, const T2& y ): first(x), second(y){}
+
+        pair( const pair<T1, T2>& p ): first(p.first), second(p.second){}        
+
+        pair& operator=( const pair& other ){
+            first = other.first;
+            second = other.second;
+            return *this;
+        }
+        bool operator==(const pair& rhs ){
+            if (first == rhs.first)
+                return second == rhs.second;
+            else 
+                return first == rhs.first;
+        }
+
+        bool operator!=(const pair& rhs ){
+            if (first == rhs.first)
+                return second != rhs.second;
+            else 
+                return first != rhs.first;
+        }
+
+        bool operator<(const pair& rhs ){
+            if (first == rhs.first)
+                return second < rhs.second;
+            else 
+                return first < rhs.first;
+        }
+
+        bool operator<=(const pair& rhs ){
+            if (first == rhs.first)
+                return second <= rhs.second;
+            else 
+                return first <= rhs.first;
+        }
+
+        bool operator>(const pair& rhs ){
+            if (first == rhs.first)
+                return second > rhs.second;
+            else 
+                return first > rhs.first;
+        }
+
+        bool operator>=(const pair& rhs ){
+            if (first == rhs.first)
+                return second >= rhs.second;
+            else 
+                return first >= rhs.first;
+        }
+    };
 
     template <class T1, class T2>
-    pair<T1,T2> make_pair (T1 x, T2 y);
+    pair<T1,T2> make_pair (T1 x, T2 y){
+        return pair<T1,T2>(x,y);
+    }
     
     //std::lexicographical_compare
     template <class InputIterator1, class InputIterator2>
