@@ -4,9 +4,126 @@
 # include <iostream>
 # include <string>
 #include "Utils.hpp"
-
+# include "Vector.hpp"
+# define ABS(x) (x<0?-x:x)
 namespace ft
 {
+	template < class Key>
+	class Node {
+		public:
+			typedef 	Key key_type;
+
+		private:
+			key_type content;
+			Node *children[2];
+
+		public:
+			Node(key_type const &c)
+			{
+				content = c;
+				children[0] = 0;
+				children[1] = 0;
+			}
+			void setLeft(Node *l)
+			{
+				children[0] = l;
+			}
+			void setRight(Node *l)
+			{
+				children[1] = l;
+			}
+			key_type &getContent(void)
+			{
+				return content;
+			}
+			Node *left(void)
+			{
+				return children[0];
+			}
+
+			Node *right(void)
+			{
+				return children[1];
+			}
+			Node **getChildren(void){
+				return children;
+			}
+	};
+
+	template< class Key>
+	class BST
+	{
+
+		typedef 	Key key_type;
+		typedef  	Node<key_type> node_type;
+
+		node_type *tree_root;
+
+		public:
+			BST(void){
+
+			}
+			BST(ft::Vector<key_type> const &v){
+				fillFromVec(v);
+			}
+			~BST(){
+				
+			}
+
+			node_type *newNode(key_type &k){
+				return new node_type(k);
+			}
+
+			void fillFromVec(ft::Vector<key_type> const &v){
+				for(typename ft::Vector<key_type>::iterator it = v.begin(); it!= v.end(); it++){
+					insert(*it);
+				}
+			}
+
+			void insert(key_type &v)
+			{
+				if (tree_root)
+					insertAtNode(tree_root, v);
+				else
+					tree_root = newNode(v);
+			}
+
+			void insertAtNode(node_type *n, key_type v)
+			{
+				if(!n)
+					return;
+				if (v == n->getContent())
+					return;
+				ptrdiff_t diff = v - n->getContent();
+				int dir = ((diff/ABS(diff))+1)/2;
+				node_type **children = n->getChildren();
+				if(!children[dir])
+					children[dir] = newNode(v);
+				else
+					insertAtNode(children[dir], v);
+			}
+
+
+			void print(const std::string& prefix, node_type* node, bool isLeft)
+			{
+				if(node)
+				{
+					std::cout << prefix;
+					std::cout << (isLeft ? "├──" : "└──" );
+					std::cout << node->getContent() << std::endl;
+					print( prefix + (isLeft ? "│   " : "    "), node->getChildren()[1], true);
+					print( prefix + (isLeft ? "│   " : "    "), node->getChildren()[0], false);
+				}
+			}
+			void print()
+			{
+				if(tree_root)
+					print("", tree_root, false);    
+			}
+
+// pass the root node of your binary tree
+	};
+
 	template<
 		class Key,
 		class T,
