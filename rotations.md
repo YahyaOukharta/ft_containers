@@ -1,25 +1,19 @@
-single left rotate at node N:
+# single left rotate at node N:
 
-initial_NODE_R
-initial_NODE_P
+- save initial_NODE_PARENT
+```
+N->parent = initial_NODE_PARENT->parent
+initial_NODE_PARENT->parent->right = N // right or left // if exists
+N->left = initial_NODE_PARENT
+initial_NODE_PARENT->parent = N
+```
 
-N->parent = initial_NODE_P->parent
-initial_NODE_P->parent->right = N // right or left // if exists
+# single right rotate at node N:
 
-
-N->left = initial_NODE_P
-initial_NODE_P->parent = N
-
-single right rotate at node N:
-
-
-initial_NODE_L
-initial_NODE_P
-
-
-N->parent = initial_NODE_P->parent
-initial_NODE_P->parent->left = N // right or left // if exists
-
-
-N->right = initial_NODE_P
-initial_NODE_P->parent = N
+- save initial_NODE_PARENT
+```
+N->parent = initial_NODE_PARENT->parent
+initial_NODE_PARENT->parent->left = N // right or left // if exists
+N->right = initial_NODE_PARENT
+initial_NODE_PARENT->parent = N
+```
