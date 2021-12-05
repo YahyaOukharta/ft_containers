@@ -12,7 +12,7 @@
 
 int rando(){
     static std::vector<int> visited;
-    int range = 12;
+    int range = 10;
     int res = std::rand() % range;
     if (std::find(visited.begin(),visited.end(),res)==visited.end())
     {
@@ -25,7 +25,7 @@ int rando(){
 int main()
 {
     std::srand(unsigned(std::time(nullptr)));
-    ft::Vector<int> vec(12);
+    ft::Vector<int> vec(3);
     std::generate(vec.begin(), vec.end(), rando);
 
     // for(size_t i = 0; i < vec.size(); i++)
@@ -33,7 +33,9 @@ int main()
     // std::cout << std::endl;
 
     ft::BST<int> tree(vec);
-
     tree.print();
+    tree.insert(80);
+    tree.print();
+
     return (0);
 }

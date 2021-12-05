@@ -6,6 +6,7 @@
 #include "Utils.hpp"
 # include "Vector.hpp"
 # define ABS(x) (x<0?-x:x)
+# define MAX(a,b) (a<b?b:a)
 namespace ft
 {
 	template < class Key>
@@ -16,37 +17,68 @@ namespace ft
 		private:
 			key_type content;
 			Node *children[2];
-
+			Node *parent;
+			int bf;
+			int h;
+			
 		public:
 			Node(key_type const &c)
 			{
 				content = c;
 				children[0] = 0;
 				children[1] = 0;
+				parent = 0;
+				h = 0;
+				bf = 0;
 			}
+
 			void setLeft(Node *l)
 			{
 				children[0] = l;
 			}
-			void setRight(Node *l)
+			void setRight(Node *r)
 			{
-				children[1] = l;
+				children[1] = r;
 			}
+			void setParent(Node *p)
+			{
+				parent = p;
+			}
+
 			key_type &getContent(void)
 			{
 				return content;
 			}
-			Node *left(void)
-			{
-				return children[0];
-			}
-
-			Node *right(void)
-			{
-				return children[1];
-			}
 			Node **getChildren(void){
 				return children;
+			}
+			Node *getParent(void){
+				return parent;
+			}
+
+			int getHeight()
+			{
+				return h;
+			}
+			int getBF()
+			{
+				return bf;
+			}
+
+			int calcHeight(){
+				int hl = (children[0] ? children[0]->calcHeight() : -1);
+				int hr = (children[1] ? children[1]->calcHeight() : -1);
+				h = MAX(hl,hr) + 1;
+				return h;
+			}
+
+			int calcBF(){
+				int hl = (children[0] ? children[0]->getHeight() : -1);
+				int hr = (children[1] ? children[1]->getHeight() : -1);
+				bf = hr - hl;
+				if (parent)
+					parent->calcBF();
+				return bf;
 			}
 	};
 
@@ -70,7 +102,8 @@ namespace ft
 				
 			}
 
-			node_type *newNode(key_type &k){
+			node_type *newNode(key_type const &k) const 
+			{
 				return new node_type(k);
 			}
 
@@ -80,7 +113,7 @@ namespace ft
 				}
 			}
 
-			void insert(key_type &v)
+			void insert(key_type const &v)
 			{
 				if (tree_root)
 					insertAtNode(tree_root, v);
@@ -98,11 +131,15 @@ namespace ft
 				int dir = ((diff/ABS(diff))+1)/2;
 				node_type **children = n->getChildren();
 				if(!children[dir])
+				{
 					children[dir] = newNode(v);
+					children[dir]->setParent(n);
+				}
 				else
 					insertAtNode(children[dir], v);
+				n->calcHeight();
+				n->calcBF();
 			}
-
 
 			void print(const std::string& prefix, node_type* node, bool isLeft)
 			{
@@ -110,11 +147,12 @@ namespace ft
 				{
 					std::cout << prefix;
 					std::cout << (isLeft ? "├──" : "└──" );
-					std::cout << node->getContent() << std::endl;
+					std::cout << node->getContent() << " " << node->getHeight() << " " << node->getBF() << std::endl;
 					print( prefix + (isLeft ? "│   " : "    "), node->getChildren()[1], true);
 					print( prefix + (isLeft ? "│   " : "    "), node->getChildren()[0], false);
 				}
 			}
+
 			void print()
 			{
 				if(tree_root)
