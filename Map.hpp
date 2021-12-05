@@ -95,7 +95,8 @@ namespace ft
 			BST(void){
 
 			}
-			BST(ft::Vector<key_type> const &v){
+			BST(ft::Vector<key_type> const &v)
+			{
 				fillFromVec(v);
 			}
 			~BST(){
@@ -138,7 +139,34 @@ namespace ft
 				else
 					insertAtNode(children[dir], v);
 				n->calcHeight();
-				n->calcBF();
+				int bf = n->calcBF();
+				if (ABS(bf) > 1)
+				{
+					if (bf > 0)
+					{	
+						singleLeftRotate(n->getChildren()[1]);
+						//print();
+					}
+				}
+			}
+
+			void singleLeftRotate(node_type *n){
+				node_type *initial_parent = n->getParent();
+
+				n->setParent(initial_parent->getParent());
+
+				int dir = -1;
+				if(initial_parent->getParent())
+				{
+					dir = initial_parent->getParent()->getContent() > initial_parent->getContent();
+					initial_parent->getParent()->getChildren()[dir] = n;
+				}
+				else
+					tree_root = n;
+				n->setLeft(initial_parent);
+				initial_parent->setParent(n);
+
+				initial_parent->setRight(0);
 			}
 
 			void print(const std::string& prefix, node_type* node, bool isLeft)
@@ -147,7 +175,7 @@ namespace ft
 				{
 					std::cout << prefix;
 					std::cout << (isLeft ? "├──" : "└──" );
-					std::cout << node->getContent() << " " << node->getHeight() << " " << node->getBF() << std::endl;
+					std::cout << node->getContent() << " " << node->getBF() << std::endl;
 					print( prefix + (isLeft ? "│   " : "    "), node->getChildren()[1], true);
 					print( prefix + (isLeft ? "│   " : "    "), node->getChildren()[0], false);
 				}

@@ -25,16 +25,14 @@ int rando(){
 int main()
 {
     std::srand(unsigned(std::time(nullptr)));
-    ft::Vector<int> vec(3);
+    ft::Vector<int> vec(10);
     std::generate(vec.begin(), vec.end(), rando);
 
-    // for(size_t i = 0; i < vec.size(); i++)
-    //     std::cout << vec[i] << std::endl;
-    // std::cout << std::endl;
+    for(size_t i = 0; i < vec.size(); i++)
+        vec[i] = i*10;
+    std::cout << std::endl;
 
     ft::BST<int> tree(vec);
-    tree.print();
-    tree.insert(80);
     tree.print();
 
     return (0);
