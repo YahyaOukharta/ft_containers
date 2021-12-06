@@ -10,7 +10,7 @@
 #include <unistd.h>
 #include <signal.h>
 
-# define RANGE 500
+# define RANGE 10
 int rando(){
     static std::vector<int> visited;
     int range = RANGE;
@@ -39,6 +39,21 @@ int main()
 
     tree.print();
     tree.inOrderPrint();
+
+    ft::Node<int> *s=tree.searchFor(4);
+    if(s)
+    {
+        std::cout << s->getContent()<< " " << "" << std::endl;
+        ft::Node<int> *l = tree.getLowestChild(s);
+        if (l)
+            std::cout << l->getContent()<< " " << "" << std::endl;
+        l = tree.getLargestChild(s);
+        if (l)
+            std::cout << l->getContent()<< " " << "" << std::endl;
+
+    }
+    else
+        std::cout <<  "Found nothing" << std::endl;
 
     return (0);
 }

@@ -123,6 +123,7 @@ namespace ft
 					insertAtNode(tree_root, v);
 				else
 					tree_root = newNode(v);
+					s++;
 
 			}
 
@@ -139,7 +140,6 @@ namespace ft
 				{
 					children[dir] = newNode(v);
 					children[dir]->setParent(n);
-					s++;
 				}
 				else
 					insertAtNode(children[dir], v);
@@ -159,6 +159,8 @@ namespace ft
 						singleRightRotate(n);
 					}
 				}
+				n->calcBF();
+
 			}
 
 			void singleLeftRotate(node_type *n)
@@ -212,6 +214,38 @@ namespace ft
 
 			}
 
+			node_type *getLowestChild(node_type *n)
+			{
+				if (!n) return 0;
+				node_type *left = n->getChildren()[0];
+				if (left)
+					return getLowestChild(left);
+				else return n;
+			}
+			node_type *getLargestChild(node_type *n)
+			{
+				if (!n) return 0;
+				node_type *right = n->getChildren()[1];
+				if (right)
+					return getLargestChild(right);
+				else return n;
+			}
+
+			node_type *searchFor(key_type const &key){
+				node_type *n=tree_root;
+				while (n)
+				{
+					if (n->getContent() == key)
+						return n;
+					node_type **children = n->getChildren();
+					int dir = n->getContent() < key;
+					n = children[dir];
+				}
+				return (0);
+			}
+
+
+// Utils
 			void print(const std::string& prefix, node_type* node, bool isLeft)
 			{
 				if(node)
@@ -240,6 +274,7 @@ namespace ft
 				std::cout << n->getContent() << " - ";
 				traverse(n->getChildren()[1]);
 			}
+
 			void inOrderPrint(){
 				traverse(tree_root);
 				std::cout << std::endl;
