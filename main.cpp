@@ -10,9 +10,10 @@
 #include <unistd.h>
 #include <signal.h>
 
+# define RANGE 500
 int rando(){
     static std::vector<int> visited;
-    int range = 50;
+    int range = RANGE;
     int res = std::rand() % range;
     if (std::find(visited.begin(),visited.end(),res)==visited.end())
     {
@@ -26,7 +27,7 @@ int main()
 {
 
     std::srand(unsigned(std::time(nullptr)));
-    ft::Vector<int> vec(50);
+    ft::Vector<int> vec(RANGE);
     std::generate(vec.begin(), vec.end(), rando);
 
     for(size_t i = 0; i < vec.size(); i++)
