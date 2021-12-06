@@ -39,6 +39,7 @@ namespace ft
 			void setRight(Node *r)
 			{
 				children[1] = r;
+
 			}
 			void setParent(Node *p)
 			{
@@ -73,8 +74,8 @@ namespace ft
 			}
 
 			int calcBF(){
-				int hl = (children[0] ? children[0]->getHeight() : -1);
-				int hr = (children[1] ? children[1]->getHeight() : -1);
+				int hl = (children[0] ? children[0]->calcHeight() : -1);
+				int hr = (children[1] ? children[1]->calcHeight() : -1);
 				bf = hr - hl;
 				if (parent)
 					parent->calcBF();
@@ -90,13 +91,15 @@ namespace ft
 		typedef  	Node<key_type> node_type;
 
 		node_type *tree_root;
+		size_t s;
 
 		public:
 			BST(void){
-
+				s=0;
 			}
 			BST(ft::Vector<key_type> const &v)
 			{
+				s=0;
 				fillFromVec(v);
 			}
 			~BST(){
@@ -120,6 +123,7 @@ namespace ft
 					insertAtNode(tree_root, v);
 				else
 					tree_root = newNode(v);
+
 			}
 
 			void insertAtNode(node_type *n, key_type v)
@@ -135,38 +139,77 @@ namespace ft
 				{
 					children[dir] = newNode(v);
 					children[dir]->setParent(n);
+					s++;
 				}
 				else
 					insertAtNode(children[dir], v);
-				n->calcHeight();
 				int bf = n->calcBF();
 				if (ABS(bf) > 1)
 				{
 					if (bf > 0)
-					{	
-						singleLeftRotate(n->getChildren()[1]);
-						//print();
+					{
+						if (n->getChildren()[1] && n->getChildren()[1]->getBF() < 0)
+							singleRightRotate(n->getChildren()[1]);
+						singleLeftRotate(n);
+					}
+					else
+					{
+						if (n->getChildren()[0] && n->getChildren()[0]->getBF() > 0)
+							singleLeftRotate(n->getChildren()[0]);
+						singleRightRotate(n);
 					}
 				}
 			}
 
-			void singleLeftRotate(node_type *n){
-				node_type *initial_parent = n->getParent();
+			void singleLeftRotate(node_type *n)
+			{
+				node_type *init_parent = n->getParent();
+				node_type *right = n->getChildren()[1];
 
-				n->setParent(initial_parent->getParent());
+				node_type *right_left_subtree = right->getChildren()[0];
 
-				int dir = -1;
-				if(initial_parent->getParent())
+				if (init_parent)
 				{
-					dir = initial_parent->getParent()->getContent() > initial_parent->getContent();
-					initial_parent->getParent()->getChildren()[dir] = n;
+					int dir = init_parent->getContent() < n->getContent();
+					init_parent->getChildren()[dir] = right;
 				}
 				else
-					tree_root = n;
-				n->setLeft(initial_parent);
-				initial_parent->setParent(n);
+					tree_root = right;
 
-				initial_parent->setRight(0);
+				right->setLeft(n);
+				right->setParent(init_parent);
+
+				n->setParent(right);
+
+				n->setRight(right_left_subtree);
+				if(right_left_subtree)
+					right_left_subtree->setParent(n);
+		
+			}
+
+			void singleRightRotate(node_type *n)
+			{
+				node_type  *init_parent = n->getParent();
+				node_type *left = n->getChildren()[0];
+
+				node_type *left_right_subtree = left->getChildren()[1];
+				if (init_parent)
+				{
+					int dir = init_parent->getContent() < n->getContent();
+					init_parent->getChildren()[dir] = left;
+				}
+				else
+					tree_root = left;
+
+				left->setRight(n);
+				left->setParent(init_parent);
+
+				n->setParent(left);
+
+				n->setLeft(left_right_subtree);
+				if(left_right_subtree)
+					left_right_subtree->setParent(n);
+
 			}
 
 			void print(const std::string& prefix, node_type* node, bool isLeft)
@@ -184,8 +227,25 @@ namespace ft
 			void print()
 			{
 				if(tree_root)
-					print("", tree_root, false);    
+					print("", tree_root, false);
+
+				std::cout << "height : " << tree_root->calcHeight() << " for " << s << " elements" <<std::endl;
 			}
+
+			void traverse(node_type *n)
+			{
+				if(!n)
+					return;
+				traverse(n->getChildren()[0]);
+				std::cout << n->getContent() << " - ";
+				traverse(n->getChildren()[1]);
+			}
+			void inOrderPrint(){
+				traverse(tree_root);
+				std::cout << std::endl;
+			}
+
+
 
 // pass the root node of your binary tree
 	};
