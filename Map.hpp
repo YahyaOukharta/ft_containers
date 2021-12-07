@@ -131,6 +131,32 @@ namespace ft
 					s++;
 
 			}
+			void rebalanceAtNode(node_type *n)
+			{
+				int bf = n->calcBF();
+				if (ABS(bf) > 1)
+				{
+					if (bf > 0)
+					{
+						if (n->getChildren()[1] && n->getChildren()[1]->getBF() < 0)
+							singleRightRotate(n->getChildren()[1]);
+						singleLeftRotate(n);
+					}
+					else
+					{
+						if (n->getChildren()[0] && n->getChildren()[0]->getBF() > 0)
+							singleLeftRotate(n->getChildren()[0]);
+						singleRightRotate(n);
+					}
+						n->calcBF();
+				}
+			}
+
+			void rebalanceFromNode(node_type *n){
+				if(!n) return;
+				rebalanceAtNode(n);
+				rebalanceFromNode(n->getParent());
+			}
 
 			void insertAtNode(node_type *n, key_type v)
 			{
@@ -148,24 +174,7 @@ namespace ft
 				}
 				else
 					insertAtNode(children[dir], v);
-				int bf = n->calcBF();
-				if (ABS(bf) > 1)
-				{
-					if (bf > 0)
-					{
-						if (n->getChildren()[1] && n->getChildren()[1]->getBF() < 0)
-							singleRightRotate(n->getChildren()[1]);
-						singleLeftRotate(n);
-					}
-					else
-					{
-						if (n->getChildren()[0] && n->getChildren()[0]->getBF() > 0)
-							singleLeftRotate(n->getChildren()[0]);
-						singleRightRotate(n);
-					}
-				}
-				n->calcBF();
-
+				rebalanceAtNode(n);
 			}
 
 			void singleLeftRotate(node_type *n)
@@ -263,11 +272,16 @@ namespace ft
 					node->setContent(successor->getContent());
 
 					if(successor == node->getChildren()[1])
-						successor->getParent()->setRight(0);
+					{
+						successor->getParent()->setRight(successor->getChildren()[1]);
+						if(successor->getChildren()[1])
+							successor->getChildren()[1]->setParent(node);
+					}
 					else
 						successor->getParent()->setLeft(0);
-					successor->calcBF();
+					rebalanceFromNode(successor);
 					delete successor;
+
 					s--;
 				}
 				else if(children[0])
@@ -275,20 +289,41 @@ namespace ft
 					node_type *predecessor = getLargestChild(children[0]);
 					std::cout << "predecessor is " << predecessor->getContent() << std::endl;
 					node->setContent(predecessor->getContent());
-					predecessor->getParent()->setLeft(0);
-					predecessor->calcBF();
+
+
+					if(predecessor == node->getChildren()[0])
+					{
+						predecessor->getParent()->setLeft(predecessor->getChildren()[0]);
+						if(predecessor->getChildren()[0])
+							predecessor->getChildren()[0]->setParent(node);
+					}
+					else
+						predecessor->getParent()->setLeft(0);
+					rebalanceFromNode(predecessor);
 					delete predecessor;
 					s--;
 				}
 				else
 				{
 					std::cout << "node to delete is leaf" << std::endl;
-					if(node->getContent() > node->getParent()->getContent())
-						node->getParent()->setRight(0);
+					if (node->getParent())
+					{
+						std::cout << "node has parent " << node->getParent() << std::endl;
+
+						if(node->getContent() > node->getParent()->getContent())
+							node->getParent()->setRight(0);
+						else 
+							node->getParent()->setLeft(0);
+						node->calcBF();
+						rebalanceFromNode(node->getParent());
+					}
 					else
-						node->getParent()->setLeft(0);
-					node->getParent()->calcBF();
+					{
+						std::cout << "node has no parent" << std::endl;
+						tree_root = 0;
+					}
 					delete node;
+
 					s--;
 				}
 
@@ -325,10 +360,11 @@ namespace ft
 
 			void print()
 			{
-				if(tree_root)
+				if (tree_root)
+				{
 					print("", tree_root, false);
-
-				std::cout << "height : " << tree_root->calcHeight() << " for " << s << " elements" <<std::endl;
+					std::cout << "height : " << tree_root->calcHeight() << " for " << s << " elements" <<std::endl;
+				}
 			}
 
 			void traverse(node_type *n)
@@ -343,6 +379,8 @@ namespace ft
 			void inOrderPrint(){
 				traverse(tree_root);
 				std::cout << std::endl;
+				std::cout << std::endl;
+				
 			}
 
 

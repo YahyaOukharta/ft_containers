@@ -30,9 +30,9 @@ int main()
     ft::Vector<int> vec(RANGE);
     std::generate(vec.begin(), vec.end(), rando);
 
-    for(size_t i = 0; i < vec.size(); i++)
-        std::cout << vec[i] <<" ";
-    std::cout << std::endl;
+    // for(size_t i = 0; i < vec.size(); i++)
+    //     vec[i] = i+1;
+    // std::cout << std::endl;
 
     ft::BST<int> tree(vec);
 
@@ -55,12 +55,12 @@ int main()
     // else
     //     std::cout <<  "Found nothing" << std::endl;
 
-    tree.deleteWithKey(5);
-      tree.deleteWithKey(3);
-        tree.deleteWithKey(1);
-          tree.deleteWithKey(8);
-    tree.print();
-    tree.inOrderPrint();
-
+    for(size_t i = 0; i < vec.size(); i++)
+    {
+        tree.deleteWithKey(vec[i]);
+        tree.print();
+        tree.inOrderPrint();
+        std::cout << std::endl;
+    }
     return (0);
 }
