@@ -290,7 +290,6 @@ namespace ft
 					std::cout << "predecessor is " << predecessor->getContent() << std::endl;
 					node->setContent(predecessor->getContent());
 
-
 					if(predecessor == node->getChildren()[0])
 					{
 						predecessor->getParent()->setLeft(predecessor->getChildren()[0]);

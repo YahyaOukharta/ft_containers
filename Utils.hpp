@@ -29,76 +29,6 @@ namespace ft {
     template<> struct is_integral <wchar_t>             { static const bool value = true; };
     template<> struct is_integral <char>                { static const bool value = true; };
     template<> struct is_integral <bool>                { static const bool value = true; };
-
-    // std::pair / std::make_pair
-    template <class T1, class T2> struct pair
-    {
-        typedef T1 first_type;
-        typedef T2 second_type;
-
-        first_type first;
-        second_type second;
-
-        pair(){
-
-        }
-
-        pair( const T1& x, const T2& y ): first(x), second(y){}
-
-        pair( const pair<T1, T2>& p ): first(p.first), second(p.second){}        
-
-        pair& operator=( const pair& other ){
-            first = other.first;
-            second = other.second;
-            return *this;
-        }
-        bool operator==(const pair& rhs ){
-            if (first == rhs.first)
-                return second == rhs.second;
-            else 
-                return first == rhs.first;
-        }
-
-        bool operator!=(const pair& rhs ){
-            if (first == rhs.first)
-                return second != rhs.second;
-            else 
-                return first != rhs.first;
-        }
-
-        bool operator<(const pair& rhs ){
-            if (first == rhs.first)
-                return second < rhs.second;
-            else 
-                return first < rhs.first;
-        }
-
-        bool operator<=(const pair& rhs ){
-            if (first == rhs.first)
-                return second <= rhs.second;
-            else 
-                return first <= rhs.first;
-        }
-
-        bool operator>(const pair& rhs ){
-            if (first == rhs.first)
-                return second > rhs.second;
-            else 
-                return first > rhs.first;
-        }
-
-        bool operator>=(const pair& rhs ){
-            if (first == rhs.first)
-                return second >= rhs.second;
-            else 
-                return first >= rhs.first;
-        }
-    };
-
-    template <class T1, class T2>
-    pair<T1,T2> make_pair (T1 x, T2 y){
-        return pair<T1,T2>(x,y);
-    }
     
     //std::lexicographical_compare
     template <class InputIterator1, class InputIterator2>
@@ -389,16 +319,157 @@ namespace ft {
         pointer operator->() {return &(*ptr);}
         reference operator[](size_t idx) const { return *(ptr - idx);}
     };
-    template<typename T>
-    class BinaryPredicates
+
+
+    // std::pair / std::make_pair
+    template <class T1, class T2> struct pair
     {
-        public:
-            static bool less(T a, T b){ return a < b;}
-            static bool greater(T a, T b){ return a > b;}
-            static bool lessOrEqual(T a, T b){ return a <= b;}
-            static bool greaterOrEqual(T a, T b){ return a >= b;}
-            static bool equals(T a, T b){ return a == b;}
-            static bool notEquals(T a, T b){ return a != b;}
+        typedef T1 first_type;
+        typedef T2 second_type;
+
+        first_type first;
+        second_type second;
+
+        pair(){
+
+        }
+
+        pair( const T1& x, const T2& y ): first(x), second(y){}
+
+        pair( const pair<T1, T2>& p ): first(p.first), second(p.second){}        
+
+        pair& operator=( const pair& other ){
+            first = other.first;
+            second = other.second;
+            return *this;
+        }
+        bool operator==(const pair& rhs ){
+            if (first == rhs.first)
+                return second == rhs.second;
+            else 
+                return first == rhs.first;
+        }
+
+        bool operator!=(const pair& rhs ){
+            if (first == rhs.first)
+                return second != rhs.second;
+            else 
+                return first != rhs.first;
+        }
+
+        bool operator<(const pair& rhs ){
+            if (first == rhs.first)
+                return second < rhs.second;
+            else 
+                return first < rhs.first;
+        }
+
+        bool operator<=(const pair& rhs ){
+            if (first == rhs.first)
+                return second <= rhs.second;
+            else 
+                return first <= rhs.first;
+        }
+
+        bool operator>(const pair& rhs ){
+            if (first == rhs.first)
+                return second > rhs.second;
+            else 
+                return first > rhs.first;
+        }
+
+        bool operator>=(const pair& rhs ){
+            if (first == rhs.first)
+                return second >= rhs.second;
+            else 
+                return first >= rhs.first;
+        }
+    };
+
+    template <class T1, class T2>
+    pair<T1,T2> make_pair (T1 x, T2 y){
+        return pair<T1,T2>(x,y);
+    }
+    // my mapiterator : ft::MapIterator
+    template <typename T>
+    class MapIterator : public iterator<std::bidirectional_iterator_tag, T> {
+        public :
+
+        typedef T                                                           value_type;
+        typedef ptrdiff_t                                                   difference_type;
+        typedef T*                                                          pointer;
+        typedef T&                                                          reference;
+        typedef typename  
+        iterator<std::bidirectional_iterator_tag, T>::iterator_category     iterator_category;
+        typedef typename Node
+  
+            pointer ptr;
+            
+            MapIterator(){ }
+            MapIterator(pointer _ptr) : ptr(_ptr){ }
+            MapIterator(MapIterator<value_type> const & it) : ptr(&(it[0])) {}
+
+            template <class InputIterator>
+            MapIterator(InputIterator it,
+                typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator()) : ptr(&(it[0])){}
+
+            ~MapIterator() {}
+
+            MapIterator &operator=(MapIterator<value_type> const & it)
+            {
+                MapIterator tmp = it;
+                ptr = &(*tmp);
+                return *this;
+            }
+
+            // MapIterator &operator++() {++ptr;return *this;}
+
+            // MapIterator operator++(int) {
+            //     MapIterator tmp(*this);
+            //     operator++();
+            //     return tmp;
+            // }
+
+            // MapIterator &operator--() {--ptr;return *this;}
+
+            // MapIterator operator--(int) {
+            //     MapIterator tmp(*this);
+            //     operator--();
+            //     return tmp;
+            // }
+            // reference operator*() {return *ptr;}
+            // pointer operator->() {return ptr;}
+            // reference operator[](size_t idx) const { return ptr[idx]; }
+            // MapIterator operator+ (const MapIterator& rhs)
+            // {     
+            //     pointer p = ptr + &(*rhs);
+            //     return MapIterator(p);
+            // }
+            // difference_type operator- (const MapIterator& rhs){
+            //     MapIterator tmp = rhs;
+            //     difference_type p = ptr - tmp.ptr;
+            //     return p;
+            // }
+            // MapIterator operator+=(size_t n){
+            //     this->ptr += n;
+            //     return *this;
+            // }
+            // MapIterator operator-=(size_t n){
+            //     this->ptr -= n;
+            //     return *this;
+            // }
+
+            // MapIterator operator+ (int n){ return MapIterator(ptr + n); }
+            // MapIterator operator- (int n){ return MapIterator(ptr - n); }
+            // friend MapIterator operator+ (int n, const MapIterator& rhs){ return MapIterator(rhs.ptr + n); }
+            // friend MapIterator operator- (int n, const MapIterator& rhs){ return MapIterator(rhs.ptr - n); }
+            // bool operator==(const MapIterator& rhs) const { return ptr == rhs.ptr; }
+            // bool operator!=(const MapIterator& rhs) const { return ptr != rhs.ptr; }
+
+            // bool operator< (const MapIterator& rhs){ return this->ptr < rhs.ptr; }
+            // bool operator> (const MapIterator& rhs){ return this->ptr > rhs.ptr; }
+            // bool operator<=(const MapIterator& rhs){ return this->ptr <= rhs.ptr; }
+            // bool operator>=(const MapIterator& rhs){ return this->ptr >= rhs.ptr; }
     };
 }
 
