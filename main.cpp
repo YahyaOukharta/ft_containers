@@ -26,7 +26,7 @@ int rando(){
 int main()
 {
 
-    std::srand(unsigned(std::time(nullptr)));
+    std::srand(unsigned(std::time(0)));
     ft::Vector<int> vec(RANGE);
     std::generate(vec.begin(), vec.end(), rando);
 
@@ -40,20 +40,27 @@ int main()
     tree.print();
     tree.inOrderPrint();
 
-    ft::Node<int> *s=tree.searchFor(4);
-    if(s)
-    {
-        std::cout << s->getContent()<< " " << "" << std::endl;
-        ft::Node<int> *l = tree.getLowestChild(s);
-        if (l)
-            std::cout << l->getContent()<< " " << "" << std::endl;
-        l = tree.getLargestChild(s);
-        if (l)
-            std::cout << l->getContent()<< " " << "" << std::endl;
+    // ft::Node<int> *s=tree.searchFor(4);
+    // if(s)
+    // {
+    //     std::cout << s->getContent()<< " " << "" << std::endl;
+    //     ft::Node<int> *l = tree.getLowestChild(s);
+    //     if (l)
+    //         std::cout << l->getContent()<< " " << "" << std::endl;
+    //     l = tree.getLargestChild(s);
+    //     if (l)
+    //         std::cout << l->getContent()<< " " << "" << std::endl;
 
-    }
-    else
-        std::cout <<  "Found nothing" << std::endl;
+    // }
+    // else
+    //     std::cout <<  "Found nothing" << std::endl;
+
+    tree.deleteWithKey(5);
+      tree.deleteWithKey(3);
+        tree.deleteWithKey(1);
+          tree.deleteWithKey(8);
+    tree.print();
+    tree.inOrderPrint();
 
     return (0);
 }

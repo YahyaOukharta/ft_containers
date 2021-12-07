@@ -32,6 +32,11 @@ namespace ft
 				bf = 0;
 			}
 
+			void setContent(key_type const& con)
+			{
+				content = con;
+			}
+			
 			void setLeft(Node *l)
 			{
 				children[0] = l;
@@ -103,7 +108,7 @@ namespace ft
 				fillFromVec(v);
 			}
 			~BST(){
-				
+				freeAll();
 			}
 
 			node_type *newNode(key_type const &k) const 
@@ -222,6 +227,7 @@ namespace ft
 					return getLowestChild(left);
 				else return n;
 			}
+
 			node_type *getLargestChild(node_type *n)
 			{
 				if (!n) return 0;
@@ -244,6 +250,65 @@ namespace ft
 				return (0);
 			}
 
+			void deleteWithKey(key_type const & k){
+				node_type *node = searchFor(k);
+				if(!node) return;
+				std::cout << "deleting " << k << std::endl;
+				node_type **children = node->getChildren();
+				// successor
+				if(children[1])
+				{
+					node_type *successor = getLowestChild(children[1]);
+					std::cout << "successor is " << successor->getContent() << std::endl;
+					node->setContent(successor->getContent());
+
+					if(successor == node->getChildren()[1])
+						successor->getParent()->setRight(0);
+					else
+						successor->getParent()->setLeft(0);
+					successor->calcBF();
+					delete successor;
+					s--;
+				}
+				else if(children[0])
+				{
+					node_type *predecessor = getLargestChild(children[0]);
+					std::cout << "predecessor is " << predecessor->getContent() << std::endl;
+					node->setContent(predecessor->getContent());
+					predecessor->getParent()->setLeft(0);
+					predecessor->calcBF();
+					delete predecessor;
+					s--;
+				}
+				else
+				{
+					std::cout << "node to delete is leaf" << std::endl;
+					if(node->getContent() > node->getParent()->getContent())
+						node->getParent()->setRight(0);
+					else
+						node->getParent()->setLeft(0);
+					node->getParent()->calcBF();
+					delete node;
+					s--;
+				}
+
+				//predecessor
+			}
+// Free
+			void freeSubtree(node_type *n)
+			{
+				node_type **children = n->getChildren();
+				if (children[0])
+					freeSubtree(children[0]);
+				if (children[1])
+					freeSubtree(children[1]);
+				delete n;
+			}
+
+			void freeAll(){
+				if (tree_root)
+					freeSubtree(tree_root);
+			}
 
 // Utils
 			void print(const std::string& prefix, node_type* node, bool isLeft)
