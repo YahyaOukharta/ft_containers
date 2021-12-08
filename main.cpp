@@ -1,9 +1,12 @@
-#include "Vector.hpp"
-#include "Stack.hpp"
+#include "./src/Vector/Vector.hpp"
+#include "./src/Stack/Stack.hpp"
+#include "./src/Map/Map.hpp"
+
 #include <random>
 #include <algorithm>
-#include "Map.hpp"
+
 #include <vector>
+
 #include <iomanip>
 #include <ctime>
 #include <sys/time.h>
@@ -15,7 +18,7 @@ int rando(){
     static std::vector<int> visited;
     int range = RANGE;
     int res = std::rand() % range;
-    if (std::find(visited.begin(),visited.end(),res)==visited.end())
+    if (std::find(visited.begin(),visited.end(),res) == visited.end())
     {
         visited.push_back(res);
         return res;

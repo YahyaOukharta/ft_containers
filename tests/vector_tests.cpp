@@ -18,7 +18,7 @@
 #include <unistd.h>
 #include <signal.h>
 #include <sys/time.h>
-#include "../Vector.hpp"
+#include "../src/Vector/Vector.hpp"
 
 #define BLUE "\e[0;34m"
 #define RED "\e[0;31m"

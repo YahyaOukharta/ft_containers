@@ -4,8 +4,10 @@
 # include <iostream>
 # include <string>
 # include <memory>
-# define INITIAL_CAPACITY 100
-# include "Utils.hpp"
+
+# include "../Utils/Utils.hpp"
+# include "../Utils/Iterators.hpp"
+
 # include <stddef.h>
 
 namespace ft {

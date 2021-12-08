@@ -3,7 +3,8 @@
 
 # include <iostream>
 # include <string>
-#include "Vector.hpp"
+#include "../Vector/Vector.hpp"
+
 namespace ft
 {
 	template<
@@ -22,6 +23,7 @@ namespace ft
 
 		protected:
 			container_type c;
+			
 		public:
 
 			Stack( const Container& cont = Container() ){
