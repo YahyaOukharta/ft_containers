@@ -106,6 +106,9 @@ namespace ft
 
 		typedef 	Pair pair_type;
 		typedef  	Node<pair_type> node_type;
+		typedef typename node_type::key_type key_type;
+		typedef typename node_type::value_type value_type;
+		
 
 		node_type *tree_root;
 		size_t s;
@@ -177,7 +180,7 @@ namespace ft
 					return;
 				if (v.first == n->getKey())
 					return;
-				ptrdiff_t diff = v.first - n->getKey();
+				ptrdiff_t diff = (v.first > n->getKey() ? 1 : -1);
 				int dir = ((diff/ABS(diff))+1)/2;
 				node_type **children = n->getChildren();
 				if(!children[dir])
@@ -259,7 +262,7 @@ namespace ft
 				else return n;
 			}
 
-			node_type *searchFor(pair_type const &key){
+			node_type *searchFor(key_type const &key){
 				node_type *n=tree_root;
 				while (n)
 				{
@@ -272,7 +275,7 @@ namespace ft
 				return (0);
 			}
 
-			void deleteWithKey(pair_type const & k){
+			void deleteWithKey(key_type const & k){
 				node_type *node = searchFor(k);
 				if(!node) return;
 				std::cout << "deleting " << k << std::endl;
@@ -282,7 +285,7 @@ namespace ft
 				{
 					node_type *successor = getLowestChild(children[1]);
 					std::cout << "successor is " << successor->getKey() << std::endl;
-					node->setContent(successor->getKey());
+					node->setPair(successor->getPair());
 
 					if(successor == node->getChildren()[1])
 					{
@@ -301,7 +304,7 @@ namespace ft
 				{
 					node_type *predecessor = getLargestChild(children[0]);
 					std::cout << "predecessor is " << predecessor->getKey() << std::endl;
-					node->setContent(predecessor->getKey());
+					node->setPair(predecessor->getPair());
 
 					if(predecessor == node->getChildren()[0])
 					{
@@ -384,7 +387,7 @@ namespace ft
 				if(!n)
 					return;
 				traverse(n->getChildren()[0]);
-				std::cout << n->getKey() << " - ";
+				std::cout << "<"<<n->getKey() << ", "<<n->getValue()<<"> - ";
 				traverse(n->getChildren()[1]);
 			}
 
