@@ -13,31 +13,46 @@
 #include <unistd.h>
 #include <signal.h>
 
-# define RANGE 10
-int rando(){
+# define RANGE 13
+
+#include <sstream>
+
+template <typename T>
+  std::string NumberToString ( T Number )
+  {
+     std::ostringstream ss;
+     ss << Number;
+     return ss.str();
+  }
+
+ft::pair<int, std::string> rando(){
     static std::vector<int> visited;
     int range = RANGE;
     int res = std::rand() % range;
     if (std::find(visited.begin(),visited.end(),res) == visited.end())
     {
+        std::string t = "test";
         visited.push_back(res);
-        return res;
+        return ft::make_pair(res, t + NumberToString(res));
     }
     else return rando();
 }
 
 int main()
 {
+// ft::pair<int, std::string> 
+    std::srand(unsigned(std::time(0)));
+    ft::Vector<ft::pair<int, std::string> > vec(RANGE);
+    std::generate(vec.begin(), vec.end(), rando);
 
-    // std::srand(unsigned(std::time(0)));
-    // ft::Vector<int> vec(RANGE);
-    // std::generate(vec.begin(), vec.end(), rando);
+    // for(size_t i = 0; i < vec.size(); i++)
+    //     vec[i] = i+1;
+    // std::cout << std::endl;
 
-    // // for(size_t i = 0; i < vec.size(); i++)
-    // //     vec[i] = i+1;
-    // // std::cout << std::endl;
-
-    // ft::BST<int> tree(vec);
+    ft::BST<ft::pair<int, std::string> > tree(vec);
+    // std::string t = "test";
+    // tree.insert(ft::make_pair(10, t));
+    tree.print();
     
     return (0);
 }

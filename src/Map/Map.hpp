@@ -56,7 +56,7 @@ namespace ft{
 			};
 
 		private:
-
+			ft::BST<value_type> tree;
 		public:
 
 			Map(){

@@ -10,22 +10,24 @@ namespace ft
 {
 
 
-	template < class Key>
+	template < class Pair>
 	class Node {
 		public:
-			typedef 	Key key_type;
-
+			typedef 			Pair 				pair_type;
+			typedef	typename pair_type::first_type 	key_type;
+			typedef	typename pair_type::second_type value_type;
 		private:
-			key_type content;
+
+			pair_type p;
 			Node *children[2];
 			Node *parent;
 			int bf;
 			int h;
 			
 		public:
-			Node(key_type const &c)
+			Node(pair_type const &c)
 			{
-				content = c;
+				p = c;
 				children[0] = 0;
 				children[1] = 0;
 				parent = 0;
@@ -33,11 +35,25 @@ namespace ft
 				bf = 0;
 			}
 
-			void setContent(key_type const& con)
+			void setPair(pair_type const& con)
 			{
-				content = con;
+				p = con;
 			}
-			
+			pair_type &getPair(void)
+			{
+				return p;
+			}
+
+			key_type &getKey()
+			{
+				return p.first;
+			}
+
+			value_type &getValue()
+			{
+				return p.second;
+			}
+
 			void setLeft(Node *l)
 			{
 				children[0] = l;
@@ -45,17 +61,12 @@ namespace ft
 			void setRight(Node *r)
 			{
 				children[1] = r;
-
 			}
 			void setParent(Node *p)
 			{
 				parent = p;
 			}
 
-			key_type &getContent(void)
-			{
-				return content;
-			}
 			Node **getChildren(void){
 				return children;
 			}
@@ -89,12 +100,12 @@ namespace ft
 			}
 	};
 
-	template< class Key>
+	template< class Pair>
 	class BST
 	{
 
-		typedef 	Key key_type;
-		typedef  	Node<key_type> node_type;
+		typedef 	Pair pair_type;
+		typedef  	Node<pair_type> node_type;
 
 		node_type *tree_root;
 		size_t s;
@@ -103,7 +114,7 @@ namespace ft
 			BST(void){
 				s=0;
 			}
-			BST(ft::Vector<key_type> const &v)
+			BST(ft::Vector<pair_type> const &v)
 			{
 				s=0;
 				fillFromVec(v);
@@ -112,18 +123,18 @@ namespace ft
 				freeAll();
 			}
 
-			node_type *newNode(key_type const &k) const 
+			node_type *newNode(pair_type const &k) const 
 			{
 				return new node_type(k);
 			}
 
-			void fillFromVec(ft::Vector<key_type> const &v){
-				for(typename ft::Vector<key_type>::iterator it = v.begin(); it!= v.end(); it++){
+			void fillFromVec(ft::Vector<pair_type> const &v){
+				for(typename ft::Vector<pair_type>::iterator it = v.begin(); it!= v.end(); it++){
 					insert(*it);
 				}
 			}
 
-			void insert(key_type const &v)
+			void insert(pair_type const &v)
 			{
 				if (tree_root)
 					insertAtNode(tree_root, v);
@@ -160,13 +171,13 @@ namespace ft
 				rebalanceFromNode(n->getParent());
 			}
 
-			void insertAtNode(node_type *n, key_type v)
+			void insertAtNode(node_type *n, pair_type v)
 			{
 				if(!n)
 					return;
-				if (v == n->getContent())
+				if (v.first == n->getKey())
 					return;
-				ptrdiff_t diff = v - n->getContent();
+				ptrdiff_t diff = v.first - n->getKey();
 				int dir = ((diff/ABS(diff))+1)/2;
 				node_type **children = n->getChildren();
 				if(!children[dir])
@@ -188,7 +199,7 @@ namespace ft
 
 				if (init_parent)
 				{
-					int dir = init_parent->getContent() < n->getContent();
+					int dir = init_parent->getKey() < n->getKey();
 					init_parent->getChildren()[dir] = right;
 				}
 				else
@@ -213,7 +224,7 @@ namespace ft
 				node_type *left_right_subtree = left->getChildren()[1];
 				if (init_parent)
 				{
-					int dir = init_parent->getContent() < n->getContent();
+					int dir = init_parent->getKey() < n->getKey();
 					init_parent->getChildren()[dir] = left;
 				}
 				else
@@ -248,20 +259,20 @@ namespace ft
 				else return n;
 			}
 
-			node_type *searchFor(key_type const &key){
+			node_type *searchFor(pair_type const &key){
 				node_type *n=tree_root;
 				while (n)
 				{
-					if (n->getContent() == key)
+					if (n->getKey() == key)
 						return n;
 					node_type **children = n->getChildren();
-					int dir = n->getContent() < key;
+					int dir = n->getKey() < key;
 					n = children[dir];
 				}
 				return (0);
 			}
 
-			void deleteWithKey(key_type const & k){
+			void deleteWithKey(pair_type const & k){
 				node_type *node = searchFor(k);
 				if(!node) return;
 				std::cout << "deleting " << k << std::endl;
@@ -270,8 +281,8 @@ namespace ft
 				if(children[1])
 				{
 					node_type *successor = getLowestChild(children[1]);
-					std::cout << "successor is " << successor->getContent() << std::endl;
-					node->setContent(successor->getContent());
+					std::cout << "successor is " << successor->getKey() << std::endl;
+					node->setContent(successor->getKey());
 
 					if(successor == node->getChildren()[1])
 					{
@@ -289,8 +300,8 @@ namespace ft
 				else if(children[0])
 				{
 					node_type *predecessor = getLargestChild(children[0]);
-					std::cout << "predecessor is " << predecessor->getContent() << std::endl;
-					node->setContent(predecessor->getContent());
+					std::cout << "predecessor is " << predecessor->getKey() << std::endl;
+					node->setContent(predecessor->getKey());
 
 					if(predecessor == node->getChildren()[0])
 					{
@@ -311,7 +322,7 @@ namespace ft
 					{
 						std::cout << "node has parent " << node->getParent() << std::endl;
 
-						if(node->getContent() > node->getParent()->getContent())
+						if(node->getKey() > node->getParent()->getKey())
 							node->getParent()->setRight(0);
 						else 
 							node->getParent()->setLeft(0);
@@ -353,7 +364,7 @@ namespace ft
 				{
 					std::cout << prefix;
 					std::cout << (isLeft ? "├──" : "└──" );
-					std::cout << node->getContent() << " " << node->getBF() << std::endl;
+					std::cout << "<"<<node->getKey() << ", "<<node->getValue()<<"> " << node->getBF() << std::endl;
 					print( prefix + (isLeft ? "│   " : "    "), node->getChildren()[1], true);
 					print( prefix + (isLeft ? "│   " : "    "), node->getChildren()[0], false);
 				}
@@ -373,7 +384,7 @@ namespace ft
 				if(!n)
 					return;
 				traverse(n->getChildren()[0]);
-				std::cout << n->getContent() << " - ";
+				std::cout << n->getKey() << " - ";
 				traverse(n->getChildren()[1]);
 			}
 
