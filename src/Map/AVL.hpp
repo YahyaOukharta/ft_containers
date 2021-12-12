@@ -115,10 +115,12 @@ namespace ft
 
 		public:
 			BST(void){
+				tree_root = 0;
 				s=0;
 			}
 			BST(ft::Vector<pair_type> const &v)
 			{
+				tree_root = 0;
 				s=0;
 				fillFromVec(v);
 			}
