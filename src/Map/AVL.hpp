@@ -98,6 +98,53 @@ namespace ft
 					parent->calcBF();
 				return bf;
 			}
+
+			Node *getLowestChild(Node *n)
+			{
+				if (!n) return 0;
+				Node *left = n->getChildren()[0];
+				if (left)
+					return getLowestChild(left);
+				else return n;
+			}
+
+			Node *getLargestChild(Node *n)
+			{
+				if (!n) return 0;
+				Node *right = n->getChildren()[1];
+				if (right)
+					return getLargestChild(right);
+				else return n;
+			}
+			Node *next(){
+				if (children[1])
+					return (getLowestChild(children[1]));
+				else{
+					Node *tmp = this;
+					while (tmp->parent && tmp->getKey() > tmp->parent->getKey())
+					{
+						tmp = tmp->parent;
+					}
+					if(!tmp->getParent())
+						return (0);
+					else return tmp->getParent();
+				}
+			}
+			Node *previous(){
+				if (children[0])
+					return (getLargestChild(children[0]));
+				else{
+					Node *tmp = this;
+					while (tmp->parent && tmp->getKey() < tmp->parent->getKey())
+					{
+						tmp = tmp->parent;
+					}
+					if(!tmp->getParent())
+						return (0);
+					else return tmp->getParent();
+				}
+			}
+
 	};
 
 	template< class Pair>

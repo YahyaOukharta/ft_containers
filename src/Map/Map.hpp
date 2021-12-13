@@ -3,9 +3,10 @@
 
 # include <iostream>
 # include <string>
-# include "../Utils/Utils.hpp"
-# include "../Vector/Vector.hpp"
 # include "AVL.hpp"
+# include "../Utils/Utils.hpp"
+# include "./Iterator.hpp"
+
 
 # define ABS(x) (x<0?-x:x)
 
@@ -52,7 +53,6 @@ namespace ft{
 					result_type operator()( const first_argument_type& lhs, const second_argument_type& rhs ) const{
 						return comp(lhs,rhs);
 					}
-
 			};
 
 		private:

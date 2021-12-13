@@ -47,14 +47,11 @@ int main()
     ft::Vector<my_pair > vec(RANGE);
     std::generate(vec.begin(), vec.end(), rando);
 
-    // for(size_t i = 0; i < vec.size(); i++)
-    //     vec[i] = i+1;
+    // // for(size_t i = 0; i < vec.size(); i++)
+    // //     vec[i] = i+1;
     // std::cout << std::endl;
 
     ft::BST<my_pair > tree(vec);
-    tree.print();
-    tree.deleteWithKey(std::string("test4"));
-    tree.print();
     tree.insert(ft::make_pair(std::string("new value1"),42));
     tree.insert(ft::make_pair(std::string("new value2"),42));
     tree.insert(ft::make_pair(std::string("new value3"),42));
@@ -62,5 +59,14 @@ int main()
 
     tree.print();
     tree.inOrderPrint();
+
+    ft::MapIterator<my_pair> it(tree.searchFor("test3"));
+    ft::Node<my_pair> *n = tree.searchFor("test9");    
+    while (n)
+    {
+        std::cout << n->getKey() << " " << n->getValue() << std::endl;
+        n = n->previous();
+    }
+
     return (0);
 }
