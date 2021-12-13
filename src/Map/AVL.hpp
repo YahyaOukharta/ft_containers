@@ -390,9 +390,21 @@ namespace ft
 
 					s--;
 				}
-
-				//predecessor
 			}
+
+			node_type *first(){
+				if (tree_root)
+					return getLowestChild(tree_root);
+				else
+					return (0);
+			}
+			node_type *last(){
+				if (tree_root)
+					return getLargestChild(tree_root);
+				else
+					return (0);
+			}
+
 // Free
 			void freeSubtree(node_type *n)
 			{

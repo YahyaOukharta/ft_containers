@@ -39,24 +39,26 @@ namespace ft
             return *this;
         }
 
-        // MapIterator &operator++() {++ptr;return *this;}
+        MapIterator &operator++() {node = node->next(); return *this;}
 
-        // MapIterator operator++(int) {
-        //     MapIterator tmp(*this);
-        //     operator++();
-        //     return tmp;
-        // }
+        MapIterator operator++(int) {
+            MapIterator tmp(*this);
+            operator++();
+            return tmp;
+        }
 
-        // MapIterator &operator--() {--ptr;return *this;}
+        MapIterator &operator--() {node = node->previous();return *this;}
 
-        // MapIterator operator--(int) {
-        //     MapIterator tmp(*this);
-        //     operator--();
-        //     return tmp;
-        // }
-        // reference operator*() {return *ptr;}
-        // pointer operator->() {return ptr;}
+        MapIterator operator--(int) {
+            MapIterator tmp(*this);
+            operator--();
+            return tmp;
+        }
+
+        reference operator*() {return node->getPair();}
+        pointer operator->() { return &(node->getPair());}
         // reference operator[](size_t idx) const { return ptr[idx]; }
+
         // MapIterator operator+ (const MapIterator& rhs)
         // {
         //     pointer p = ptr + &(*rhs);
@@ -80,8 +82,8 @@ namespace ft
         // MapIterator operator- (int n){ return MapIterator(ptr - n); }
         // friend MapIterator operator+ (int n, const MapIterator& rhs){ return MapIterator(rhs.ptr + n); }
         // friend MapIterator operator- (int n, const MapIterator& rhs){ return MapIterator(rhs.ptr - n); }
-        // bool operator==(const MapIterator& rhs) const { return ptr == rhs.ptr; }
-        // bool operator!=(const MapIterator& rhs) const { return ptr != rhs.ptr; }
+        bool operator==(const MapIterator& rhs) const { return node == rhs.node; }
+        bool operator!=(const MapIterator& rhs) const { return node != rhs.node; }
 
         // bool operator< (const MapIterator& rhs){ return this->ptr < rhs.ptr; }
         // bool operator> (const MapIterator& rhs){ return this->ptr > rhs.ptr; }

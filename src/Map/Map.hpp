@@ -33,10 +33,10 @@ namespace ft{
 			typedef typename Allocator::pointer 		pointer;
 			typedef typename Allocator::const_pointer	const_pointer;
 
-			// typedef ft::MapIterator<value_type>			iterator;
-			// typedef ft::MapIterator<const value_type>	const_iterator;
-			// typedef ft::reverse_iterator<iterator>		reverse_iterator;
-			// typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
+			typedef ft::MapIterator<value_type>			iterator;
+			typedef ft::MapIterator<const value_type>	const_iterator;
+			typedef ft::reverse_iterator<iterator>		reverse_iterator;
+			typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
 			
 			class value_compare
 			{

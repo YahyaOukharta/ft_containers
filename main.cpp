@@ -60,13 +60,21 @@ int main()
     tree.print();
     tree.inOrderPrint();
 
-    ft::MapIterator<my_pair> it(tree.searchFor("test3"));
-    ft::Node<my_pair> *n = tree.searchFor("test9");    
-    while (n)
+    ft::MapIterator<my_pair> it(tree.searchFor("test9"));
+    ft::MapIterator<my_pair> end(tree.searchFor("testdfdfdf"));
+
+    while (it != end)
     {
-        std::cout << n->getKey() << " " << n->getValue() << std::endl;
-        n = n->previous();
+        std::cout << it->first << " " << it->second << std::endl;
+        it--;
     }
+
+    // ft::Node<my_pair> *n = tree.searchFor("test9");    
+    // while (n)
+    // {
+    //     std::cout << n->getKey() << " " << n->getValue() << std::endl;
+    //     n = n->previous();
+    // }
 
     return (0);
 }
