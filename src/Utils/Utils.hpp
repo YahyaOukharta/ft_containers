@@ -104,15 +104,42 @@ namespace ft {
         first_type first;
         second_type second;
 
-        pair(){
+        pair(): first(first_type()), second(second_type()){
 
         }
 
-        pair( const T1& x, const T2& y ): first(x), second(y){}
+        pair( const T1& x, const T2& y )
+        {
+            first_type a = x;
+            second_type b = y;
+            first = a;
+            second = b;
+        }
 
-        pair( const pair<T1, T2>& p ): first(p.first), second(p.second){}        
+        pair( const pair<T1, T2>& p ): first(first_type(p.first)), second(second_type(p.second))
+        {
 
-        pair& operator=( const pair& other ){
+        }        
+        template<typename U1, typename U2>
+        pair( const pair<U1, U2>& p ): first(first_type(p.first)), second(second_type(p.second))
+        {
+
+        }       
+
+        template<typename U1, typename U2>
+        pair& operator=( const pair<U1, U2>& p )
+        {
+            first = first_type(p.first);
+            second = second_type(p.second);
+        }      
+        template<typename U1, typename U2>
+        pair& operator=( const std::pair<U1, U2>& p )
+        {
+            first = first_type(p.first);
+            second = second_type(p.second);
+        }      
+        pair& operator=( const pair& other)
+        {
             first = other.first;
             second = other.second;
             return *this;
@@ -161,7 +188,8 @@ namespace ft {
     };
 
     template <class T1, class T2>
-    pair<T1,T2> make_pair (T1 x, T2 y){
+    pair<T1,T2> make_pair (T1 x, T2 y)
+    {
         return pair<T1,T2>(x,y);
     }
 

@@ -151,6 +151,8 @@ namespace ft
 	class BST
 	{
 
+		public:
+		
 		typedef 	Pair pair_type;
 		typedef  	Node<pair_type> node_type;
 		typedef typename node_type::key_type key_type;
@@ -160,7 +162,6 @@ namespace ft
 		node_type *tree_root;
 		size_t s;
 
-		public:
 			BST(void){
 				tree_root = 0;
 				s=0;
@@ -293,7 +294,7 @@ namespace ft
 
 			}
 
-			node_type *getLowestChild(node_type *n)
+			node_type *getLowestChild(node_type *n) const
 			{
 				if (!n) return 0;
 				node_type *left = n->getChildren()[0];
@@ -302,7 +303,7 @@ namespace ft
 				else return n;
 			}
 
-			node_type *getLargestChild(node_type *n)
+			node_type *getLargestChild(node_type *n) const
 			{
 				if (!n) return 0;
 				node_type *right = n->getChildren()[1];
@@ -311,7 +312,8 @@ namespace ft
 				else return n;
 			}
 
-			node_type *searchFor(key_type const &key){
+			node_type *searchFor(key_type const &key) const
+			{
 				node_type *n=tree_root;
 				while (n)
 				{

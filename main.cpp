@@ -6,6 +6,7 @@
 #include <algorithm>
 
 #include <vector>
+#include <map>
 
 #include <iomanip>
 #include <ctime>
@@ -51,24 +52,19 @@ int main()
     // //     vec[i] = i+1;
     // std::cout << std::endl;
 
-    ft::BST<my_pair > tree(vec);
-    tree.insert(ft::make_pair(std::string("new value1"),42));
-    tree.insert(ft::make_pair(std::string("new value2"),42));
-    tree.insert(ft::make_pair(std::string("new value3"),42));
+    // ft::BST<my_pair > tree(vec);
+    // tree.insert(ft::make_pair(std::string("new value1"),42));
+    // tree.insert(ft::make_pair(std::string("new value2"),42));
+    // tree.insert(ft::make_pair(std::string("new value3"),42));
 
+    // tree.print();
+    // tree.inOrderPrint();
 
-    tree.print();
-    tree.inOrderPrint();
+    ft::Map<std::string, int> m;
+    m.insert(ft::make_pair("hello", 3));
 
-    ft::MapIterator<my_pair> it(tree.searchFor("test9"));
-    ft::MapIterator<my_pair> end(tree.searchFor("testdfdfdf"));
-
-    while (it != end)
-    {
-        std::cout << it->first << " " << it->second << std::endl;
-        it--;
-    }
-
+    // std::map<std::string, int> m2;
+    // m2.insert(std::make_pair<>("hello", 3));
     // ft::Node<my_pair> *n = tree.searchFor("test9");    
     // while (n)
     // {

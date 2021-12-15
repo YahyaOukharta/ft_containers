@@ -40,3 +40,6 @@ stack: fclean
 	./stack.out
 	
 map:
+	$(COMP) -o map.out $(FLAGS) tests/map_tests.cpp
+	clear
+	./map.out
