@@ -48,8 +48,8 @@ int main()
     ft::Vector<my_pair > vec(RANGE);
     std::generate(vec.begin(), vec.end(), rando);
 
-    // // for(size_t i = 0; i < vec.size(); i++)
-    // //     vec[i] = i+1;
+    // for(size_t i = 0; i < vec.size(); i++)
+    //     vec[i] = i+1;
     // std::cout << std::endl;
 
     // ft::BST<my_pair > tree(vec);
@@ -61,7 +61,13 @@ int main()
     // tree.inOrderPrint();
 
     ft::Map<std::string, int> m;
-    m.insert(ft::make_pair("hello", 3));
+    m.insert(vec.begin(),vec.end());
+    m.print();
+    m.erase(m.begin());
+    m.print();
+
+
+
 
     // std::map<std::string, int> m2;
     // m2.insert(std::make_pair<>("hello", 3));

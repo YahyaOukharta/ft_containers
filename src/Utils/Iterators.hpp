@@ -62,11 +62,11 @@ namespace ft{
             
             RandomAccessIterator(){ }
             RandomAccessIterator(pointer _ptr) : ptr(_ptr){ }
-            RandomAccessIterator(RandomAccessIterator<value_type> const & it) : ptr(&(it[0])) {}
+            RandomAccessIterator(RandomAccessIterator<value_type> const & it) : ptr(&(*it)) {}
 
             template <class InputIterator>
             RandomAccessIterator(InputIterator it,
-                typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator()) : ptr(&(it[0])){}
+                typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator()) : ptr(&(*it)){}
 
             ~RandomAccessIterator() {}
 
@@ -144,11 +144,11 @@ namespace ft{
         reverse_iterator(pointer _ptr) : ptr(_ptr){ }
 
         template<typename T>
-        reverse_iterator(reverse_iterator<T> const& it) : ptr(&(it[0])), iter(it){
+        reverse_iterator(reverse_iterator<T> const& it) : ptr(&(*it)), iter(it){
         }
         template<class InputIterator>
         reverse_iterator(InputIterator it,
-            typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator()) : ptr(&(it[0]) - 1), iter(it)
+            typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator()) : ptr(&(*it) - 1), iter(it)
         {
         }
 

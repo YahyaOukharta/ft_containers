@@ -10,24 +10,50 @@ namespace ft
 {
 
 
-	template < class Pair>
+	template < class Pair, class Allocator = std::allocator<Pair> >
 	class Node {
+
 		public:
 			typedef 			Pair 				pair_type;
 			typedef	typename pair_type::first_type 	key_type;
 			typedef	typename pair_type::second_type value_type;
-		private:
+			typedef						Allocator   allocator_type;
 
-			pair_type p;
+		private:
+			pair_type *p;
 			Node *children[2];
 			Node *parent;
 			int bf;
 			int h;
-			
+			allocator_type alloc;
+
 		public:
+
 			Node(pair_type const &c)
 			{
-				p = c;
+				p = alloc.allocate(1);
+				alloc.construct(p, ft::pair<key_type,value_type>(c));
+				
+				children[0] = 0;
+				children[1] = 0;
+				parent = 0;
+				h = 0;
+				bf = 0;
+			}
+
+			Node()
+			{
+				p = 0;
+				children[0] = 0;
+				children[1] = 0;
+				parent = 0;
+				h = 0;
+				bf = 0;
+			}
+
+			void init()
+			{
+				p = 0;
 				children[0] = 0;
 				children[1] = 0;
 				parent = 0;
@@ -37,34 +63,39 @@ namespace ft
 
 			void setPair(pair_type const& con)
 			{
-				p = con;
+				if (!p)
+					p = alloc.allocate(1);
+				alloc.construct(p, con);
 			}
+
 			pair_type &getPair(void)
 			{
-				return p;
+				return *p;
 			}
 
 			key_type &getKey()
 			{
-				return p.first;
+				return p->first;
 			}
 
 			value_type &getValue()
 			{
-				return p.second;
+				return p->second;
 			}
 
 			void setLeft(Node *l)
 			{
 				children[0] = l;
 			}
+
 			void setRight(Node *r)
 			{
 				children[1] = r;
 			}
-			void setParent(Node *p)
+
+			void setParent(Node *_p)
 			{
-				parent = p;
+				parent = _p;
 			}
 
 			Node **getChildren(void){
@@ -147,7 +178,7 @@ namespace ft
 
 	};
 
-	template< class Pair>
+	template< class Pair, class Allocator = std::allocator<Pair> >
 	class BST
 	{
 
@@ -158,9 +189,11 @@ namespace ft
 		typedef typename node_type::key_type key_type;
 		typedef typename node_type::value_type value_type;
 		
+		typedef Allocator allocator_type;
 
 		node_type *tree_root;
 		size_t s;
+		allocator_type alloc;
 
 			BST(void){
 				tree_root = 0;
@@ -172,13 +205,18 @@ namespace ft
 				s=0;
 				fillFromVec(v);
 			}
+
 			~BST(){
 				freeAll();
 			}
 
 			node_type *newNode(pair_type const &k) const 
 			{
-				return new node_type(k);
+				typename allocator_type::template rebind<node_type>::other a;
+				node_type *n = a.allocate(1);
+				n->init();
+				n->setPair(k);
+				return n;
 			}
 
 			void fillFromVec(ft::Vector<pair_type> const &v){
@@ -194,7 +232,6 @@ namespace ft
 				else
 					tree_root = newNode(v);
 				s++;
-
 			}
 			
             void rebalanceAtNode(node_type *n)
@@ -416,11 +453,13 @@ namespace ft
 				if (children[1])
 					freeSubtree(children[1]);
 				delete n;
+				
 			}
 
 			void freeAll(){
 				if (tree_root)
 					freeSubtree(tree_root);
+				tree_root = 0;
 			}
 
 // Utils

@@ -43,15 +43,14 @@ namespace ft{
 			class value_compare
 			{
 					typedef bool 		result_type;
-					typedef value_type	first_argument_type;
-					typedef value_type	second_argument_type;
+					typedef typename allocator_type::value_type	first_argument_type;
+					typedef typename allocator_type::value_type	second_argument_type;
 
 				protected :
 					Compare comp;
 
-					value_compare( Compare c): comp(c) {}
-				
 				public:
+					value_compare( Compare c): comp(c) {}
 					result_type operator()( const first_argument_type& lhs, const second_argument_type& rhs ) const{
 						return comp(lhs,rhs);
 					}
@@ -59,23 +58,29 @@ namespace ft{
 
 		private:
 			ft::BST<value_type> tree;
-			key_compare cmp;
+			key_compare k_cmp;
+			value_compare v_cmp;
 			allocator_type alloc;
+
 		public:
 
-			Map() {
-
+			Map() :v_cmp(Compare()){
+				k_cmp = Compare();
 			}
 
-			Map( const Compare& comp, const Allocator& alloc = Allocator() ){
-				cmp = comp;
+			Map( const Compare& comp, const Allocator& _alloc = Allocator() ) :v_cmp(Compare())
+			{
+				alloc = _alloc;
+				k_cmp = comp;
 			}
 
 			template< class InputIt >
 			Map( InputIt first, InputIt last,
 				typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type = InputIt())
+				:v_cmp(Compare())
 			{
-
+				k_cmp = Compare();
+				insert(first,last);
 			}
 
 			Map( Map const & other );
@@ -177,7 +182,10 @@ namespace ft{
 			}
 
 			//erase
-			void erase( iterator pos );
+			void erase( iterator pos ){
+				value_type p = *pos;
+				tree.deleteWithKey(p.first);
+			}
 			void erase( iterator first, iterator last );
 			size_type erase( const key_type& key );
 			
@@ -207,11 +215,11 @@ namespace ft{
 		//Observers
 			//key_comp
 			key_compare key_comp() const{
-				return key_compare();
+				return k_cmp;
 			}
 			//value_comp
 			value_compare value_comp() const{
-				return value_compare();
+				return v_cmp;
 			}
 
 		//Operators
@@ -226,12 +234,18 @@ namespace ft{
 		bool operator> (const Map& rhs );
 
 		bool operator>=(const Map& rhs );
+	
+		void print(){
+			tree.print();
+		}
 	};
 
 	//swap (map specialization)
 	template< class Key, class T, class Compare, class Alloc >
 	void swap( Map<Key,T,Compare,Alloc>& lhs,
 			Map<Key,T,Compare,Alloc>& rhs );
+
+
 
 }
 

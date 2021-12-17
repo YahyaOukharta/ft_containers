@@ -104,6 +104,7 @@ namespace ft {
         first_type first;
         second_type second;
 
+        //constructors
         pair(): first(first_type()), second(second_type()){
 
         }
@@ -115,35 +116,42 @@ namespace ft {
             first = a;
             second = b;
         }
-
-        pair( const pair<T1, T2>& p ): first(first_type(p.first)), second(second_type(p.second))
-        {
-
-        }        
+     
         template<typename U1, typename U2>
         pair( const pair<U1, U2>& p ): first(first_type(p.first)), second(second_type(p.second))
         {
 
-        }       
+        }
 
+        //operator=
         template<typename U1, typename U2>
         pair& operator=( const pair<U1, U2>& p )
         {
             first = first_type(p.first);
             second = second_type(p.second);
         }      
-        template<typename U1, typename U2>
-        pair& operator=( const std::pair<U1, U2>& p )
-        {
-            first = first_type(p.first);
-            second = second_type(p.second);
-        }      
-        pair& operator=( const pair& other)
+
+        pair& operator=( const pair& other )
         {
             first = other.first;
             second = other.second;
             return *this;
         }
+
+        pair& operator=( const std::pair<T1,T2>& other )
+        {
+            first = other.first;
+            second = other.second;
+            return *this;
+        }
+        template<typename U1, typename U2>
+        pair& operator=( const std::pair<U1, U2>& p )
+        {
+            first = first_type(p.first);
+            second = second_type(p.second);
+        }   
+
+        //relational ops
         bool operator==(const pair& rhs ){
             if (first == rhs.first)
                 return second == rhs.second;
