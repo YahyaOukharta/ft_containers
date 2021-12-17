@@ -40,19 +40,18 @@ namespace ft{
 
 			typedef typename ft::BST<value_type,allocator_type>::node_type node_type;
 
-			class value_compare
-			{
-					typedef bool 		result_type;
-					typedef typename allocator_type::value_type	first_argument_type;
-					typedef typename allocator_type::value_type	second_argument_type;
-
-				protected :
+			class value_compare:public std::binary_function<value_type,value_type,bool>
+			{   // in C++98, it is required to inherit binary_function<value_type,value_type,bool>
+				protected:
 					Compare comp;
-
 				public:
-					value_compare( Compare c): comp(c) {}
-					result_type operator()( const first_argument_type& lhs, const second_argument_type& rhs ) const{
-						return comp(lhs,rhs);
+					value_compare (Compare c) : comp(c) {}  // constructed with map's comparison object
+					typedef bool result_type;
+					typedef value_type first_argument_type;
+					typedef value_type second_argument_type;
+					bool operator() (const value_type& x, const value_type& y) const
+					{
+						return comp(x.first, y.first);
 					}
 			};
 
