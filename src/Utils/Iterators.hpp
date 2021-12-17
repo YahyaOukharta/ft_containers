@@ -62,7 +62,7 @@ namespace ft{
             
             RandomAccessIterator(){ }
             RandomAccessIterator(pointer _ptr) : ptr(_ptr){ }
-            RandomAccessIterator(RandomAccessIterator<value_type> const & it) : ptr(&(*it)) {}
+            RandomAccessIterator(RandomAccessIterator<value_type> const & it) : ptr((it.ptr)) {}
 
             template <class InputIterator>
             RandomAccessIterator(InputIterator it,

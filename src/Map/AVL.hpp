@@ -61,12 +61,18 @@ namespace ft
 				bf = 0;
 			}
 
+			void freeNode()
+			{
+				if(p)
+					alloc.deallocate(p,1);
+			}
 			void setPair(pair_type const& con)
 			{
 				if (!p)
 					p = alloc.allocate(1);
 				alloc.construct(p, con);
 			}
+			
 
 			pair_type &getPair(void)
 			{
@@ -185,11 +191,12 @@ namespace ft
 		public:
 		
 		typedef 	Pair pair_type;
-		typedef  	Node<pair_type> node_type;
+		typedef  	Node<pair_type, Allocator> node_type;
 		typedef typename node_type::key_type key_type;
 		typedef typename node_type::value_type value_type;
 		
 		typedef Allocator allocator_type;
+
 
 		node_type *tree_root;
 		size_t s;
@@ -212,8 +219,8 @@ namespace ft
 
 			node_type *newNode(pair_type const &k) const 
 			{
-				typename allocator_type::template rebind<node_type>::other a;
-				node_type *n = a.allocate(1);
+				typename allocator_type::template rebind<node_type>::other alloc_node;
+				node_type *n = alloc_node.allocate(1);
 				n->init();
 				n->setPair(k);
 				return n;
@@ -368,6 +375,8 @@ namespace ft
 				if(!node) return;
 				std::cout << "deleting " << k << std::endl;
 				node_type **children = node->getChildren();
+				typename allocator_type::template rebind<node_type>::other alloc_node;
+
 				// successor
 				if(children[1])
 				{
@@ -384,8 +393,9 @@ namespace ft
 					else
 						successor->getParent()->setLeft(0);
 					rebalanceFromNode(successor);
-					delete successor;
-
+					//delete successor node
+					successor->freeNode();
+					alloc_node.deallocate(successor, 1);
 					s--;
 				}
 				else if(children[0])
@@ -403,7 +413,9 @@ namespace ft
 					else
 						predecessor->getParent()->setLeft(0);
 					rebalanceFromNode(predecessor);
-					delete predecessor;
+					//delete predecessor node
+					predecessor->freeNode();
+					alloc_node.deallocate(predecessor, 1);
 					s--;
 				}
 				else
@@ -425,8 +437,9 @@ namespace ft
 						std::cout << "node has no parent" << std::endl;
 						tree_root = 0;
 					}
-					delete node;
-
+					//delete leaf node
+					node->freeNode();
+					alloc_node.deallocate(node, 1);
 					s--;
 				}
 			}
@@ -452,6 +465,7 @@ namespace ft
 					freeSubtree(children[0]);
 				if (children[1])
 					freeSubtree(children[1]);
+				n->freeNode();
 				delete n;
 				
 			}

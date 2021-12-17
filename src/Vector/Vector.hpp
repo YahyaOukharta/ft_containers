@@ -209,7 +209,7 @@ namespace ft {
                     typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator())
             {
                 clear();
-                size_t size = last - first;
+                ptrdiff_t size = last - first;
                 if (size < 0)
                     return ;
                 resize(size);

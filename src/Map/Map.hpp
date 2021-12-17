@@ -38,7 +38,7 @@ namespace ft{
 			typedef ft::map_reverse_iterator<iterator>		reverse_iterator;
 			typedef ft::map_reverse_iterator<const_iterator> const_reverse_iterator;
 
-			typedef typename ft::BST<value_type>::node_type node_type;
+			typedef typename ft::BST<value_type,allocator_type>::node_type node_type;
 
 			class value_compare
 			{
@@ -57,7 +57,7 @@ namespace ft{
 			};
 
 		private:
-			ft::BST<value_type> tree;
+			ft::BST<value_type,allocator_type> tree;
 			key_compare k_cmp;
 			value_compare v_cmp;
 			allocator_type alloc;

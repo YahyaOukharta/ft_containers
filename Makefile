@@ -2,7 +2,7 @@ NAME = a.out
 
 SRCS = main.cpp
 
-FLAGS =  -std=c++98   -fsanitize=address -g 	#-Wall -Wextra -Werror
+FLAGS =  -std=c++98  -std=c++11 -fsanitize=address -g 	#-Wall -Wextra -Werror
 
 COMP=clang++
 ifeq ($(shell uname), Linux)
@@ -40,6 +40,6 @@ stack: fclean
 	./stack.out
 	
 map:
-	$(COMP) -o map.out $(FLAGS) tests/map_tests.cpp
+	$(COMP) -o map.out $(FLAGS) tests/Map_tests.cpp
 	clear
 	./map.out
