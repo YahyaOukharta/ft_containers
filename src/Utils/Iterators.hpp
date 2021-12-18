@@ -144,7 +144,7 @@ namespace ft{
         reverse_iterator(pointer _ptr) : ptr(_ptr){ }
 
         template<typename T>
-        reverse_iterator(reverse_iterator<T> const& it) : ptr(&(*it)), iter(it){
+        reverse_iterator(reverse_iterator<T> const& it) : ptr(&(it[0])), iter(it){
         }
         template<class InputIterator>
         reverse_iterator(InputIterator it,

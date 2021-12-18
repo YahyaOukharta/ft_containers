@@ -82,13 +82,21 @@ namespace ft{
 				insert(first,last);
 			}
 
-			Map( Map const & other );
+			Map( Map const & other ) : v_cmp(Compare())
+			{
+				clear();
+				insert(other.begin(),other.end());
+			}
 
 			~Map(){
 
 			}
 
-			Map &		operator=( Map const & other );
+			Map &		operator=( Map const & other ){
+				clear();
+				insert(other.begin(),other.end());
+				return *this;
+			}
 
 			allocator_type get_allocator() const{
 				return alloc;
@@ -185,31 +193,101 @@ namespace ft{
 				value_type p = *pos;
 				tree.deleteWithKey(p.first);
 			}
-			void erase( iterator first, iterator last );
-			size_type erase( const key_type& key );
+			void erase( iterator first, iterator last ){
+				while (first != last){
+					erase(first);
+					first++;
+				}
+			}
+			size_type erase( const key_type& key ){
+				size_type s = size();
+				tree.deleteWithKey(key);
+				return (s - size());
+			}
 			
+			void setAttributes(ft::BST<value_type,allocator_type> _tree, allocator_type a)
+			{
+				tree = _tree;
+				alloc = a;
+			}
+
+			ft::BST<value_type,allocator_type> &getTree()
+			{
+				return tree;
+			}
+
 			//swap
-			void swap( Map& other );
+			void swap( Map& other )
+			{
+				ft::BST<value_type,allocator_type> _tree = other.getTree();
+				allocator_type a = other.get_allocator();
+				other.setAttributes(tree, get_allocator());
+				setAttributes(_tree, a);
+			}
 
 		// Lookup
 			//count
-			size_type count( const key_type& key ) const;
+			size_type count( const key_type& key ) const{
+				if (tree.searchFor(key))
+					return (1);
+				return (0);
+			}
 
 			//find
-			iterator find( const key_type& key );
-			iterator find( const key_type& key ) const;
+			iterator find( const key_type& key ){
+				node_type *n;
+				if ((n = tree.searchFor(key)))
+					return (iterator(n));
+				return (end());
+			}
+			const_iterator find( const key_type& key ) const{
+				node_type *n;
+				if ((n = tree.searchFor(key)))
+					return (const_iterator(n));
+				return (end());
+			}
 
 			// //equal_range
-			std::pair<iterator,iterator> equal_range( const key_type& key );
-			std::pair<const_iterator,const_iterator> equal_range( const key_type& key ) const;
+			ft::pair<iterator,iterator> equal_range( const key_type& key ){
+				node_type *n;
+				if ((n = tree.searchFor(key)))
+					return (ft::make_pair(iterator(n),iterator(n->next())));
+				return (ft::make_pair(end(),end()));
+			}
+			ft::pair<const_iterator,const_iterator> equal_range( const key_type& key ) const{
+				node_type *n;
+				if ((n = tree.searchFor(key)))
+					return (ft::make_pair(const_iterator(n),const_iterator(n->next())));
+				return (ft::make_pair(end(),end()));
+			}
 
 			// //lower_bound
-			iterator lower_bound( const key_type& key );
-			const_iterator lower_bound( const key_type& key ) const;
+			iterator lower_bound( const key_type& key ){
+				node_type *n;
+				if ((n = tree.searchFor(key)))
+					return (iterator(n->previous()));
+				return (end());
+			}
+			const_iterator lower_bound( const key_type& key ) const{
+				node_type *n;
+				if ((n = tree.searchFor(key)))
+					return (const_iterator(n->previous()));
+				return (end());
+			}
 
 			// //upper_bound
-			iterator upper_bound( const key_type& key );
-			const_iterator upper_bound( const key_type& key ) const;
+			iterator upper_bound( const key_type& key ){
+				node_type *n;
+				if ((n = tree.searchFor(key)))
+					return (iterator(n->next()));
+				return (end());
+			}
+			const_iterator upper_bound( const key_type& key ) const{
+				node_type *n;
+				if ((n = tree.searchFor(key)))
+					return (const_iterator(n->next()));
+				return (end());
+			}
 
 		//Observers
 			//key_comp
@@ -222,17 +300,36 @@ namespace ft{
 			}
 
 		//Operators
-		bool operator==(const Map& rhs );
+		bool operator==(const Map& rhs ){
+			if(size() != rhs.size())
+                return false;
+            return ft::equal(begin(),end(),rhs.begin());
+		}
 
-		bool operator!=(const Map& rhs );
+		bool operator!=(const Map& rhs ){
+			return !operator==(rhs);
+		}
 
-		bool operator< (const Map& rhs );
+		bool operator< (const Map& rhs ){
+			if(size() != rhs.size())
+				return size() < rhs.size();
+			else return ft::lexicographical_compare(begin(),end(),rhs.begin(),rhs.end());
+		}
 
-		bool operator<=(const Map& rhs );
+		bool operator<=(const Map& rhs ){
+			return (!operator>(rhs));
+		}
 
-		bool operator> (const Map& rhs );
+		bool operator> (const Map& rhs )
+		{
+			if (size() != rhs.size())
+				return size() > rhs.size();
+			else return ft::lexicographical_compare(rhs.begin(), rhs.end(), begin(), end());
+		}
 
-		bool operator>=(const Map& rhs );
+		bool operator>=(const Map& rhs ){
+			return (!operator<(rhs));
+		}
 	
 		void print(){
 			tree.print();
@@ -242,7 +339,9 @@ namespace ft{
 	//swap (map specialization)
 	template< class Key, class T, class Compare, class Alloc >
 	void swap( Map<Key,T,Compare,Alloc>& lhs,
-			Map<Key,T,Compare,Alloc>& rhs );
+			Map<Key,T,Compare,Alloc>& rhs ){
+				lhs.swap(rhs);
+	}
 
 
 

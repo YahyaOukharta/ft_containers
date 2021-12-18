@@ -8,8 +8,6 @@
 
 namespace ft
 {
-
-
 	template < class Pair, class Allocator = std::allocator<Pair> >
 	class Node {
 
