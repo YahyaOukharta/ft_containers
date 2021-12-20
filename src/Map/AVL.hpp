@@ -49,6 +49,7 @@ namespace ft
 				bf = 0;
 			}
 
+
 			void init()
 			{
 				p = 0;
@@ -152,6 +153,7 @@ namespace ft
 				else return n;
 			}
 			Node *next(){
+
 				if (children[1])
 					return (getLowestChild(children[1]));
 				else{
@@ -371,7 +373,7 @@ namespace ft
 			void deleteWithKey(key_type const & k){
 				node_type *node = searchFor(k);
 				if(!node) return;
-				std::cout << "deleting " << k << std::endl;
+				//std::cout << "deleting " << k << std::endl;
 				node_type **children = node->getChildren();
 				typename allocator_type::template rebind<node_type>::other alloc_node;
 
@@ -379,7 +381,7 @@ namespace ft
 				if(children[1])
 				{
 					node_type *successor = getLowestChild(children[1]);
-					std::cout << "successor is " << successor->getKey() << std::endl;
+					//std::cout << "successor is " << successor->getKey() << std::endl;
 					node->setPair(successor->getPair());
 
 					if(successor == node->getChildren()[1])
@@ -399,7 +401,7 @@ namespace ft
 				else if(children[0])
 				{
 					node_type *predecessor = getLargestChild(children[0]);
-					std::cout << "predecessor is " << predecessor->getKey() << std::endl;
+					//std::cout << "predecessor is " << predecessor->getKey() << std::endl;
 					node->setPair(predecessor->getPair());
 
 					if(predecessor == node->getChildren()[0])
@@ -418,10 +420,10 @@ namespace ft
 				}
 				else
 				{
-					std::cout << "node to delete is leaf" << std::endl;
+					//std::cout << "node to delete is leaf" << std::endl;
 					if (node->getParent())
 					{
-						std::cout << "node has parent " << node->getParent() << std::endl;
+						//std::cout << "node has parent " << node->getParent() << std::endl;
 
 						if(node->getKey() > node->getParent()->getKey())
 							node->getParent()->setRight(0);
@@ -432,7 +434,7 @@ namespace ft
 					}
 					else
 					{
-						std::cout << "node has no parent" << std::endl;
+						//std::cout << "node has no parent" << std::endl;
 						tree_root = 0;
 					}
 					//delete leaf node

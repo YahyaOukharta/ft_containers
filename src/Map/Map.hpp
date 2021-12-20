@@ -123,10 +123,12 @@ namespace ft{
 			}
 
 			iterator end(){
-				return iterator(0);
+				iterator it(tree.getLargestChild(tree.tree_root));
+				return ++it;
 			}
 			const_iterator end() const{
-				return const_iterator(0);
+				iterator it(tree.getLargestChild(tree.tree_root));
+				return const_iterator(++it);
 			}
 
 		reverse_iterator rbegin()
@@ -140,12 +142,13 @@ namespace ft{
 			return const_reverse_iterator(it);
 		}
 
-		reverse_iterator rend(){
-			return reverse_iterator(0);
+		reverse_iterator rend(){ // to verify
+			iterator it = iterator(tree.getLowestChild(tree.tree_root));
+			return reverse_iterator(it);
 		}
 		const_reverse_iterator rend() const{
-			return const_reverse_iterator(0);
-
+			iterator it = iterator(tree.getLowestChild(tree.tree_root));
+			return const_reverse_iterator(it);
 		}
 
 		//Capacity

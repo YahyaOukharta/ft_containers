@@ -17,16 +17,22 @@ namespace ft
         typedef typename ft::Node<value_type> node_type;
 
         node_type *node;
-
+        bool rend,end;
         MapIterator() {}
+        
+        MapIterator(node_type *n) : node(n) {
+            rend=0,end=0;
+        }
 
-        MapIterator(node_type *n) : node(n) {}
-
-        MapIterator(MapIterator<value_type> const &it) : node(it.node) {}
+        MapIterator(MapIterator<value_type> const &it) : node(it.node) {
+            rend=0,end=0;
+        }
 
         template <class InputIterator>
         MapIterator(InputIterator it,
-                    typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator()) : node(it.node) {}
+                    typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator()) : node(it.node) {
+            rend=0,end=0;
+        }
 
         ~MapIterator() {}
 
@@ -34,12 +40,23 @@ namespace ft
         {
             MapIterator tmp = it;
             node = tmp.node;
+            rend=tmp.rend;
+            end=tmp.end;
             return *this;
         }
 
         MapIterator &operator++()
         {
-            node = node->next();
+            if(rend)
+                rend = 0;
+            else
+            {
+                node_type *n = node->next();
+                if(n)
+                    node = n;
+                else
+                    end = 1;
+            }
             return *this;
         }
 
@@ -52,7 +69,15 @@ namespace ft
 
         MapIterator &operator--()
         {
-            node = node->previous();
+            if(end)
+                end=0;
+            else{
+                node_type *n = node->previous();
+                if(n)
+                    node = n;
+                else
+                    rend = 1; 
+            }
             return *this;
         }
 

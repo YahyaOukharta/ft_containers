@@ -67,7 +67,8 @@ int main()
     m.print();
 
 
-
+    ft::Map<std::string, int>::iterator it = m.end()--;
+    std::cout << it->first << it->second << std::endl;
 
     // std::map<std::string, int> m2;
     // m2.insert(std::make_pair<>("hello", 3));
