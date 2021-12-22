@@ -115,8 +115,10 @@ namespace ft
         // MapIterator operator- (int n){ return MapIterator(ptr - n); }
         // friend MapIterator operator+ (int n, const MapIterator& rhs){ return MapIterator(rhs.ptr + n); }
         // friend MapIterator operator- (int n, const MapIterator& rhs){ return MapIterator(rhs.ptr - n); }
-        bool operator==(const MapIterator &rhs) const { return node == rhs.node; }
-        bool operator!=(const MapIterator &rhs) const { return node != rhs.node; }
+        bool operator==(const MapIterator &rhs) const { 
+            return node == rhs.node && end == rhs.end && rend==rhs.rend; 
+        }
+        bool operator!=(const MapIterator &rhs) const { return !operator==(rhs);}
 
         // bool operator< (const MapIterator& rhs){ return this->ptr < rhs.ptr; }
         // bool operator> (const MapIterator& rhs){ return this->ptr > rhs.ptr; }

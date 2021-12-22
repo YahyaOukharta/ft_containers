@@ -258,7 +258,7 @@ namespace ft
 							singleLeftRotate(n->getChildren()[0]);
 						singleRightRotate(n);
 					}
-						n->calcBF();
+					n->calcBF();
 				}
 			}
 
@@ -272,19 +272,40 @@ namespace ft
 			{
 				if(!n)
 					return;
-				if (v.first == n->getKey())
-					return;
-				ptrdiff_t diff = (v.first > n->getKey() ? 1 : -1);
-				int dir = ((diff/ABS(diff))+1)/2;
-				node_type **children = n->getChildren();
-				if(!children[dir])
+				// if (v.first == n->getKey())
+				// 	return;
+				// ptrdiff_t diff = (v.first > n->getKey() ? 1 : -1);
+				// int dir = ((diff/ABS(diff))+1)/2;
+				// node_type **children = n->getChildren();
+				// if(!children[dir])
+				// {
+				// 	children[dir] = newNode(v);
+				// 	children[dir]->setParent(n);
+				// }
+				// else
+				// 	insertAtNode(children[dir], v);
+				// rebalanceAtNode(n);
+
+				node_type *tmp = n;
+				while (v.first != tmp->getKey())
 				{
-					children[dir] = newNode(v);
-					children[dir]->setParent(n);
+					ptrdiff_t diff = (v.first > tmp->getKey() ? 1 : -1);
+					int dir = ((diff/ABS(diff))+1)/2;
+					node_type **children = tmp->getChildren();
+					if(!children[dir])
+					{
+						children[dir] = newNode(v);
+						children[dir]->setParent(tmp);
+						while (tmp)
+						{
+							rebalanceAtNode(tmp);
+							tmp = tmp->getParent();
+						}
+						break;
+					}
+					else
+						tmp = children[dir];
 				}
-				else
-					insertAtNode(children[dir], v);
-				rebalanceAtNode(n);
 			}
 
 			void singleLeftRotate(node_type *n)
