@@ -27,7 +27,7 @@
 #define RESET "\e[0m"
 
 #define EQUAL(x) ((x) ? (std::cout << "\033[1;32mAC\033[0m\n") : (std::cout << "\033[1;31mWA\033[0m\n"))
-#define TIME_FAC 4 // the ft::Map methods can be slower up to std::map methods * TIME_FAC (MAX 20)
+#define TIME_FAC 100// the ft::Map methods can be slower up to std::map methods * TIME_FAC (MAX 20)
 
 typedef std::pair<std::map<int, std::string>::iterator, std::map<int, std::string>::iterator> iter_def;
 typedef ft::pair<ft::Map<int, std::string>::iterator, ft::Map<int, std::string>::iterator> ft_iter_def;
@@ -441,17 +441,20 @@ void testConstructors()
 
             start = get_time();
             std::map<int, std::string> m;
-            for (int i = 0; i < 1e3; ++i)
+            for (int i = 0; i < 1e6; ++i)
                 m.insert(std::make_pair(i, "fill constructor test"));
             end = get_time();
             diff = end - start;
             diff = (diff) ? (diff * TIME_FAC) : TIME_FAC;
 
-            ualarm(diff * 500, 0);
+            ualarm(diff * 1e3, 0);
 
             ft::Map<int, std::string> my_m;
-            for (int i = 0; i < 1e3; ++i)
-                my_m.insert(ft::make_pair(i, "fill constructor test"));
+            for (int i = 0; i < 1e6; ++i)
+            {    my_m.insert(ft::make_pair(i, "fill constructor test"));
+                if(!(i%10000))
+                std::cout << i<<std::endl;
+                }
             ualarm(0, 0);
         }
         /*----------------------------------------------------------------------------------------------*/
@@ -2225,9 +2228,9 @@ int main()
     //TEST_CASE(reverse_iterator_tests);
     std::cout << std::endl;
 
-    // std::cout << YELLOW << "Testing Constructors;" << RESET << std::endl;
-    // TEST_CASE(testConstructors);
-    // std::cout << std::endl;
+    std::cout << YELLOW << "Testing Constructors;" << RESET << std::endl;
+    TEST_CASE(testConstructors);
+    std::cout << std::endl;
 
     std::cout << YELLOW << "Testing Iterator Methods;" << RESET << std::endl;
     TEST_CASE(testIterators);

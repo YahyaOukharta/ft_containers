@@ -1,5 +1,6 @@
 #ifndef UTILS_HPP
 # define UTILS_HPP
+
 #ifdef LINUX
    typedef typename std::ptrdiff_t ptrdiff_t;
 #endif
@@ -19,7 +20,7 @@ namespace ft {
     struct is_integral{
         static const bool value = false;
     };
-    
+
     template<> struct is_integral <int>                 { static const bool value = true; };
     template<> struct is_integral <unsigned int>        { static const bool value = true; };
     template<> struct is_integral <long>                { static const bool value = true; };
@@ -30,7 +31,7 @@ namespace ft {
     template<> struct is_integral <wchar_t>             { static const bool value = true; };
     template<> struct is_integral <char>                { static const bool value = true; };
     template<> struct is_integral <bool>                { static const bool value = true; };
-    
+
     //std::lexicographical_compare
     template <class InputIterator1, class InputIterator2>
     bool lexicographical_compare (InputIterator1 first1, InputIterator1 last1,

@@ -130,8 +130,8 @@ namespace ft
 				int hl = (children[0] ? children[0]->calcHeight() : -1);
 				int hr = (children[1] ? children[1]->calcHeight() : -1);
 				bf = hr - hl;
-				if (parent)
-					parent->calcBF();
+				// if (parent)
+				// 	parent->calcBF();
 				return bf;
 			}
 
@@ -232,13 +232,9 @@ namespace ft
 				}
 			}
 
-			void insert(pair_type const &v)
+			node_type *insert(pair_type const &v)
 			{
-				if (tree_root)
-					insertAtNode(tree_root, v);
-				else
-					tree_root = newNode(v);
-				s++;
+				return insertAtNode(tree_root, v);
 			}
 			
             void rebalanceAtNode(node_type *n)
@@ -258,7 +254,7 @@ namespace ft
 							singleLeftRotate(n->getChildren()[0]);
 						singleRightRotate(n);
 					}
-					n->calcBF();
+					// n->calcBF();
 				}
 			}
 
@@ -268,10 +264,14 @@ namespace ft
 				rebalanceFromNode(n->getParent());
 			}
 
-			void insertAtNode(node_type *n, pair_type v)
+			node_type *insertAtNode(node_type *n, pair_type v)
 			{
 				if(!n)
-					return;
+				{
+					s++;
+					return (tree_root=newNode(v));
+				}
+
 				// if (v.first == n->getKey())
 				// 	return;
 				// ptrdiff_t diff = (v.first > n->getKey() ? 1 : -1);
@@ -296,16 +296,14 @@ namespace ft
 					{
 						children[dir] = newNode(v);
 						children[dir]->setParent(tmp);
-						while (tmp)
-						{
-							rebalanceAtNode(tmp);
-							tmp = tmp->getParent();
-						}
+						s++;
+						rebalanceFromNode(tmp); // 9210
 						break;
 					}
 					else
 						tmp = children[dir];
 				}
+				return tmp;
 			}
 
 			void singleLeftRotate(node_type *n)

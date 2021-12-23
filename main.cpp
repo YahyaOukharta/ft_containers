@@ -606,8 +606,13 @@ int main()
     // std::generate(vec.begin(), vec.end(), rando);
     // ft::BST<my_pair > tree(vec);.
 
-    testConstructors();
+   // testConstructors();
 
-
+    ft::Map<int, std::string> my_m;
+    for (int i = 0; i < 50; ++i)
+    {
+        my_m.insert(ft::make_pair(i, "fill constructor test"));
+    }
+    my_m.print();
     return (0);
 }

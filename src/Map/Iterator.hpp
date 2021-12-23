@@ -225,7 +225,4 @@ namespace ft
         pointer operator->() {return &(*iter);}
         reference operator[](size_t idx) const { return *(iter - idx);}
     };
-
-
-
 }

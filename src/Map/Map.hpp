@@ -173,17 +173,15 @@ namespace ft{
 			//insert
 			ft::pair<iterator, bool> insert( const value_type & value ){
 				
-				node_type *n;
-				
-				if((n = tree.searchFor(value.first)))
-					return ft::make_pair(iterator(n),false);
-				tree.insert(value);
-				return ft::make_pair(iterator(tree.searchFor(value.first)),true);
+				size_type prev_s = size();
+				return (ft::make_pair<iterator,bool>(iterator(tree.insert(value)), prev_s - size()));
 			}
+
 			iterator insert( iterator hint, const value_type& value ){
 				(void)hint;
 				return insert(value).first;
 			}
+
 			template< class InputIt >
 			void insert( InputIt first, InputIt last,
 				typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type = InputIt()){
@@ -198,18 +196,20 @@ namespace ft{
 				value_type p = *pos;
 				tree.deleteWithKey(p.first);
 			}
+
 			void erase( iterator first, iterator last ){
 				while (first != last){
 					erase(first);
 					first++;
 				}
 			}
+
 			size_type erase( const key_type& key ){
 				size_type s = size();
 				tree.deleteWithKey(key);
 				return (s - size());
 			}
-			
+
 			void setAttributes(ft::BST<value_type,allocator_type> _tree, allocator_type a)
 			{
 				tree = _tree;
