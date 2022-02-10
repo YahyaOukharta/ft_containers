@@ -215,24 +215,20 @@ namespace ft{
             return iter != rhs.base();
         }
 
-
-
-
         bool operator< (reverse_iterator<iterator_type> rhs){ return iter > rhs.base(); }
         bool operator> (reverse_iterator<iterator_type> rhs){ return iter < rhs.base(); }
         bool operator<=(reverse_iterator<iterator_type> rhs){ return iter >= rhs.base(); }
         bool operator>=(reverse_iterator<iterator_type> rhs){ return iter <= rhs.base(); }
 
-
-
-
-        reference operator*() {return *(iter-1);}
+        reference operator*() {
+            //return *(iter-1);
+            return *(&(*iter)-1);
+        }
 
         iterator_type base() const {
-            
             return iter;
         }
-        pointer operator->() {return &(*(iter-1));}
+        pointer operator->() {return &(*(&(*iter)-1));}
 
         reference operator[](size_t idx) const { 
             return *(iter - 1 - idx);

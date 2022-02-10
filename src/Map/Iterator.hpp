@@ -111,8 +111,23 @@ namespace ft
         //     return *this;
         // }
 
-        // MapIterator operator+ (int n){ return MapIterator(ptr + n); }
-        // MapIterator operator- (int n){ return MapIterator(ptr - n); }
+        MapIterator operator+ (int n){
+            node_type *tmp = node;
+            while (n){
+                tmp = tmp->next();
+                n--;
+            }
+            return MapIterator(tmp); 
+        }
+        MapIterator operator- (int n)
+        { 
+            node_type *tmp = node;
+            while (n){
+                tmp = tmp->previous();
+                n--;
+            }
+            return MapIterator(tmp); 
+        }
         // friend MapIterator operator+ (int n, const MapIterator& rhs){ return MapIterator(rhs.ptr + n); }
         // friend MapIterator operator- (int n, const MapIterator& rhs){ return MapIterator(rhs.ptr - n); }
         bool operator==(const MapIterator &rhs) const { 

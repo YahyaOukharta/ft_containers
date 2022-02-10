@@ -35,8 +35,8 @@ namespace ft{
 
 			typedef ft::MapIterator<value_type>			iterator;
 			typedef ft::MapIterator<value_type>	const_iterator;
-			typedef ft::map_reverse_iterator<iterator>		reverse_iterator;
-			typedef ft::map_reverse_iterator<const_iterator> const_reverse_iterator;
+			typedef ft::reverse_iterator<iterator>		reverse_iterator;
+			typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
 
 			typedef typename ft::BST<value_type,allocator_type>::node_type node_type;
 

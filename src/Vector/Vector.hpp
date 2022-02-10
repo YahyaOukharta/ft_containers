@@ -110,7 +110,7 @@ namespace ft {
             T &     operator[](size_t idx) const { return content[idx]; }
             T &     front() const { return (content[0]); }
             T &     back() const { return (content[size() - 1]);}
-            T       *data() const { return (content); } //cpp11
+            T       *data() const { return (content); } // cpp11
 
             // Iterators
 
