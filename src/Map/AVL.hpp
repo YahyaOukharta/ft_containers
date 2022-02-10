@@ -5,7 +5,7 @@
 # include <string>
 # define ABS(x) (x<0?-x:x)
 # define MAX(a,b) (a<b?b:a)
-
+# include "../Vector/Vector.hpp"
 namespace ft
 {
 	template < class Pair, class Allocator = std::allocator<Pair> >

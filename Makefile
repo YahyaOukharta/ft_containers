@@ -33,6 +33,11 @@ vector: fclean
 	clear
 	./vector.out
 
+vector_tle: fclean
+	$(COMP) -o vector.out $(FLAGS) tests/vector_tle_tests.cpp
+	clear
+	./vector.out
+
 
 stack: fclean
 	$(COMP) -o stack.out $(FLAGS) tests/stack_tests.cpp

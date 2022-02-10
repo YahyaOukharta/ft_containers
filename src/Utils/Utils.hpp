@@ -139,19 +139,6 @@ namespace ft {
             return *this;
         }
 
-        pair& operator=( const std::pair<T1,T2>& other )
-        {
-            first = other.first;
-            second = other.second;
-            return *this;
-        }
-        template<typename U1, typename U2>
-        pair& operator=( const std::pair<U1, U2>& p )
-        {
-            first = first_type(p.first);
-            second = second_type(p.second);
-        }   
-
         //relational ops
         bool operator==(const pair& rhs ){
             if (first == rhs.first)
