@@ -29,12 +29,18 @@ int main()
 
     std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " base function "
               << "] --------------------]\t\t\033[0m";
-    //EQUAL((rit->first == (rit_1.base()->first)));// && (my_rit->first == my_rit1.base()->first));
 
-    //std::cout << my_rit->first ;//<< " - " 
-    std::cout << my_rit1.base()->first << std::endl;
+    // EQUAL((rit->first == (rit_1.base()->first)));// && (my_rit->first == my_rit1.base()->first));
 
-    //EQUAL((my_rit->first == my_rit1.base()->first));
+    //std::cout << my_rit->first ;//<< " - "
+
+    //my_rit (end)  first == end - 1
+    //my_rit1 (end - 1) base().first == end - 1
+
+    std::cout << my_rit->first; //<< " " << my_rit1.base()->first << std::endl;
+
+    // EQUAL((my_rit->first == my_rit1.base()->first));
+
     // std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " == operator "
     //           << "] --------------------]\t\t\033[0m";
     // EQUAL((rit == rit_1) == (my_rit == my_rit1));
