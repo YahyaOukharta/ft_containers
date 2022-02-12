@@ -21,17 +21,20 @@ namespace ft
         MapIterator() {}
         
         MapIterator(node_type *n) : node(n) {
+     
             rend=0,end=0;
         }
 
         MapIterator(MapIterator<value_type> const &it) : node(it.node) {
-            rend=0,end=0;
+
+            rend=it.rend,end=it.end;
         }
 
         template <class InputIterator>
         MapIterator(InputIterator it,
                     typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator()) : node(it.node) {
-            rend=0,end=0;
+
+            rend=it.rend,end=it.end;
         }
 
         ~MapIterator() {}
@@ -94,7 +97,7 @@ namespace ft
 
         // MapIterator operator+ (const MapIterator& rhs)
         // {
-        //     pointer p = ptr + &(*rhs);
+        //     while ()
         //     return MapIterator(p);
         // }
         // difference_type operator- (const MapIterator& rhs){
@@ -111,22 +114,26 @@ namespace ft
         //     return *this;
         // }
 
-        MapIterator operator+ (int n){
-            node_type *tmp = node;
-            while (n){
-                tmp = tmp->next();
+        MapIterator operator+ (int n)
+        {
+            MapIterator a(*this);
+            while (n)
+            {
+                ++a;
                 n--;
             }
-            return MapIterator(tmp); 
+            return a; 
         }
+
         MapIterator operator- (int n)
         { 
-            node_type *tmp = node;
-            while (n){
-                tmp = tmp->previous();
+            MapIterator a(*this);
+            while (n)
+            {
+                --a;
                 n--;
             }
-            return MapIterator(tmp); 
+            return a; 
         }
         // friend MapIterator operator+ (int n, const MapIterator& rhs){ return MapIterator(rhs.ptr + n); }
         // friend MapIterator operator- (int n, const MapIterator& rhs){ return MapIterator(rhs.ptr - n); }

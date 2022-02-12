@@ -144,6 +144,7 @@ namespace ft{
 
         template<typename T>
         reverse_iterator(reverse_iterator<T> const& it) : iter(it.base()){
+
         }
 
         template<class InputIterator>
@@ -163,6 +164,7 @@ namespace ft{
             iter = it.base();
             return *this;
         }
+
         // += -=
         reverse_iterator operator+=(size_t n){
             iter -= n;
@@ -172,13 +174,16 @@ namespace ft{
             iter += n;
             return *this;
         }
+
         // ++ --
         reverse_iterator &operator++() {--iter;return *this;}
+        
         reverse_iterator operator++(int) {
             reverse_iterator tmp(*this);
             operator++();
             return tmp;
         }
+
         reverse_iterator &operator--() {++iter;return *this;}
         reverse_iterator operator--(int) {
             reverse_iterator tmp(*this);
@@ -221,17 +226,21 @@ namespace ft{
         bool operator>=(reverse_iterator<iterator_type> rhs){ return iter <= rhs.base(); }
 
         reference operator*() {
-            //return *(iter-1);
-            return *(&(*iter)-1);
+            iterator_type it(iter);
+            return *(--it);
         }
 
         iterator_type base() const {
             return iter;
         }
-        pointer operator->() {return &(*(&(*iter)-1));}
+        pointer operator->() {
+            iterator_type it(iter);
+            return &(*(it));
+            }
 
         reference operator[](size_t idx) const { 
-            return *(iter - 1 - idx);
+            iterator_type it(iter);
+            return *(--it - idx);
         }
     };
 };
