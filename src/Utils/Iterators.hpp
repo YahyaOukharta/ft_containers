@@ -235,7 +235,7 @@ namespace ft{
         }
         pointer operator->() {
             iterator_type it(iter);
-            return &(*(it));
+            return &(*(--it));
             }
 
         reference operator[](size_t idx) const { 

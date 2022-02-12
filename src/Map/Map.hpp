@@ -45,6 +45,7 @@ namespace ft{
 				protected:
 					Compare comp;
 				public:
+					
 					value_compare (Compare c) : comp(c) {}  // constructed with map's comparison object
 					typedef bool result_type;
 					typedef value_type first_argument_type;
@@ -111,7 +112,8 @@ namespace ft{
 			}
 
 			mapped_type& operator[]( const key_type& key ){
-				return tree.searchFor(key)->getValue();
+			
+				return (*((this->insert(ft::make_pair(key,mapped_type()))).first)).second;
 			}
 
 		//iterators
@@ -301,7 +303,7 @@ namespace ft{
 			}
 			//value_comp
 			value_compare value_comp() const{
-				return v_cmp;
+				return value_compare(k_cmp);
 			}
 
 		//Operators
