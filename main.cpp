@@ -15,71 +15,86 @@
 #include <signal.h>
 #define EQUAL(x) ((x) ? (std::cout << "\033[1;32mAC\033[0m\n") : (std::cout << "\033[1;31mWA\033[0m\n"))
 
+template <typename Iter1, typename Iter2>
+bool compareMaps(Iter1 first1, Iter1 last1, Iter2 first2, Iter2 last2)
+{
+    for (; (first1 != last1) && (first2 != last2); ++first1, ++first2)
+    {
+                if (first1->first != first2->first || first1->second != first2->second)
+            return false;}
+    return true;
+}
+
+bool fncomp(char lhs, char rhs) { return lhs < rhs; }
+
+struct classcomp
+{
+    bool operator()(const char &lhs, const char &rhs) const
+    {
+        return lhs < rhs;
+    }
+};
+bool testMapConstructors()
+{
+    bool cond;
+    std::map<char, int> first;
+    ft::Map<char, int> m_first;
+
+    for (size_t i = 97; i < 110; i++)
+    {
+        first[i - 97] = i;
+        m_first[i - 97] = i;
+    }
+
+    std::map<char, int> copy(first);
+    ft::Map<char, int> m_copy(m_first);
+
+    cond = first.size() == m_first.size() && compareMaps(first.begin(), first.end(), m_first.begin(), m_first.end());
+
+    std::map<char, int> second(first.begin(), first.end());
+    ft::Map<char, int> m_second(m_first.begin(), m_first.end());
+
+    cond = cond && second.size() == m_second.size() && compareMaps(second.begin(), second.end(), m_second.begin(), m_second.end());
+    std::map<char, int> third(second);
+    ft::Map<char, int> m_third(m_second);
+
+    cond = cond && third.size() == m_third.size() && compareMaps(third.begin(), third.end(), m_third.begin(), m_third.end());
+
+    std::map<char, int, classcomp> fourth;  // class as Compare
+    ft::Map<char, int, classcomp> m_fourth; // class as Compare
+
+    cond = fourth.size() == m_fourth.size() && cond && compareMaps(fourth.begin(), fourth.end(), m_fourth.begin(), m_fourth.end());
+
+    bool (*fn_pt)(char, char) = fncomp;
+    std::map<char, int, bool (*)(char, char)> fifth(fn_pt);  // function pointer as Compare
+    ft::Map<char, int, bool (*)(char, char)> m_fifth(fn_pt); // function pointer as Compare
+
+    cond = fifth.size() == m_fifth.size() && cond && compareMaps(fifth.begin(), fifth.end(), m_fifth.begin(), m_fifth.end());
+
+    first = std::map<char, int>();
+    m_first = ft::Map<char, int>();
+
+    cond = copy.size() == m_copy.size() && cond && compareMaps(copy.begin(), copy.end(), m_copy.begin(), m_copy.end());
+
+    return cond;
+}
 
 int main()
 {
-    std::map<int, char> m;
-    for (int i = 0; i < 7; i++)
-        m.insert(std::make_pair(i, 'A'));
+    std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " Constructors with costum compare "
+            << "] --------------------]\t\t\033[0m";
+    EQUAL(testMapConstructors());
+    // std::map<char, int> first;
+    // ft::Map<char, int> m_first;
 
-    std::reverse_iterator<std::map<int, char>::iterator> rit(m.end()), rit_1(--m.end());
-
-    ft::reverse_iterator<std::map<int, char>::iterator> my_rit(m.end()), my_rit1(--m.end());
-    /*----------------------------------*/
-
-    std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " base function "
-              << "] --------------------]\t\t\033[0m";
-
-    // EQUAL((rit->first == (rit_1.base()->first)));// && (my_rit->first == my_rit1.base()->first));
-
-    //std::cout << my_rit->first ;//<< " - "
-
-    //my_rit (end)  first == end - 1
-    //my_rit1 (end - 1) base().first == end - 1
-
-    std::cout << my_rit->first; //<< " " << my_rit1.base()->first << std::endl;
-
-    // EQUAL((my_rit->first == my_rit1.base()->first));
-
-    // std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " == operator "
-    //           << "] --------------------]\t\t\033[0m";
-    // EQUAL((rit == rit_1) == (my_rit == my_rit1));
-    // std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " != operator "
-    //           << "] --------------------]\t\t\033[0m";
-    // EQUAL((rit != rit_1) == (my_rit != my_rit1));
-    // std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " -> operator "
-    //           << "] --------------------]\t\t\033[0m";
-    // EQUAL(((my_rit->first == (--m.end())->first) && ((my_rit->first) == ((--m.end())->first))) && ((rit->first == (--m.end())->first) && ((rit->first) == ((--m.end())->first))));
-
-    // std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " * operator "
-    //           << "] --------------------]\t\t\033[0m";
-    // EQUAL((((*my_rit).first == (*(--m.end())).first) && (((*my_rit).first) == ((*(--m.end())).first))) && (((*rit).first == (*(--m.end())).first) && ((*(rit)).first) == ((*(--m.end())).first)));
-
-    // std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " ++rit operator "
-    //           << "] --------------------]\t\t\033[0m";
-    // ++my_rit; // I incremented here to make sure that the object changes
-    // ++rit;
-    // EQUAL(&(*my_rit) == &(*my_rit1)) && (&(*rit) == &(*rit_1));
-    // std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " --rit operator "
-    //           << "] --------------------]\t\t\033[0m";
-    // --my_rit; // I incremented here to make sure that the object changes
-    // --rit;
-    // EQUAL((my_rit->first == (--my_rit1)->first) && (rit->first == (--rit_1)->first));
-    // std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " rit++ operator "
-    //           << "] --------------------]\t\t\033[0m";
+    // for (size_t i = 97; i < 98; ++i)
     // {
-    //     std::reverse_iterator<std::map<int, char>::iterator> tmp(rit++);
-    //     ft::reverse_iterator<std::map<int, char>::iterator> my_tmp(my_rit++);
-    //     EQUAL(tmp->first == (--rit)->first && my_tmp->first == (--my_rit)->first);
+    //     first[i - 97] = i;
+    //     m_first[i - 97] = i;
     // }
-    // std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " rit-- operator "
-    //           << "] --------------------]\t\t\033[0m";
-    // {
-    //     rit++;
-    //     my_rit++;
-    //     std::reverse_iterator<std::map<int, char>::iterator> tmp(rit--);
-    //     ft::reverse_iterator<std::map<int, char>::iterator> my_tmp(my_rit--);
-    //     EQUAL(tmp->first == (++rit)->first && my_tmp->first == (++my_rit)->first);
-    // }
+    // std::cout << first[0] << std::endl;
+    // std::cout << m_first[0] << std::endl;
+    //     std::cout << first[1] << std::endl;
+    // std::cout << m_first[1] << std::endl;
     return (0);
 }

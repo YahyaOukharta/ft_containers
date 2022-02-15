@@ -50,11 +50,13 @@ namespace ft
 
         MapIterator &operator++()
         {
+            node_type *n = 0;
             if(rend)
                 rend = 0;
-            else
+            else if (!end)
             {
-                node_type *n = node->next();
+                if (node)
+                    n = node->next();
                 if(n)
                     node = n;
                 else
@@ -72,10 +74,13 @@ namespace ft
 
         MapIterator &operator--()
         {
+            node_type *n = 0;
             if(end)
                 end=0;
-            else{
-                node_type *n = node->previous();
+            else if(!rend)
+            {
+                if(node)
+                    n = node->previous();
                 if(n)
                     node = n;
                 else

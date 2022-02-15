@@ -85,6 +85,7 @@ namespace ft{
 
 			Map( Map const & other ) : v_cmp(Compare())
 			{
+				if(size())
 				clear();
 				insert(other.begin(),other.end());
 			}
@@ -94,8 +95,10 @@ namespace ft{
 			}
 
 			Map &		operator=( Map const & other ){
+				if (size())
 				clear();
-				insert(other.begin(),other.end());
+				if (other.size())
+					insert(other.begin(),other.end());
 				return *this;
 			}
 
@@ -112,14 +115,14 @@ namespace ft{
 			}
 
 			mapped_type& operator[]( const key_type& key ){
-			
-				return (*((this->insert(ft::make_pair(key,mapped_type()))).first)).second;
+				mapped_type &ref = (*((this->insert(ft::make_pair(key,mapped_type()))).first)).second;
+				return ref;
 			}
 
 		//iterators
 			iterator begin(){
 				return iterator(tree.getLowestChild(tree.tree_root));
-			}
+			}	
 			const_iterator begin() const{
 				return const_iterator(tree.getLowestChild(tree.tree_root));
 			}
