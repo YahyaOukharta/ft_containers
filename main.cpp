@@ -81,20 +81,33 @@ bool testMapConstructors()
 
 int main()
 {
-    std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " Constructors with costum compare "
-            << "] --------------------]\t\t\033[0m";
-    EQUAL(testMapConstructors());
-    // std::map<char, int> first;
-    // ft::Map<char, int> m_first;
+        std::map<int, std::string> m1;
+        std::map<int, std::string> m2;
+        ft::Map<int, std::string> ft_m1;
+        ft::Map<int, std::string> ft_m2;
 
-    // for (size_t i = 97; i < 98; ++i)
-    // {
-    //     first[i - 97] = i;
-    //     m_first[i - 97] = i;
-    // }
-    // std::cout << first[0] << std::endl;
-    // std::cout << m_first[0] << std::endl;
-    //     std::cout << first[1] << std::endl;
-    // std::cout << m_first[1] << std::endl;
+        for (int i = 0; i < 10; ++i)
+        {
+            m1.insert(std::make_pair(i, "string2"));
+            ft_m1.insert(ft::make_pair(i, "string2"));
+        }
+        m1 = m2;
+        /*-----------------------------------------------------*/
+        /*------------------ ft::Map ---------------------*/
+        ft_m1 = ft_m2;
+        std::cout << "ft_m1 = " << ft_m1.size() << std::endl;
+        /*----------------------------------------------------*/
+        /*------------------ strings to store the results ----*/
+        std::string res, ft_res;
+        /*----------------------------------------------------*/
+        for (std::map<int, std::string>::iterator it = m1.begin(); it != m1.end(); ++it) // fill res from m1
+        {
+            res += it->second;
+        }
+
+        for (ft::Map<int, std::string>::iterator it = ft_m1.begin(); it != ft_m1.end(); ++it) // fill ft_res from ft_m1
+            ft_res += it->second;
+
+        EQUAL(res == ft_res);
     return (0);
 }

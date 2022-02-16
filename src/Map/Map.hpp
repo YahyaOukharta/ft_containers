@@ -85,9 +85,10 @@ namespace ft{
 
 			Map( Map const & other ) : v_cmp(Compare())
 			{
-				if(size())
-				clear();
-				insert(other.begin(),other.end());
+				k_cmp = Compare();
+
+				if(other.size())
+					insert(other.begin(),other.end());
 			}
 
 			~Map(){
@@ -95,7 +96,6 @@ namespace ft{
 			}
 
 			Map &		operator=( Map const & other ){
-				if (size())
 				clear();
 				if (other.size())
 					insert(other.begin(),other.end());
@@ -121,11 +121,14 @@ namespace ft{
 
 		//iterators
 			iterator begin(){
+				if(size())
 				return iterator(tree.getLowestChild(tree.tree_root));
+				return end();
 			}	
 			const_iterator begin() const{
-				return const_iterator(tree.getLowestChild(tree.tree_root));
-			}
+				if(size())
+					return const_iterator(tree.getLowestChild(tree.tree_root));
+				return end();			}
 
 			iterator end(){
 				iterator it(tree.getLargestChild(tree.tree_root));
@@ -173,13 +176,16 @@ namespace ft{
 			//clear
 			void clear(){
 				tree.freeAll();
+				tree.s=0;
 			}
 
 			//insert
 			ft::pair<iterator, bool> insert( const value_type & value ){
 				
 				size_type prev_s = size();
-				return (ft::make_pair<iterator,bool>(iterator(tree.insert(value)), prev_s - size()));
+				iterator it(tree.insert(value));
+
+				return (ft::make_pair<iterator,bool>(it, prev_s - size()));
 			}
 
 			iterator insert( iterator hint, const value_type& value ){
