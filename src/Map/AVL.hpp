@@ -390,9 +390,9 @@ namespace ft
 				return (0);
 			}
 
-			void deleteWithKey(key_type const & k){
+			node_type *deleteWithKey(key_type const & k){
 				node_type *node = searchFor(k);
-				if(!node) return;
+				if(!node) return 0;
 				//std::cout << "deleting " << k << std::endl;
 				node_type **children = node->getChildren();
 				typename allocator_type::template rebind<node_type>::other alloc_node;
@@ -417,6 +417,7 @@ namespace ft
 					successor->freeNode();
 					alloc_node.deallocate(successor, 1);
 					s--;
+					return node;
 				}
 				else if(children[0])
 				{
@@ -437,6 +438,7 @@ namespace ft
 					predecessor->freeNode();
 					alloc_node.deallocate(predecessor, 1);
 					s--;
+					return node;
 				}
 				else
 				{
@@ -449,7 +451,7 @@ namespace ft
 							node->getParent()->setRight(0);
 						else 
 							node->getParent()->setLeft(0);
-						node->calcBF();
+						node->getParent()->calcBF();
 						rebalanceFromNode(node->getParent());
 					}
 					else
@@ -458,9 +460,11 @@ namespace ft
 						tree_root = 0;
 					}
 					//delete leaf node
+					node_type *n = tree_root ? node->getParent() : 0;
 					node->freeNode();
 					alloc_node.deallocate(node, 1);
 					s--;
+					return n;
 				}
 			}
 

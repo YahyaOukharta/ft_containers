@@ -6,7 +6,7 @@
 # include "AVL.hpp"
 # include "../Utils/Utils.hpp"
 # include "./Iterator.hpp"
-
+# include "../Vector/Vector.hpp"
 
 # define ABS(x) (x<0?-x:x)
 
@@ -143,22 +143,18 @@ namespace ft{
 
 		reverse_iterator rbegin()
 		{
-			iterator it(tree.getLargestChild(tree.tree_root));
-			return reverse_iterator(it);
+			return reverse_iterator(end());
 		}
 		const_reverse_iterator rbegin() const
 		{
-			iterator it(tree.getLargestChild(tree.tree_root));
-			return const_reverse_iterator(it);
+			return const_reverse_iterator(end());
 		}
 
 		reverse_iterator rend(){ // to verify
-			iterator it = iterator(tree.getLowestChild(tree.tree_root));
-			return reverse_iterator(it);
+			return reverse_iterator(begin());
 		}
 		const_reverse_iterator rend() const{
-			iterator it = iterator(tree.getLowestChild(tree.tree_root));
-			return const_reverse_iterator(it);
+			return const_reverse_iterator(begin());
 		}
 
 		//Capacity
@@ -203,16 +199,25 @@ namespace ft{
 			}
 
 			//erase
-			void erase( iterator pos ){
-				value_type p = *pos;
-				tree.deleteWithKey(p.first);
+			iterator erase( iterator pos ){
+
+				iterator p = pos + 1;
+				tree.deleteWithKey(pos->first);
+				return p;
 			}
 
-			void erase( iterator first, iterator last ){
-				while (first != last){
-					erase(first);
+			iterator erase( iterator first, iterator last ){
+				if (!tree.tree_root)
+					return (end());
+				ft::Vector<key_type> v;
+				while(first != last)
+				{
+					v.push_back(first->first);
 					first++;
 				}
+				for(typename ft::Vector<key_type>::iterator it = v.begin(); it!=v.end(); ++it)
+					erase(*it);
+				return first;
 			}
 
 			size_type erase( const key_type& key ){

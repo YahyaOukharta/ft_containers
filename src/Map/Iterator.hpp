@@ -80,7 +80,10 @@ namespace ft
             else if(!rend)
             {
                 if(node)
+                {
                     n = node->previous();
+                
+                }
                 if(n)
                     node = n;
                 else
@@ -143,7 +146,7 @@ namespace ft
         // friend MapIterator operator+ (int n, const MapIterator& rhs){ return MapIterator(rhs.ptr + n); }
         // friend MapIterator operator- (int n, const MapIterator& rhs){ return MapIterator(rhs.ptr - n); }
         bool operator==(const MapIterator &rhs) const { 
-            return node == rhs.node && end == rhs.end && rend==rhs.rend; 
+            return (node == rhs.node) && (end == rhs.end && rend==rhs.rend); 
         }
         bool operator!=(const MapIterator &rhs) const { return !operator==(rhs);}
 
