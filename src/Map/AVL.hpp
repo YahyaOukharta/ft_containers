@@ -297,13 +297,14 @@ namespace ft
 						children[dir] = newNode(v);
 						children[dir]->setParent(tmp);
 						s++;
-						rebalanceFromNode(tmp); // 9210
 						tmp = children[dir];
 						break;
 					}
 					else
 						tmp = children[dir];
+					
 				}
+				rebalanceFromNode(tmp);
 				return tmp;
 			}
 
