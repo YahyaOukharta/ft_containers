@@ -226,9 +226,10 @@ namespace ft{
 				return (s - size());
 			}
 
-			void setAttributes(ft::BST<value_type,allocator_type> _tree, allocator_type a)
+			void setAttributes(node_type *tree_root, size_type s,allocator_type a)
 			{
-				tree = _tree;
+				tree.tree_root = tree_root;
+				tree.s = s;
 				alloc = a;
 			}
 
@@ -240,10 +241,17 @@ namespace ft{
 			//swap
 			void swap( Map& other )
 			{
-				ft::BST<value_type,allocator_type> _tree = other.getTree();
-				allocator_type a = other.get_allocator();
-				other.setAttributes(tree, get_allocator());
-				setAttributes(_tree, a);
+				node_type *other_root = other.getTree().tree_root;
+				allocator_type other_alloc = other.get_allocator();
+				size_type other_s = other.getTree().s;
+				// std::cout << "other root " << other.getTree().tree_root << std::endl;
+				// std::cout << "this  root " << tree.tree_root << std::endl;
+
+				other.setAttributes(tree.tree_root, tree.s, get_allocator());
+				setAttributes(other_root, other_s, other_alloc);
+
+				// std::cout << "other root " << other.getTree().tree_root << std::endl;
+				// std::cout << "this  root " << tree.tree_root << std::endl;
 			}
 
 		// Lookup
