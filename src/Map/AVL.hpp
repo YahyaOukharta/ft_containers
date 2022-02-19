@@ -49,7 +49,6 @@ namespace ft
 				bf = 0;
 			}
 
-
 			void init()
 			{
 				p = 0;
@@ -65,6 +64,7 @@ namespace ft
 				if(p)
 					alloc.deallocate(p,1);
 			}
+
 			void setPair(pair_type const& con)
 			{
 				if (!p)
@@ -72,7 +72,6 @@ namespace ft
 				alloc.construct(p, con);
 			}
 			
-
 			pair_type &getPair(void)
 			{
 				return *p;
@@ -502,7 +501,7 @@ namespace ft
 			}
 
 // Utils
-			void print(const std::string& prefix, node_type* node, bool isLeft)
+			void print(const std::string& prefix, node_type* node, bool isLeft) const
 			{
 				if(node)
 				{
@@ -514,7 +513,7 @@ namespace ft
 				}
 			}
 
-			void print()
+			void print() const
 			{
 				if (tree_root)
 				{

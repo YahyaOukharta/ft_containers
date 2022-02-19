@@ -292,16 +292,18 @@ namespace ft{
 
 			// //lower_bound
 			iterator lower_bound( const key_type& key ){
-				node_type *n;
-				if ((n = tree.searchFor(key)))
-					return (iterator(n->previous()));
-				return (end());
+				for (iterator it = begin(); it!=end(); ++it){
+					if (it->first >= key)
+						return it;
+				}
+				return end();
 			}
 			const_iterator lower_bound( const key_type& key ) const{
-				node_type *n;
-				if ((n = tree.searchFor(key)))
-					return (const_iterator(n->previous()));
-				return (end());
+				for (const_iterator it = begin(); it!=end(); ++it){
+					if (it->first >= key)
+						return it;
+				}
+				return end();
 			}
 
 			// //upper_bound
@@ -360,7 +362,7 @@ namespace ft{
 			return (!operator<(rhs));
 		}
 	
-		void print(){
+		void print() const {
 			tree.print();
 		}
 	};
