@@ -280,14 +280,14 @@ namespace ft{
 			ft::pair<iterator,iterator> equal_range( const key_type& key ){
 				node_type *n;
 				if ((n = tree.searchFor(key)))
-					return (ft::make_pair(iterator(n),iterator(n->next())));
-				return (ft::make_pair(end(),end()));
+					return (ft::make_pair(lower_bound(key),upper_bound(key)));
+				return (ft::make_pair(upper_bound(key),upper_bound(key)));
 			}
 			ft::pair<const_iterator,const_iterator> equal_range( const key_type& key ) const{
 				node_type *n;
 				if ((n = tree.searchFor(key)))
-					return (ft::make_pair(const_iterator(n),const_iterator(n->next())));
-				return (ft::make_pair(end(),end()));
+					return (ft::make_pair(lower_bound(key),upper_bound(key)));
+				return (ft::make_pair(upper_bound(key),upper_bound(key)));
 			}
 
 			// //lower_bound
@@ -308,16 +308,19 @@ namespace ft{
 
 			// //upper_bound
 			iterator upper_bound( const key_type& key ){
-				node_type *n;
-				if ((n = tree.searchFor(key)))
-					return (iterator(n->next()));
-				return (end());
+				for (iterator it = begin(); it!=end(); ++it){
+					if (it->first > key)
+						return it;
+				}
+				return end();
+
 			}
 			const_iterator upper_bound( const key_type& key ) const{
-				node_type *n;
-				if ((n = tree.searchFor(key)))
-					return (const_iterator(n->next()));
-				return (end());
+					for (const_iterator it = begin(); it!=end(); ++it){
+					if (it->first > key)
+						return it;
+				}
+				return end();
 			}
 
 		//Observers
