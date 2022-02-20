@@ -119,21 +119,19 @@ namespace ft
 			}
 
 			int calcHeight(){
-				//std::cout << "calculating Height" << std::endl;
+				std::cout << "calculating Height" << std::endl;
 				int hl = (children[0] ? children[0]->calcHeight() : -1);
 				int hr = (children[1] ? children[1]->calcHeight() : -1);
 				h = MAX(hl,hr) + 1;
-
 				return h;
 			}
 
 			int calcBF(){
-				//std::cout << "calculating BF" << std::endl;
+				std::cout << "calculating BF" << std::endl;
 				int hl = (children[0] ? children[0]->getHeight() : -1);
 				int hr = (children[1] ? children[1]->getHeight() : -1);
 				bf = hr - hl;
-				// if (parent)
-				// 	parent->calcBF();
+
 				return bf;
 			}
 
@@ -256,14 +254,14 @@ namespace ft
 							singleLeftRotate(n->getChildren()[0]);
 						singleRightRotate(n);
 					}
-					//n->calcBF();
+					if(n->getParent())
+						n->getParent()->calcHeight();
 				}
 			}
 
 			void rebalanceFromNode(node_type *n){
-				//std::cout << "rebalancing after insert" << std::endl;
+				std::cout << "rebalancing after insert" << std::endl;
 				if(!n) return;
-
 				n->calcHeight();
 				rebalanceAtNode(n);
 				rebalanceFromNode(n->getParent());
@@ -313,6 +311,7 @@ namespace ft
 					else
 						tmp = children[dir];
 				}
+				
 				rebalanceFromNode(tmp);
 				return tmp;
 			}
@@ -340,6 +339,8 @@ namespace ft
 				n->setRight(right_left_subtree);
 				if(right_left_subtree)
 					right_left_subtree->setParent(n);
+				
+				tree_root->calcHeight();
 			}
 
 			void singleRightRotate(node_type *n)
@@ -364,6 +365,8 @@ namespace ft
 				n->setLeft(left_right_subtree);
 				if(left_right_subtree)
 					left_right_subtree->setParent(n);
+				tree_root->calcHeight();
+
 			}
 
 			node_type *getLowestChild(node_type *n) const
