@@ -22,7 +22,11 @@ int main()
     ft::Map<int, std::string> m;
     for (int i = 0; i < 10; ++i){
         m.insert(ft::make_pair(i,std::string(std::to_string(i))));
+        m.print();
+        std::cout << std::endl;
     }
+
+
     m.print();
     return (0);
 }
