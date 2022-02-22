@@ -132,6 +132,52 @@ namespace ft
 			void decrBF(){
 				--bf;
 			}
+			Node *getLowestChild(Node *n)
+			{
+				if (!n) return 0;
+				Node *left = n->getChildren()[0];
+				if (left)
+					return getLowestChild(left);
+				else return n;
+			}
+
+			Node *getLargestChild(Node *n)
+			{
+				if (!n) return 0;
+				Node *right = n->getChildren()[1];
+				if (right)
+					return getLargestChild(right);
+				else return n;
+			}
+			Node *next(){
+
+				if (children[1])
+					return (getLowestChild(children[1]));
+				else{
+					Node *tmp = this;
+					while (tmp->parent && tmp->getKey() > tmp->parent->getKey())
+					{
+						tmp = tmp->parent;
+					}
+					if(!tmp->getParent())
+						return (0);
+					else return tmp->getParent();
+				}
+			}
+			Node *previous(){
+				if (children[0])
+					return (getLargestChild(children[0]));
+				else{
+					Node *tmp = this;
+					while (tmp->parent && tmp->getKey() < tmp->parent->getKey())
+					{
+						tmp = tmp->parent;
+					}
+					if(!tmp->getParent())
+						return (0);
+					else return tmp->getParent();
+				}
+			}
 	};
 
 	template< class Pair, class Allocator = std::allocator<Pair> >
@@ -236,7 +282,7 @@ namespace ft
 			}
 
 			int getH(node_type *n){
-				if(!n) return (0);
+				if(!n) return (-1);
 				return n->getHeight();
 			}
 			int getBF(node_type *n){
@@ -245,21 +291,12 @@ namespace ft
 
 			void rebalanceFromNode(node_type *inserted)
 			{
-				node_type *prev = inserted;
-				node_type *n = inserted->getParent();
-				while (n) {	
-
+				node_type *n = inserted;
+				while (n)
+				{
 					n->setHeight( MAX(getH(n->getChildren()[0]), getH(n->getChildren()[1])) + 1);
-					std::cout << "bf for node "<< n->getValue() <<" = " << getBF(n) << std::endl;
 					n->setBF(getBF(n));
-
-					// if (n->getChildren()[1] == prev)
-					// 	n->incrBF();
-					// else
-					// 	n->decrBF();
-
 					rebalanceAtNode(n);
-					prev = n;
 					n = n->getParent();
 				}
 			}
@@ -393,7 +430,7 @@ namespace ft
 					}
 					else
 						successor->getParent()->setLeft(0);
-					// rebalanceFromNode(successor);
+					rebalanceFromNode(successor);
 					//delete successor node
 					successor->freeNode();
 					alloc_node.deallocate(successor, 1);
@@ -414,7 +451,7 @@ namespace ft
 					}
 					else
 						predecessor->getParent()->setLeft(0);
-					// rebalanceFromNode(predecessor);
+					rebalanceFromNode(predecessor);
 					//delete predecessor node
 					predecessor->freeNode();
 					alloc_node.deallocate(predecessor, 1);
@@ -432,8 +469,7 @@ namespace ft
 							node->getParent()->setRight(0);
 						else 
 							node->getParent()->setLeft(0);
-						node->getParent()->calcBF();
-						// rebalanceFromNode(node->getParent());
+						rebalanceFromNode(node->getParent());
 					}
 					else
 					{
@@ -488,7 +524,7 @@ namespace ft
 				{
 					std::cout << prefix;
 					std::cout << (isLeft ? "├──" : "└──" );
-					std::cout << "<"<<node->getKey() << ", "<<node->getValue()<<"> h=" << node->getHeight() <<" bf="<<node->getBF()<< std::endl;
+					std::cout << "<"<<node->getKey() << ", "<<node->getValue() << " / "<< node->getHeight() << std::endl;
 					print( prefix + (isLeft ? "│   " : "    "), node->getChildren()[1], true);
 					print( prefix + (isLeft ? "│   " : "    "), node->getChildren()[0], false);
 				}
