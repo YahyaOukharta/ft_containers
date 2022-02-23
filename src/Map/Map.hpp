@@ -291,36 +291,79 @@ namespace ft{
 			}
 
 			// //lower_bound
-			iterator lower_bound( const key_type& key ){
-				for (iterator it = begin(); it!=end(); ++it){
-					if (it->first >= key)
-						return it;
+			iterator lower_bound(const key_type& key)
+			{
+				node_type *n = tree.tree_root;
+				node_type *prev;
+				while (n)
+				{
+					prev = n;
+					if (k_cmp(n->getKey(), key))
+						n = n->getChildren()[1];
+					else if (k_cmp(key, n->getKey()))
+						n = n->getChildren()[0];
+					else return n;
 				}
-				return end();
+				while (prev->getKey() < key){
+					prev = prev->getParent();
+				}
+				return prev;
 			}
 			const_iterator lower_bound( const key_type& key ) const{
-				for (const_iterator it = begin(); it!=end(); ++it){
-					if (it->first >= key)
-						return it;
+				node_type *n = tree.tree_root;
+				node_type *prev;
+				while (n)
+				{
+					prev = n;
+					if (k_cmp(n->getKey(), key))
+						n = n->getChildren()[1];
+					else if (k_cmp(key, n->getKey()))
+						n = n->getChildren()[0];
+					else return n;
 				}
-				return end();
+				while (k_cmp(prev->getKey(), key)){
+					prev = prev->getParent();
+				}
+				return prev;
 			}
 
 			// //upper_bound
 			iterator upper_bound( const key_type& key ){
-				for (iterator it = begin(); it!=end(); ++it){
-					if (it->first > key)
-						return it;
+				node_type *n = tree.tree_root;
+				node_type *prev;
+				while (n)
+				{
+					prev = n;
+					if (k_cmp(n->getKey(), key))
+						n = n->getChildren()[1];
+					else if (k_cmp(key, n->getKey()))
+						n = n->getChildren()[0];
+					else break;
 				}
-				return end();
+				if(n) return n->next();
+				while (!k_cmp(key, prev->getKey())){
+					prev = prev->getParent();
+				}
+				return prev;
 
 			}
 			const_iterator upper_bound( const key_type& key ) const{
-					for (const_iterator it = begin(); it!=end(); ++it){
-					if (it->first > key)
-						return it;
+				node_type *n = tree.tree_root;
+				node_type *prev;
+				while (n)
+				{
+					prev = n;
+					if (k_cmp(n->getKey(), key))
+						n = n->getChildren()[1];
+					else if (k_cmp(key, n->getKey()))
+						n = n->getChildren()[0];
+					else break;
 				}
-				return end();
+				if(n) return n->next();
+				while (!k_cmp(key, prev->getKey())){
+					prev = prev->getParent();
+				}
+				return prev;
 			}
 
 		//Observers
