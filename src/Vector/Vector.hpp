@@ -230,7 +230,7 @@ namespace ft {
                     reserve(1);
                 else if(s + 1 > cap)
                     reserve(cap*2);
-                for(size_t rit = s - 1; rit != idx - 1; rit--)
+                for(difference_type rit = s - 1; rit != idx - 1; rit--)
                     content[rit + 1] = content[rit];
                 content[idx]=val;
                 s++;
@@ -244,7 +244,7 @@ namespace ft {
                 else if(cap < s + n && s+n<=cap*2 )
                     reserve(cap*2);
                 else reserve(s+n);
-                for(size_t rit = s - 1; rit != idx - 1; rit--)
+                for(difference_type rit = s - 1; rit != idx - 1; rit--)
                     content[rit+n] = content[rit];
                 for(size_t i = idx; i != idx + n; i++)
                     content[i]=val;
@@ -262,9 +262,9 @@ namespace ft {
                     else if(cap < s + n && s+n<=cap*2 )
                         reserve(cap*2);
                     else reserve(s+n);
-                    for(size_t rit = s - 1; rit != idx - 1; rit--)
+                    for(difference_type rit = s - 1; rit != idx - 1; rit--)
                         content[rit+n] = content[rit];
-                    for(size_t i = idx; i != idx + n; i++)
+                    for(difference_type i = idx; i != idx + n; i++)
                         content[i]=*(first++);
                     s+=n;
                 }

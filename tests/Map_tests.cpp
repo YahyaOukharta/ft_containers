@@ -1394,45 +1394,6 @@ void testModifiers()
 
         cond = cond && m2.size() == ft_m2.size() && compareMaps(m2.begin(), m2.end(), ft_m2.begin(), ft_m2.end());
 
-        std::map<int, std::string> m3;
-        ft::Map<int, std::string> ft_m3;
-        std::vector<int> vec;
-        std::vector<int> ft_vec;
-        std::random_device randDev;
-        std::mt19937 generator(randDev());
-        std::uniform_int_distribution<int> distr(0, 1e8);
-
-        for (size_t i = 0; i < 1e6; i++)
-        {
-            m3.insert(std::make_pair(i, "string1"));
-            ft_m3.insert(ft::make_pair(i, "string1"));
-        }
-
-        for (size_t i = 0; i < 1e6; ++i)
-        {
-            int n = distr(generator);
-            int ret1 = m3.erase(n);
-            int ret2 = ft_m3.erase(n);
-
-            if (ret1 != ret2)
-            {
-                cond = false;
-                break;
-            }
-        }
-
-        if (!m3.empty())
-        {
-            m3.erase(m3.begin(), m3.end());
-            m3.erase(m3.begin(), m3.end());
-        }
-        if (!ft_m3.empty())
-        {
-            ft_m3.erase(ft_m3.begin(), ft_m3.end());
-            ft_m3.erase(ft_m3.begin(), ft_m3.end());
-        }
-        cond = cond && (m3.size() == ft_m3.size() && compareMaps(m3.begin(), m3.end(), ft_m3.begin(), ft_m3.end()));
-
         EQUAL(cond);
     }
 
@@ -2220,50 +2181,50 @@ int main()
     std::cout << RED << "--------------------------------------------------------------------------------------------------------" << RESET << std::endl;
     signal(SIGALRM, alarm_handler);
 
-    // std::cout << YELLOW << "Testing Iterators;" << RESET << std::endl;
-    // TEST_CASE(iterator_tests);
-    // TEST_CASE(const_iterator_tests);
-    // TEST_CASE(reverse_iterator_tests);
-    // std::cout << std::endl;
+    std::cout << YELLOW << "Testing Iterators;" << RESET << std::endl;
+    TEST_CASE(iterator_tests);
+    TEST_CASE(const_iterator_tests);
+    TEST_CASE(reverse_iterator_tests);
+    std::cout << std::endl;
 
-    // std::cout << YELLOW << "Testing Constructors;" << RESET << std::endl;
-    // TEST_CASE(testConstructors);
-    // std::cout << std::endl;
+    std::cout << YELLOW << "Testing Constructors;" << RESET << std::endl;
+    TEST_CASE(testConstructors);
+    std::cout << std::endl;
 
-    // std::cout << YELLOW << "Testing Iterator Methods;" << RESET << std::endl;
-    // TEST_CASE(testIterators);
-    // std::cout << std::endl;
+    std::cout << YELLOW << "Testing Iterator Methods;" << RESET << std::endl;
+    TEST_CASE(testIterators);
+    std::cout << std::endl;
 
-    // std::cout << YELLOW << "Testing Capacity Methods;" << RESET << std::endl;
-    // TEST_CASE(testCapacityMethods)
-    // std::cout << std::endl;
+    std::cout << YELLOW << "Testing Capacity Methods;" << RESET << std::endl;
+    TEST_CASE(testCapacityMethods)
+    std::cout << std::endl;
 
-    // std::cout << YELLOW << "Testing Access Element Methods; " << RESET << std::endl;
-    // TEST_CASE(testElementAccess);
-    // std::cout << std::endl;
+    std::cout << YELLOW << "Testing Access Element Methods; " << RESET << std::endl;
+    TEST_CASE(testElementAccess);
+    std::cout << std::endl;
 
     std::cout << YELLOW << "Testing Modifiers Methods;" << RESET << std::endl;
     TEST_CASE(testModifiers)
     std::cout << std::endl;
 
-    // std::cout << YELLOW << "Testing Observers Methods;" << RESET << std::endl;
-    // TEST_CASE(testObservers)
-    // std::cout << std::endl;
+    std::cout << YELLOW << "Testing Observers Methods;" << RESET << std::endl;
+    TEST_CASE(testObservers)
+    std::cout << std::endl;
 
-    // std::cout << YELLOW << "Testing Operations Methods;" << RESET << std::endl;
-    // TEST_CASE(testOperations)
-    // std::cout << std::endl;
+    std::cout << YELLOW << "Testing Operations Methods;" << RESET << std::endl;
+    TEST_CASE(testOperations)
+    std::cout << std::endl;
 
-    // std::cout << YELLOW << "Testing Allocator Methods;" << RESET << std::endl;
-    // TEST_CASE(testAllocatorMethodes)
-    // std::cout << std::endl;
+    std::cout << YELLOW << "Testing Allocator Methods;" << RESET << std::endl;
+    TEST_CASE(testAllocatorMethodes)
+    std::cout << std::endl;
 
-    // std::cout << YELLOW << "Testing Retional Operators; " << RESET << std::endl;
-    // TEST_CASE(testRetionalOperators);
-    // std::cout << std::endl;
+    std::cout << YELLOW << "Testing Retional Operators; " << RESET << std::endl;
+    TEST_CASE(testRetionalOperators);
+    std::cout << std::endl;
 
-    // std::cout << YELLOW << "Testing Non-Member Swap  ; " << RESET << std::endl;
-    // TEST_CASE(testNonMemberSwap);
-    // std::cout << std::endl;
+    std::cout << YELLOW << "Testing Non-Member Swap  ; " << RESET << std::endl;
+    TEST_CASE(testNonMemberSwap);
+    std::cout << std::endl;
     return 0;
 }
