@@ -407,8 +407,7 @@ namespace ft
 				return (0);
 			}
 
-			node_type *deleteWithKey(key_type const & k)
-			{
+			node_type *deleteWithKey(key_type const & k){
 				node_type *node = searchFor(k);
 				if(!node) return 0;
 				//std::cout << "deleting " << k << std::endl;
@@ -469,18 +468,20 @@ namespace ft
 							node->getParent()->setRight(0);
 						else 
 							node->getParent()->setLeft(0);
-						rebalanceFromNode(node->getParent());
+						rebalanceFromNode(node->getParent()->getParent());
+						s--;
 					}
 					else
 					{
 						//std::cout << "node has no parent" << std::endl;
 						tree_root = 0;
+						s = 0;
 					}
 					//delete leaf node
 					node_type *n = tree_root ? node->getParent() : 0;
 					node->freeNode();
 					alloc_node.deallocate(node, 1);
-					s--;
+
 					return n;
 				}
 			}

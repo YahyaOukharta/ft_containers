@@ -25,8 +25,6 @@ int main()
         m.print();
         std::cout << std::endl;
     }
-
-
     m.print();
     return (0);
 }
