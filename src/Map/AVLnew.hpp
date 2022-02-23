@@ -328,7 +328,7 @@ namespace ft
 				node_type *init_parent = n->getParent();
 				node_type *right = n->getChildren()[1];
 
-				node_type *right_left_subtree = right->getChildren()[0];
+				node_type *right_left_subtree = right ? right->getChildren()[0] : 0;
 
 				if (init_parent)
 				{
@@ -338,11 +338,13 @@ namespace ft
 				else
 					tree_root = right;
 
-				right->setLeft(n);
-				right->setParent(init_parent);
+				if(right)
+				{
+					right->setLeft(n);
+					right->setParent(init_parent);
 
-				right->setHeight(MAX(getH(right->getChildren()[0]), getH(right->getChildren()[1])) + 1);
-
+					right->setHeight(MAX(getH(right->getChildren()[0]), getH(right->getChildren()[1])) + 1);
+				}
 				n->setParent(right);
 				n->setRight(right_left_subtree);
 				n->setHeight(MAX(getH(n->getChildren()[0]), getH(n->getChildren()[1])) + 1);
@@ -357,7 +359,7 @@ namespace ft
 				node_type  *init_parent = n->getParent();
 				node_type *left = n->getChildren()[0];
 
-				node_type *left_right_subtree = left->getChildren()[1];
+				node_type *left_right_subtree = left ? left->getChildren()[1] : 0;
 				if (init_parent)
 				{
 					int dir = init_parent->getKey() < n->getKey();
@@ -366,10 +368,12 @@ namespace ft
 				else
 					tree_root = left;
 
-				left->setRight(n);
-				left->setParent(init_parent);
-				left->setHeight(MAX(getH(left->getChildren()[0]), getH(left->getChildren()[1])) + 1);
-
+				if (left)
+				{
+					left->setRight(n);
+					left->setParent(init_parent);
+					left->setHeight(MAX(getH(left->getChildren()[0]), getH(left->getChildren()[1])) + 1);
+				}
 				n->setParent(left);
 				n->setLeft(left_right_subtree);
 				n->setHeight(MAX(getH(n->getChildren()[0]), getH(n->getChildren()[1])) + 1);
