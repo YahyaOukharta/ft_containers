@@ -213,7 +213,7 @@ namespace ft {
                 if (size < 0)
                     return ;
                 resize(size);
-                for (size_t i = 0; i < size; i++)
+                for (ptrdiff_t i = 0; i < size; i++)
                     alloc.construct(content + i, *(first + i));
             }
 

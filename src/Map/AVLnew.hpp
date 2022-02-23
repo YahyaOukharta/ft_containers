@@ -8,7 +8,7 @@
 # include "../Vector/Vector.hpp"
 namespace ft
 {
-	template < class Pair, class Allocator = std::allocator<Pair> >
+	template < class Pair,class Compare, class Allocator = std::allocator<Pair> >
 	class Node {
 
 		public:
@@ -24,7 +24,7 @@ namespace ft
 			int bf;
 			int h;
 			allocator_type alloc;
-
+			Compare k_cmp;
 		public:
 
 			Node(pair_type const &c)
@@ -155,7 +155,7 @@ namespace ft
 					return (getLowestChild(children[1]));
 				else{
 					Node *tmp = this;
-					while (tmp->parent && tmp->getKey() > tmp->parent->getKey())
+					while (tmp->parent && !k_cmp(tmp->getKey(),tmp->parent->getKey()))
 					{
 						tmp = tmp->parent;
 					}
@@ -169,7 +169,7 @@ namespace ft
 					return (getLargestChild(children[0]));
 				else{
 					Node *tmp = this;
-					while (tmp->parent && tmp->getKey() < tmp->parent->getKey())
+					while (tmp->parent && k_cmp(tmp->getKey(), 	tmp->parent->getKey()))
 					{
 						tmp = tmp->parent;
 					}
@@ -180,16 +180,17 @@ namespace ft
 			}
 	};
 
-	template< class Pair, class Allocator = std::allocator<Pair> >
+	template< class Pair,class Compare, class Allocator = std::allocator<Pair> >
 	class BST
 	{
 
 		public:
 		
 		typedef 	Pair pair_type;
-		typedef  	Node<pair_type, Allocator> node_type;
+		typedef  	Node<pair_type,Compare, Allocator> node_type;
 		typedef typename node_type::key_type key_type;
 		typedef typename node_type::value_type value_type;
+
 		
 		typedef Allocator allocator_type;
 
@@ -197,8 +198,8 @@ namespace ft
 		node_type *tree_root;
 		size_t s;
 		allocator_type alloc;
-
-			BST(void){
+		Compare k_cmp;
+			BST(){
 				tree_root = 0;
 				s=0;
 			}
@@ -212,7 +213,9 @@ namespace ft
 			~BST(){
 				freeAll();
 			}
+			void setKeyComp (){
 
+			}
 			node_type *newNode(pair_type const &k) const 
 			{
 				typename allocator_type::template rebind<node_type>::other alloc_node;
@@ -262,7 +265,7 @@ namespace ft
 
 				while (v.first != tmp->getKey())
 				{
-					ptrdiff_t diff = (v.first > tmp->getKey() ? 1 : -1);
+					ptrdiff_t diff = (!k_cmp(v.first, tmp->getKey()) ? 1 : -1);
 					int dir = ((diff/ABS(diff))+1)/2;
 					node_type **children = tmp->getChildren();
 					if(!children[dir])
@@ -401,7 +404,7 @@ namespace ft
 					if (n->getKey() == key)
 						return n;
 					node_type **children = n->getChildren();
-					int dir = n->getKey() < key;
+					int dir = k_cmp(n->getKey(), key);
 					n = children[dir];
 				}
 				return (0);
@@ -464,7 +467,7 @@ namespace ft
 					{
 						//std::cout << "node has parent " << node->getParent() << std::endl;
 
-						if(node->getKey() > node->getParent()->getKey())
+						if(!k_cmp(node->getKey(), 	node->getParent()->getKey()))
 							node->getParent()->setRight(0);
 						else 
 							node->getParent()->setLeft(0);

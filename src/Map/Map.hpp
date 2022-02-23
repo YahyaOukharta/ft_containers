@@ -33,12 +33,12 @@ namespace ft{
 			typedef typename Allocator::pointer 		pointer;
 			typedef typename Allocator::const_pointer	const_pointer;
 
-			typedef ft::MapIterator<value_type>			iterator;
-			typedef ft::MapIterator<value_type>	const_iterator;
+			typedef ft::MapIterator<value_type, key_compare>			iterator;
+			typedef ft::MapIterator<value_type, key_compare>	const_iterator;
 			typedef ft::reverse_iterator<iterator>		reverse_iterator;
 			typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
 
-			typedef typename ft::BST<value_type,allocator_type>::node_type node_type;
+			typedef typename ft::BST<value_type,Compare,allocator_type>::node_type node_type;
 
 			class value_compare:public std::binary_function<value_type,value_type,bool>
 			{   // in C++98, it is required to inherit binary_function<value_type,value_type,bool>
@@ -57,7 +57,7 @@ namespace ft{
 			};
 
 		private:
-			ft::BST<value_type,allocator_type> tree;
+			ft::BST<value_type,Compare ,allocator_type> tree;	
 			key_compare k_cmp;
 			value_compare v_cmp;
 			allocator_type alloc;
@@ -233,7 +233,7 @@ namespace ft{
 				alloc = a;
 			}
 
-			ft::BST<value_type,allocator_type> &getTree()
+			ft::BST<value_type,Compare,allocator_type> &getTree()
 			{
 				return tree;
 			}

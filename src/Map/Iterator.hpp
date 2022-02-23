@@ -3,7 +3,7 @@ namespace ft
 {
 
     // my mapiterator : ft::MapIterator
-    template <typename T>
+    template <typename T, class Compare>
     class MapIterator : public iterator<std::bidirectional_iterator_tag, T>
     {
 
@@ -14,7 +14,7 @@ namespace ft
         typedef T &reference;
         typedef typename iterator<std::bidirectional_iterator_tag, T>::iterator_category iterator_category;
 
-        typedef typename ft::Node<value_type> node_type;
+        typedef typename ft::Node<value_type,Compare> node_type;
 
         node_type *node;
         bool rend,end;
@@ -25,7 +25,7 @@ namespace ft
             rend=0,end=0;
         }
 
-        MapIterator(MapIterator<value_type> const &it) : node(it.node) {
+        MapIterator(MapIterator<value_type, Compare> const &it) : node(it.node) {
 
             rend=it.rend,end=it.end;
         }
@@ -39,7 +39,7 @@ namespace ft
 
         ~MapIterator() {}
 
-        MapIterator &operator=(MapIterator<value_type> const &it)
+        MapIterator &operator=(MapIterator<value_type, Compare> const &it)
         {
             MapIterator tmp = it;
             node = tmp.node;
@@ -101,7 +101,7 @@ namespace ft
 
         reference operator*() const { return node->getPair(); }
         pointer operator->()  const { return &(node->getPair()); }
-        reference operator[](size_t idx) const { return node->getPair(); }
+        // reference operator[](size_t idx) const { return node->getPair(); }
 
         // MapIterator operator+ (const MapIterator& rhs)
         // {
