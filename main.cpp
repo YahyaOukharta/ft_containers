@@ -74,7 +74,6 @@ int main(int argc, char** argv) {
 	}
 	ft::Vector<Buffer>().swap(vector_buffer);
 
-    std::cout << vector_buffer.size() << std::endl;
 	try
 	{
 		for (int i = 0; i < COUNT; i++)
@@ -82,7 +81,6 @@ int main(int argc, char** argv) {
 			const int idx = rand() % COUNT;
 			vector_buffer.at(idx);
 			std::cerr << "Error: THIS VECTOR SHOULD BE EMPTY!!" << std::endl;
-            exit(1);
 		}
 	}
 	catch(const std::exception& e)
@@ -94,12 +92,11 @@ int main(int argc, char** argv) {
 	{
 		map_int.insert(ft::make_pair(rand(), rand()));
 	}
-
+	//map_int.print();
 	int sum = 0;
-	for (int i = 0; i < 10000; i++)
+	for (int i = 0; i < 1000000; i++)
 	{
-		int access = rand();
-		sum += map_int[access];
+		sum += map_int[i];
 	}
 	std::cout << "should be constant with the same seed: " << sum << std::endl;
 
