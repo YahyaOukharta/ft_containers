@@ -103,11 +103,11 @@ namespace ft {
 
             // Element Access
             T &     at(size_t idx) const { 
-                if(idx < 0 || idx > size() - 1)
-                    throw std::exception();
-                return (content[idx]); 
+                if(idx < size())
+                    return (content[idx]); 
+                throw std::out_of_range("");
             }
-            T &     operator[](size_t idx) const { return content[idx]; }
+            T &     operator[](size_t idx) const { return at(idx); }
             T &     front() const { return (content[0]); }
             T &     back() const { return (content[size() - 1]);}
             T       *data() const { return (content); } // cpp11
