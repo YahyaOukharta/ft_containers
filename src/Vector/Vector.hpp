@@ -104,7 +104,7 @@ namespace ft {
             // Element Access
             T &     at(size_t idx) const { 
                 if(idx < 0 || idx > size() - 1)
-                    throw std::out_of_range("ee");
+                    throw std::exception();
                 return (content[idx]); 
             }
             T &     operator[](size_t idx) const { return content[idx]; }

@@ -1,69 +1,118 @@
-#include "./src/Vector/Vector.hpp"
-#include "./src/Stack/Stack.hpp"
-#include "./src/Map/Map.hpp"
+#include <iostream>
+#include <string>
+#include <deque>
+#if 0 //CREATE A REAL STL EXAMPLE
+	#include <map>
+	#include <stack>
+	#include <vector>
+	namespace ft = std;
+#else
+	#include "src/Map/Map.hpp"
+	#include "src/Vector/Vector.hpp"
+	#include "src/Stack/Stack.hpp"
+#endif
 
-#include <random>
-#include <algorithm>
+#include <stdlib.h>
 
-#include <vector>
-#include <map>
-
-#include <iomanip>
-#include <ctime>
-#include <sys/time.h>
-#include <unistd.h>
-#include <signal.h>
-#define EQUAL(x) ((x) ? (std::cout << "\033[1;32mAC\033[0m\n") : (std::cout << "\033[1;31mWA\033[0m\n"))
-#define TIME_FAC 4 // the ft::Map methods can be slower up to std::map methods * TIME_FAC (MAX 20)
-
-time_t get_time(void)
+#define MAX_RAM 4294967296
+#define BUFFER_SIZE 4096
+struct Buffer
 {
-    struct timeval time_now;
+	int idx;
+	char buff[BUFFER_SIZE];
+};
 
-    gettimeofday(&time_now, NULL);
-    time_t msecs_time = (time_now.tv_sec * 1e3) + (time_now.tv_usec / 1e3);
-    return (msecs_time);
-}
 
-template <typename Iter1, typename Iter2>
-bool compareMaps(Iter1 first1, Iter1 last1, Iter2 first2, Iter2 last2)
+#define COUNT (MAX_RAM / (int)sizeof(Buffer))
+
+template<typename T>
+class MutantStack : public ft::Stack<T>
 {
-    for (; (first1 != last1) && (first2 != last2); ++first1, ++first2)
-        if (first1->first != first2->first || first1->second != first2->second)
-            return false;
-    return true;
-}
+public:
+	MutantStack() {}
+	MutantStack(const MutantStack<T>& src) { *this = src; }
+	MutantStack<T>& operator=(const MutantStack<T>& rhs) 
+	{
+		this->c = rhs.c;
+		return *this;
+	}
+	~MutantStack() {}
 
-int main()
-{
-    std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " upper_bound method "
-              << "] --------------------]\t\t\033[0m";
-    {
-        bool cond = 1;
-        std::map<int, std::string> m;
-        ft::Map<int, std::string> ft_m;
-        int arr[] = {20, 10, 100, 15, 60, 90, 65, 200, 150}; // size = 9
-        for (size_t i = 0; i < 9; ++i)
-        {
-            m.insert(std::make_pair(arr[i], "value"));
-            ft_m.insert(ft::make_pair(arr[i], "value"));
-        }
-        std::map<int, std::string> const c_m(m.begin(), m.end());
-        ft::Map<int, std::string> const c_ft_m(ft_m.begin(), ft_m.end());
-        cond = (cond && (m.upper_bound(15)->first == ft_m.upper_bound(15)->first));
-        cond = (cond && (m.upper_bound(65)->first == ft_m.upper_bound(65)->first));
-        cond = (cond && (m.upper_bound(63)->first == ft_m.upper_bound(63)->first));
-        cond = (cond && (m.upper_bound(120)->first == ft_m.upper_bound(120)->first));
-        cond = (cond && (m.upper_bound(70)->first == ft_m.upper_bound(70)->first));
-        cond = (cond && (m.upper_bound(150)->first == ft_m.upper_bound(150)->first));
+	typedef typename ft::Stack<T>::container_type::iterator iterator;
 
-        cond = (cond && (c_m.upper_bound(15)->first == c_ft_m.upper_bound(15)->first));
-        cond = (cond && (c_m.upper_bound(65)->first == c_ft_m.upper_bound(65)->first));
-        cond = (cond && (c_m.upper_bound(63)->first == c_ft_m.upper_bound(63)->first));
-        cond = (cond && (c_m.upper_bound(120)->first == c_ft_m.upper_bound(120)->first));
-        cond = (cond && (c_m.upper_bound(70)->first == c_ft_m.upper_bound(70)->first));
-        cond = (cond && (c_m.upper_bound(150)->first == c_ft_m.upper_bound(150)->first));
-        EQUAL(cond);
-    }
-    return (0);
+	iterator begin() { return this->c.begin(); }
+	iterator end() { return this->c.end(); }
+};
+
+int main(int argc, char** argv) {
+	if (argc != 2)
+	{
+		std::cerr << "Usage: ./test seed" << std::endl;
+		std::cerr << "Provide a seed please" << std::endl;
+		std::cerr << "Count value:" << COUNT << std::endl;
+		return 1;
+	}
+	const int seed = atoi(argv[1]);
+	srand(seed);
+
+	ft::Vector<std::string> vector_str;
+	ft::Vector<int> vector_int;
+	ft::Stack<int> stack_int;
+	ft::Vector<Buffer> vector_buffer;
+	ft::Stack<Buffer, std::deque<Buffer> > stack_deq_buffer;
+	ft::Map<int, int> map_int;
+
+	for (int i = 0; i < COUNT; i++)
+	{
+		vector_buffer.push_back(Buffer());
+	}
+
+	for (int i = 0; i < COUNT; i++)
+	{
+		const int idx = rand() % COUNT;
+		vector_buffer[idx].idx = 5;
+	}
+	ft::Vector<Buffer>().swap(vector_buffer);
+
+    std::cout << vector_buffer.size() << std::endl;
+	try
+	{
+		for (int i = 0; i < COUNT; i++)
+		{
+			const int idx = rand() % COUNT;
+			vector_buffer.at(idx);
+			std::cerr << "Error: THIS VECTOR SHOULD BE EMPTY!!" << std::endl;
+            exit(1);
+		}
+	}
+	catch(const std::exception& e)
+	{
+		//NORMAL ! :P
+	}
+	
+	for (int i = 0; i < COUNT; ++i)
+	{
+		map_int.insert(ft::make_pair(rand(), rand()));
+	}
+
+	int sum = 0;
+	for (int i = 0; i < 10000; i++)
+	{
+		int access = rand();
+		sum += map_int[access];
+	}
+	std::cout << "should be constant with the same seed: " << sum << std::endl;
+
+	{
+		ft::Map<int, int> copy = map_int;
+	}
+	MutantStack<char> iterable_stack;
+	for (char letter = 'a'; letter <= 'z'; letter++)
+		iterable_stack.push(letter);
+	for (MutantStack<char>::iterator it = iterable_stack.begin(); it != iterable_stack.end(); it++)
+	{
+		std::cout << *it;
+	}
+	std::cout << std::endl;
+	return (0);
 }

@@ -8,7 +8,7 @@
 # include "../Vector/Vector.hpp"
 namespace ft
 {
-	template < class Pair, class Allocator = std::allocator<Pair> >
+	template < class Pair,class Compare, class Allocator = std::allocator<Pair> >
 	class Node {
 
 		public:
@@ -24,7 +24,7 @@ namespace ft
 			int bf;
 			int h;
 			allocator_type alloc;
-
+			Compare k_cmp;
 		public:
 
 			Node(pair_type const &c)
@@ -63,6 +63,10 @@ namespace ft
 			{
 				if(p)
 					alloc.deallocate(p,1);
+				p = 0;
+				children[0] = 0;
+				children[1] = 0;
+				parent = 0;
 			}
 
 			void setPair(pair_type const& con)
@@ -113,28 +117,25 @@ namespace ft
 			{
 				return h;
 			}
+			void setHeight(int _h)
+			{
+				h = _h;
+			}
+
 			int getBF()
 			{
 				return bf;
 			}
-
-			int calcHeight(){
-				std::cout << "calculating Height" << std::endl;
-				int hl = (children[0] ? children[0]->calcHeight() : -1);
-				int hr = (children[1] ? children[1]->calcHeight() : -1);
-				h = MAX(hl,hr) + 1;
-				return h;
+			void setBF(int _bf)
+			{
+				bf = _bf;
 			}
-
-			int calcBF(){
-				std::cout << "calculating BF" << std::endl;
-				int hl = (children[0] ? children[0]->getHeight() : -1);
-				int hr = (children[1] ? children[1]->getHeight() : -1);
-				bf = hr - hl;
-
-				return bf;
+			void incrBF(){
+				++bf;
 			}
-
+			void decrBF(){
+				--bf;
+			}
 			Node *getLowestChild(Node *n)
 			{
 				if (!n) return 0;
@@ -158,7 +159,7 @@ namespace ft
 					return (getLowestChild(children[1]));
 				else{
 					Node *tmp = this;
-					while (tmp->parent && tmp->getKey() > tmp->parent->getKey())
+					while (tmp->parent && !k_cmp(tmp->getKey(),tmp->parent->getKey()))
 					{
 						tmp = tmp->parent;
 					}
@@ -172,7 +173,7 @@ namespace ft
 					return (getLargestChild(children[0]));
 				else{
 					Node *tmp = this;
-					while (tmp->parent && tmp->getKey() < tmp->parent->getKey())
+					while (tmp->parent && k_cmp(tmp->getKey(), 	tmp->parent->getKey()))
 					{
 						tmp = tmp->parent;
 					}
@@ -181,19 +182,19 @@ namespace ft
 					else return tmp->getParent();
 				}
 			}
-
 	};
 
-	template< class Pair, class Allocator = std::allocator<Pair> >
+	template< class Pair,class Compare, class Allocator = std::allocator<Pair> >
 	class BST
 	{
 
 		public:
 		
 		typedef 	Pair pair_type;
-		typedef  	Node<pair_type, Allocator> node_type;
+		typedef  	Node<pair_type,Compare, Allocator> node_type;
 		typedef typename node_type::key_type key_type;
 		typedef typename node_type::value_type value_type;
+
 		
 		typedef Allocator allocator_type;
 
@@ -201,8 +202,8 @@ namespace ft
 		node_type *tree_root;
 		size_t s;
 		allocator_type alloc;
-
-			BST(void){
+		Compare k_cmp;
+			BST(){
 				tree_root = 0;
 				s=0;
 			}
@@ -216,7 +217,9 @@ namespace ft
 			~BST(){
 				freeAll();
 			}
+			void setKeyComp (){
 
+			}
 			node_type *newNode(pair_type const &k) const 
 			{
 				typename allocator_type::template rebind<node_type>::other alloc_node;
@@ -235,36 +238,6 @@ namespace ft
 			node_type *insert(pair_type const &v)
 			{
 				return insertAtNode(tree_root, v);
-			}
-			
-            void rebalanceAtNode(node_type *n)
-			{
-				int bf = n->calcBF();
-				if (ABS(bf) > 1)
-				{
-					if (bf > 0)
-					{
-						if (n->getChildren()[1] && n->getChildren()[1]->getBF() < 0)
-							singleRightRotate(n->getChildren()[1]);
-						singleLeftRotate(n);
-					}
-					else
-					{
-						if (n->getChildren()[0] && n->getChildren()[0]->getBF() > 0)
-							singleLeftRotate(n->getChildren()[0]);
-						singleRightRotate(n);
-					}
-					if(n->getParent())
-						n->getParent()->calcHeight();
-				}
-			}
-
-			void rebalanceFromNode(node_type *n){
-				std::cout << "rebalancing after insert" << std::endl;
-				if(!n) return;
-				n->calcHeight();
-				rebalanceAtNode(n);
-				rebalanceFromNode(n->getParent());
 			}
 
 			node_type *insertAtNode(node_type *n, pair_type v)
@@ -296,7 +269,7 @@ namespace ft
 
 				while (v.first != tmp->getKey())
 				{
-					ptrdiff_t diff = (v.first > tmp->getKey() ? 1 : -1);
+					ptrdiff_t diff = (!k_cmp(v.first, tmp->getKey()) ? 1 : -1);
 					int dir = ((diff/ABS(diff))+1)/2;
 					node_type **children = tmp->getChildren();
 					if(!children[dir])
@@ -310,10 +283,48 @@ namespace ft
 					}
 					else
 						tmp = children[dir];
-				}
-				
+				}				
 				rebalanceFromNode(tmp);
 				return tmp;
+			}
+
+			int getH(node_type *n){
+				if(!n) return (-1);
+				return n->getHeight();
+			}
+			int getBF(node_type *n){
+				return ( getH(n->getChildren()[1]) - getH(n->getChildren()[0]) );
+			}
+
+			void rebalanceFromNode(node_type *inserted)
+			{
+				node_type *n = inserted;
+				while (n)
+				{
+					n->setHeight( MAX(getH(n->getChildren()[0]), getH(n->getChildren()[1])) + 1);
+					n->setBF(getBF(n));
+					rebalanceAtNode(n);
+					n = n->getParent();
+				}
+			}
+            void rebalanceAtNode(node_type *n)
+			{
+				int bf = n->getBF();
+				if (ABS(bf) > 1)
+				{
+					if (bf > 0)
+					{
+						if (n->getChildren()[1] && n->getChildren()[1]->getBF() < 0)
+							singleRightRotate(n->getChildren()[1]);
+						singleLeftRotate(n);
+					}
+					else
+					{
+						if (n->getChildren()[0] && n->getChildren()[0]->getBF() > 0)
+							singleLeftRotate(n->getChildren()[0]);
+						singleRightRotate(n);
+					}
+				}
 			}
 
 			void singleLeftRotate(node_type *n)
@@ -321,7 +332,7 @@ namespace ft
 				node_type *init_parent = n->getParent();
 				node_type *right = n->getChildren()[1];
 
-				node_type *right_left_subtree = right->getChildren()[0];
+				node_type *right_left_subtree = right ? right->getChildren()[0] : 0;
 
 				if (init_parent)
 				{
@@ -331,16 +342,20 @@ namespace ft
 				else
 					tree_root = right;
 
-				right->setLeft(n);
-				right->setParent(init_parent);
+				if(right)
+				{
+					right->setLeft(n);
+					right->setParent(init_parent);
 
+					right->setHeight(MAX(getH(right->getChildren()[0]), getH(right->getChildren()[1])) + 1);
+				}
 				n->setParent(right);
-
 				n->setRight(right_left_subtree);
+				n->setHeight(MAX(getH(n->getChildren()[0]), getH(n->getChildren()[1])) + 1);
+
 				if(right_left_subtree)
 					right_left_subtree->setParent(n);
 				
-				tree_root->calcHeight();
 			}
 
 			void singleRightRotate(node_type *n)
@@ -348,7 +363,7 @@ namespace ft
 				node_type  *init_parent = n->getParent();
 				node_type *left = n->getChildren()[0];
 
-				node_type *left_right_subtree = left->getChildren()[1];
+				node_type *left_right_subtree = left ? left->getChildren()[1] : 0;
 				if (init_parent)
 				{
 					int dir = init_parent->getKey() < n->getKey();
@@ -357,16 +372,18 @@ namespace ft
 				else
 					tree_root = left;
 
-				left->setRight(n);
-				left->setParent(init_parent);
-
+				if (left)
+				{
+					left->setRight(n);
+					left->setParent(init_parent);
+					left->setHeight(MAX(getH(left->getChildren()[0]), getH(left->getChildren()[1])) + 1);
+				}
 				n->setParent(left);
-
 				n->setLeft(left_right_subtree);
+				n->setHeight(MAX(getH(n->getChildren()[0]), getH(n->getChildren()[1])) + 1);
+
 				if(left_right_subtree)
 					left_right_subtree->setParent(n);
-				tree_root->calcHeight();
-
 			}
 
 			node_type *getLowestChild(node_type *n) const
@@ -395,7 +412,7 @@ namespace ft
 					if (n->getKey() == key)
 						return n;
 					node_type **children = n->getChildren();
-					int dir = n->getKey() < key;
+					int dir = k_cmp(n->getKey(), key);
 					n = children[dir];
 				}
 				return (0);
@@ -458,23 +475,24 @@ namespace ft
 					{
 						//std::cout << "node has parent " << node->getParent() << std::endl;
 
-						if(node->getKey() > node->getParent()->getKey())
+						if(!k_cmp(node->getKey(), 	node->getParent()->getKey()))
 							node->getParent()->setRight(0);
 						else 
 							node->getParent()->setLeft(0);
-						node->getParent()->calcBF();
-						rebalanceFromNode(node->getParent());
+						rebalanceFromNode(node->getParent()->getParent());
+						s--;
 					}
 					else
 					{
 						//std::cout << "node has no parent" << std::endl;
 						tree_root = 0;
+						s = 0;
 					}
 					//delete leaf node
 					node_type *n = tree_root ? node->getParent() : 0;
 					node->freeNode();
 					alloc_node.deallocate(node, 1);
-					s--;
+
 					return n;
 				}
 			}
@@ -518,7 +536,7 @@ namespace ft
 				{
 					std::cout << prefix;
 					std::cout << (isLeft ? "├──" : "└──" );
-					std::cout << "<"<<node->getKey() << ", "<<node->getValue()<<"> " << node->getBF() << std::endl;
+					std::cout << "<"<<node->getKey() << ", "<<node->getValue() << " / "<< node->getHeight() << std::endl;
 					print( prefix + (isLeft ? "│   " : "    "), node->getChildren()[1], true);
 					print( prefix + (isLeft ? "│   " : "    "), node->getChildren()[0], false);
 				}
@@ -529,7 +547,7 @@ namespace ft
 				if (tree_root)
 				{
 					print("", tree_root, false);
-					std::cout << "height : " << tree_root->calcHeight() << " for " << s << " elements" <<std::endl;
+					std::cout << "height : " << tree_root->getHeight() << " for " << s << " elements" <<std::endl;
 				}
 			}
 
